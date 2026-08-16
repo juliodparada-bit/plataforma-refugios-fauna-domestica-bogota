@@ -1,0 +1,21 @@
+# Dependencias y artefactos de construcción (fase 3)
+node_modules/
+dist/
+build/
+coverage/
+.next/
+out/
+
+# Secretos y entorno local
+.env
+.env.*
+!.env.example
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.idea/
+*.swp
