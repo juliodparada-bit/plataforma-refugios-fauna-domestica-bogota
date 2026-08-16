@@ -11,7 +11,7 @@
 | Nombre académico | Plataforma digital para la gestión integral de refugios de fauna doméstica en Bogotá |
 | Marca propuesta | Mestizo (aún no cerrada) |
 | Ámbito | Área urbana de Bogotá, D.C. — caninos y felinos domésticos |
-| Repositorio | https://github.com/yuliedma1003-boop/plataforma-refugios-fauna-domestica-bogota |
+| Repositorio | https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota |
 
 Fuente única de documentación. Se construye por fases SENA, con artefactos de ingeniería (IEEE 830, UML, DER, pruebas, manuales).
 

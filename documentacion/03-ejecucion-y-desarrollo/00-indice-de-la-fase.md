@@ -40,7 +40,7 @@ Módulos previstos, alineados al backlog:
 
 ### 3.3 Evidencias de ejecución
 
-- Repositorio Git: https://github.com/yuliedma1003-boop/plataforma-refugios-fauna-domestica-bogota
+- Repositorio Git: https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota
 - Capturas o video corto de cada módulo funcionando (el instructor suele pedir evidencia de producto, no solo código).
 
 ---
