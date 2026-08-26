@@ -11,6 +11,9 @@ out/
 .env.*
 !.env.example
 
+# Subidas locales
+uploads/
+
 # Sistema
 .DS_Store
 Thumbs.db

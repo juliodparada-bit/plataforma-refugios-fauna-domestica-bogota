@@ -1,0 +1,328 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Rol {
+  adoptante
+  donante
+  entidad
+  validador
+}
+
+enum Nivel {
+  nivel_1
+  nivel_2
+}
+
+enum EstadoVerificacionEntidad {
+  en_revision
+  nivel_1
+  nivel_2
+  rechazada
+}
+
+enum EstadoSolicitudVerificacion {
+  en_revision
+  aprobada
+  rechazada
+  complemento
+}
+
+enum Especie {
+  canino
+  felino
+}
+
+enum Sexo {
+  macho
+  hembra
+}
+
+enum Talla {
+  pequeno
+  mediano
+  grande
+}
+
+enum Energia {
+  baja
+  media
+  alta
+}
+
+enum EstadoAnimal {
+  borrador
+  publicado
+  reservado
+  adoptado
+  archivado
+}
+
+enum EstadoPostulacion {
+  enviada
+  en_revision
+  preseleccionada
+  rechazada
+  entregada
+  seguimiento
+}
+
+enum CategoriaDeseo {
+  alimento
+  medicina
+  aseo
+}
+
+enum Prioridad {
+  baja
+  media
+  alta
+}
+
+enum EstadoItem {
+  pendiente
+  reservado
+  cubierto
+}
+
+enum EstadoReserva {
+  reservado
+  cubierto
+  vencido
+}
+
+enum TipoVivienda {
+  apartamento
+  casa
+  casa_con_patio
+  otro
+}
+
+enum OtrosAnimales {
+  ninguno
+  perro
+  gato
+  ambos
+  otros
+}
+
+model Localidad {
+  id         String    @id @default(uuid()) @db.Uuid
+  nombre     String    @unique @db.VarChar(80)
+  codigo     String    @unique @db.VarChar(20)
+  usuarios   Usuario[]
+  entidades  Entidad[]
+  animales   Animal[]
+
+  @@map("localidad")
+}
+
+model Usuario {
+  id                  String    @id @default(uuid()) @db.Uuid
+  correo              String    @unique @db.VarChar(254)
+  hashContrasena      String    @map("hash_contrasena") @db.VarChar(255)
+  nombre              String    @db.VarChar(120)
+  rol                 Rol
+  localidadId         String    @map("localidad_id") @db.Uuid
+  consentimientoDatos Boolean   @map("consentimiento_datos")
+  consentimientoEn    DateTime  @map("consentimiento_en")
+  creadoEn            DateTime  @default(now()) @map("creado_en")
+  actualizadoEn       DateTime  @updatedAt @map("actualizado_en")
+
+  localidad       Localidad        @relation(fields: [localidadId], references: [id])
+  entidad         Entidad?
+  perfilAdoptante PerfilAdoptante?
+  postulaciones   Postulacion[]
+  reservas        ReservaDeseo[]
+  verificaciones  Verificacion[]   @relation("Validador")
+
+  @@map("usuario")
+}
+
+model Entidad {
+  id                 String                     @id @default(uuid()) @db.Uuid
+  usuarioId          String                     @unique @map("usuario_id") @db.Uuid
+  nombre             String                     @db.VarChar(160)
+  nivelSolicitado    Nivel                      @map("nivel_solicitado")
+  estadoVerificacion EstadoVerificacionEntidad  @map("estado_verificacion")
+  localidadId        String                     @map("localidad_id") @db.Uuid
+  creadoEn           DateTime                   @default(now()) @map("creado_en")
+  actualizadoEn      DateTime                   @updatedAt @map("actualizado_en")
+
+  usuario         Usuario         @relation(fields: [usuarioId], references: [id])
+  localidad       Localidad       @relation(fields: [localidadId], references: [id])
+  verificaciones  Verificacion[]
+  animales        Animal[]
+  itemsDeseo      ItemDeseo[]
+
+  @@map("entidad")
+}
+
+model Verificacion {
+  id          String                       @id @default(uuid()) @db.Uuid
+  entidadId   String                       @map("entidad_id") @db.Uuid
+  tipoNivel   Nivel                        @map("tipo_nivel")
+  estado      EstadoSolicitudVerificacion
+  motivo      String?                      @db.Text
+  validadorId String?                      @map("validador_id") @db.Uuid
+  resueltoEn  DateTime?                    @map("resuelto_en")
+  creadoEn    DateTime                     @default(now()) @map("creado_en")
+  actualizadoEn DateTime                   @updatedAt @map("actualizado_en")
+
+  entidad    Entidad                 @relation(fields: [entidadId], references: [id], onDelete: Cascade)
+  validador  Usuario?                @relation("Validador", fields: [validadorId], references: [id])
+  evidencias EvidenciaVerificacion[]
+
+  @@index([estado])
+  @@map("verificacion")
+}
+
+model EvidenciaVerificacion {
+  id             String   @id @default(uuid()) @db.Uuid
+  verificacionId String   @map("verificacion_id") @db.Uuid
+  tipoDocumento  String   @map("tipo_documento") @db.VarChar(40)
+  rutaArchivo    String   @map("ruta_archivo") @db.VarChar(500)
+  mime           String   @db.VarChar(80)
+  pesoBytes      Int      @map("peso_bytes")
+  creadoEn       DateTime @default(now()) @map("creado_en")
+
+  verificacion Verificacion @relation(fields: [verificacionId], references: [id], onDelete: Cascade)
+
+  @@map("evidencia_verificacion")
+}
+
+model PerfilAdoptante {
+  usuarioId          String        @id @map("usuario_id") @db.Uuid
+  tipoVivienda       TipoVivienda  @map("tipo_vivienda")
+  horasCompania      Int           @map("horas_compania") @db.SmallInt
+  ninosEnHogar       Boolean       @map("ninos_en_hogar")
+  otrosAnimales      OtrosAnimales @map("otros_animales")
+  energiaSostenible  Energia       @map("energia_sostenible")
+  actualizadoEn      DateTime      @updatedAt @map("actualizado_en")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("perfil_adoptante")
+}
+
+model Animal {
+  id                    String       @id @default(uuid()) @db.Uuid
+  entidadId             String       @map("entidad_id") @db.Uuid
+  nombre                String       @db.VarChar(80)
+  especie               Especie
+  sexo                  Sexo
+  talla                 Talla
+  edadAprox             String       @map("edad_aprox") @db.VarChar(20)
+  energia               Energia
+  historia              String       @db.Text
+  raza                  String?      @db.VarChar(80)
+  necesidadEspecial     Boolean      @default(false) @map("necesidad_especial")
+  conviveNinos          Boolean      @map("convive_ninos")
+  conviveOtrosAnimales  Boolean      @map("convive_otros_animales")
+  esterilizado          Boolean?
+  estado                EstadoAnimal
+  localidadId           String       @map("localidad_id") @db.Uuid
+  creadoEn              DateTime     @default(now()) @map("creado_en")
+  actualizadoEn         DateTime     @updatedAt @map("actualizado_en")
+
+  entidad        Entidad        @relation(fields: [entidadId], references: [id])
+  localidad      Localidad      @relation(fields: [localidadId], references: [id])
+  fotos          AnimalFoto[]
+  postulaciones  Postulacion[]
+
+  @@index([estado, especie, localidadId])
+  @@index([entidadId])
+  @@map("animal")
+}
+
+model AnimalFoto {
+  id         String   @id @default(uuid()) @db.Uuid
+  animalId   String   @map("animal_id") @db.Uuid
+  rutaArchivo String  @map("ruta_archivo") @db.VarChar(500)
+  esPortada  Boolean  @map("es_portada")
+  orden      Int      @db.SmallInt
+  mime       String   @db.VarChar(80)
+  pesoBytes  Int      @map("peso_bytes")
+  creadoEn   DateTime @default(now()) @map("creado_en")
+
+  animal Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  @@map("animal_foto")
+}
+
+model Postulacion {
+  id                      String             @id @default(uuid()) @db.Uuid
+  animalId                String             @map("animal_id") @db.Uuid
+  adoptanteId             String             @map("adoptante_id") @db.Uuid
+  puntaje                 Int                @db.SmallInt
+  fraseExplicable         String             @map("frase_explicable") @db.VarChar(280)
+  estado                  EstadoPostulacion
+  requiereEvidenciaHogar  Boolean            @default(false) @map("requiere_evidencia_hogar")
+  seguimientoResultado    String?            @map("seguimiento_resultado") @db.VarChar(20)
+  seguimientoEn           DateTime?          @map("seguimiento_en")
+  creadoEn                DateTime           @default(now()) @map("creado_en")
+  actualizadoEn           DateTime           @updatedAt @map("actualizado_en")
+
+  animal    Animal  @relation(fields: [animalId], references: [id])
+  adoptante Usuario @relation(fields: [adoptanteId], references: [id])
+
+  @@index([animalId, estado])
+  @@index([adoptanteId])
+  @@map("postulacion")
+}
+
+model ItemDeseo {
+  id          String         @id @default(uuid()) @db.Uuid
+  entidadId   String         @map("entidad_id") @db.Uuid
+  categoria   CategoriaDeseo
+  descripcion String         @db.VarChar(200)
+  cantidad    Int
+  unidad      String         @db.VarChar(30)
+  prioridad   Prioridad
+  estado      EstadoItem
+  creadoEn    DateTime       @default(now()) @map("creado_en")
+  actualizadoEn DateTime     @updatedAt @map("actualizado_en")
+
+  entidad  Entidad        @relation(fields: [entidadId], references: [id])
+  reservas ReservaDeseo[]
+
+  @@index([entidadId, estado])
+  @@map("item_deseo")
+}
+
+model ReservaDeseo {
+  id              String        @id @default(uuid()) @db.Uuid
+  itemDeseoId     String        @map("item_deseo_id") @db.Uuid
+  donanteId       String        @map("donante_id") @db.Uuid
+  estado          EstadoReserva
+  contactoEntrega String        @map("contacto_entrega") @db.VarChar(120)
+  fechaLimite     DateTime      @map("fecha_limite") @db.Date
+  creadoEn        DateTime      @default(now()) @map("creado_en")
+  actualizadoEn   DateTime      @updatedAt @map("actualizado_en")
+
+  item      ItemDeseo            @relation(fields: [itemDeseoId], references: [id])
+  donante   Usuario              @relation(fields: [donanteId], references: [id])
+  evidencia EvidenciaRecepcion?
+
+  @@index([itemDeseoId, estado])
+  @@map("reserva_deseo")
+}
+
+model EvidenciaRecepcion {
+  id             String   @id @default(uuid()) @db.Uuid
+  reservaDeseoId String   @unique @map("reserva_deseo_id") @db.Uuid
+  rutaArchivo    String?  @map("ruta_archivo") @db.VarChar(500)
+  checkRecibido  Boolean  @map("check_recibido")
+  mime           String?  @db.VarChar(80)
+  pesoBytes      Int?     @map("peso_bytes")
+  creadoEn       DateTime @default(now()) @map("creado_en")
+
+  reserva ReservaDeseo @relation(fields: [reservaDeseoId], references: [id], onDelete: Cascade)
+
+  @@map("evidencia_recepcion")
+}

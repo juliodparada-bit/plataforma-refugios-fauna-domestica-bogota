@@ -5,10 +5,10 @@
 | Código | DOC-EV-00 |
 | Fase SENA | Evaluación y control |
 | Competencias | 220501097 · 220501098 |
-| Estado | Índice — se abre con el primer incremento usable |
-| Depende de | Al menos un módulo demostrable de la fase 3 |
+| Estado | Índice — artefactos 4.1 a 4.5 pendientes |
+| Depende de | Incrementos demostrables de la fase 3 (ya existen módulos 1 y 2) |
 
-Cierra el ciclo PHVA del proyecto formativo: verificar lo construido, desplegarlo y sustentarlo. Este índice se llena con el primer incremento usable.
+Cierro el ciclo PHVA: verificar lo construido, desplegarlo y sustentarlo. Los módulos de identidad y verificación ya se pueden mostrar en local; este índice se llena al preparar pruebas formales y sustentación.
 
 ---
 

@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: refugios-pg
+    environment:
+      POSTGRES_USER: refugios
+      POSTGRES_PASSWORD: refugios_dev
+      POSTGRES_DB: refugios
+    ports:
+      - "5433:5432"
+    volumes:
+      - refugios_pg:/var/lib/postgresql/data
+
+volumes:
+  refugios_pg:

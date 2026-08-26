@@ -8,9 +8,11 @@
 | Estado | Estable para diseñar |
 | Siguiente fase | [Planeación y diseño](../02-planeacion-y-diseno/00-indice-de-la-fase.md) |
 
-Esta fase responde **qué problema se resuelve y qué debe hacer el software**. No dibuja UML ni tablas de base de datos: eso es la fase 2.
+Esta fase responde **qué problema resuelvo y qué debe hacer el software**. UML, datos e interfaz están en la fase 2.
 
-**Cómo leerla:** vista previa (`Ctrl+Shift+V`). Orden: 1.1 → 1.2 → 1.3. El 1.4 es un ejemplo del instrumento de entrevista; no cierra requisitos.
+**Cómo leerla:** vista previa (`Ctrl+Shift+V`). Orden: 1.1 → 1.2 → 1.3. El 1.4 es ejemplo del instrumento; no cierra requisitos.
+
+El alcance cerrado (métrica norte, sin recaudo, web por URL, complemento del IDPYBA) está en la [formulación 1.1](1.1-formulacion-del-proyecto.md), secciones 5 y 6.
 
 ---
 
@@ -25,18 +27,6 @@ Esta fase responde **qué problema se resuelve y qué debe hacer el software**. 
 
 ---
 
-## Decisiones que esta fase ya cerró (no diluir en diseño)
-
-1. Métrica norte: cupos liberados por adopción efectiva.
-2. Alcance: verificación, catálogo con historia, postulación corta, listas de deseos en especie, bloqueo de fauna no doméstica.
-3. Canal: web por URL (WhatsApp / Instagram). App nativa pendiente de reevaluación (formulación 6.3).
-4. Este prototipo no recauda dinero.
-5. Complemento del IDPYBA; no clona la UCA.
-
-La entrevista real con un refugio sigue **pendiente**. Hasta entonces, los requisitos son hipótesis contrastadas con observación de canales públicos.
-
----
-
 ## Qué sigue
 
-[2.1 Arquitectura](../02-planeacion-y-diseno/2.1-arquitectura-de-la-solucion.md) — ya vigente. No añade funciones: traduce este análisis a estilo, contenedores y stack.
+[2.1 Arquitectura](../02-planeacion-y-diseno/2.1-arquitectura-de-la-solucion.md) — vigente. No añade funciones: traduce este análisis a estilo, contenedores y stack.
