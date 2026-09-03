@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { api } from './api';
+import { api } from '../api';
+import { nombreVisible } from '../demo';
 
 type Fila = {
   id: string;
@@ -26,12 +27,12 @@ export function MisPostulaciones({ alVolver }: { alVolver: () => void }) {
         ← Tablero
       </button>
       <h1>Mis postulaciones</h1>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error" role="alert">{error}</p>}
       {filas.length === 0 && !error && <p>Aún no te has postulado.</p>}
       <ul className="lista">
         {filas.map((p) => (
           <li key={p.id}>
-            <strong>{p.animal.nombre}</strong>
+            <strong>{nombreVisible(p.animal.nombre)}</strong>
             <p>
               {p.estado} · {p.puntaje} · animal {p.animal.estado}
             </p>

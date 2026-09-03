@@ -7,6 +7,7 @@ export type Usuario = {
   rol: Rol;
   localidad: string;
   tienePerfilAdoptante?: boolean;
+  demo?: boolean;
   entidad: {
     id: string;
     nombre: string;
@@ -56,6 +57,7 @@ export type TarjetaAnimal = {
   fraseExplicable?: string;
   estado?: string;
   postulaciones?: number;
+  demo?: boolean;
 };
 
 export type DetalleAnimal = {
@@ -77,6 +79,7 @@ export type DetalleAnimal = {
   entidad: { id: string; nombre: string; badge: string; localidad: string };
   fotos: { id: string; url: string; esPortada: boolean }[];
   tienePerfil: boolean;
+  demo?: boolean;
   puntaje?: number;
   fraseExplicable?: string;
 };
@@ -225,6 +228,7 @@ export const api = {
       nombre: string;
       localidad: string;
       badge: string;
+      demo?: boolean;
       bitacora: Array<{ categoria: string; descripcion: string; cantidad: number; unidad: string; cubiertoEn: string }>;
       deseos: Array<{
         id: string;
@@ -243,6 +247,7 @@ export const api = {
         historia: string;
         necesidadEspecial: boolean;
         fotoUrl: string | null;
+        demo?: boolean;
       }>;
     }>(`/entidades/${id}`),
   publicarDeseo: (datos: {

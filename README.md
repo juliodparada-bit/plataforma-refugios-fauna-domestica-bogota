@@ -1,8 +1,10 @@
-# Plataforma digital para la gestión integral de refugios de fauna doméstica en Bogotá
+# Mestizo
 
-Proyecto formativo ADSO (SENA, código 228118), ficha **3228973 B**, modalidad **presencial nocturna (mixta)**. Lo documento y lo construyo yo, Julio David Parada León.
+Proyecto formativo ADSO (SENA, código 228118), ficha **3228973 B**, modalidad **presencial nocturna (mixta)**. Nombre académico: plataforma digital para la gestión integral de refugios de fauna doméstica en Bogotá.
 
-Ámbito: área urbana de Bogotá; caninos y felinos domésticos. Marca comercial: **en definición**.
+Lo construimos y lo presentamos **Julio David Parada León** (Product Owner del expediente) y **Brayan Alejandro Sánchez**.
+
+Ámbito: área urbana de Bogotá; caninos y felinos domésticos. Marca de producto: **Mestizo**. Eslogan: *Por convivencia, no por raza.* En el catálogo: *No busca una raza. Busca un hogar.*
 
 ## Cómo leer el expediente
 
@@ -10,9 +12,9 @@ Empieza por el [índice maestro](documentacion/00-indice-maestro.md), en vista p
 
 Orden: **1.1 → 1.2 → 1.3 → 2.1 → 2.2 → 2.3 → 2.4**. El código está en `api/` y `web/`. Cómo levantarlo: [3.1 Entorno](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md).
 
-En local: Postgres en `5433`, API en `3000`, cliente en [http://localhost:5173](http://localhost:5173).
+En local: Postgres en `5433`, API en `3000`, cliente en [http://localhost:5173](http://localhost:5173). Guion de 15 minutos: [http://localhost:5173/sustentacion](http://localhost:5173/sustentacion) ([4.5](documentacion/04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md)).
 
-**Cuentas de ejemplo** (solo local; no son personas ni refugios reales): `entidad.ejemplo@local.test`, `adoptante.ejemplo@local.test` y `donante.ejemplo@local.test`, todas con `EjemploLocal123`. Detalle en [3.1](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md).
+**Cuentas de piloto** (solo local): `entidad.ejemplo@local.test`, `adoptante.ejemplo@local.test` y `donante.ejemplo@local.test`, todas con `EjemploLocal123`. En el catálogo, el nombre de la ficha (Luna, Mote) aparece también en diagonal sobre la foto. Detalle en [3.1](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md).
 
 ## Alcance del prototipo
 

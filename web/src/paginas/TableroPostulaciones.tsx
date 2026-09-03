@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { api, type TarjetaAnimal } from './api';
+import { api, type TarjetaAnimal } from '../api';
+import { nombreVisible } from '../demo';
 
 const ETQ_ESTADO: Record<string, string> = {
   publicado: 'Publicado (en catálogo)',
@@ -62,12 +63,12 @@ export function TableroPostulaciones({
       <p className="ayuda">
         Cupos liberados (animales en estado adoptado): <strong>{cupos}</strong>
       </p>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error" role="alert">{error}</p>}
       {!animalId && (
         <ul className="lista">
           {animales.map((a) => (
             <li key={a.id}>
-              <strong>{a.nombre}</strong>
+              <strong>{nombreVisible(a.nombre)}</strong>
               <p>
                 {ETQ_ESTADO[a.estado ?? ''] ?? a.estado} · {a.postulaciones ?? 0} postulaciones
               </p>
@@ -86,7 +87,7 @@ export function TableroPostulaciones({
             ← Lista
           </button>
           <h2>
-            {detalle.animal.nombre} · {ETQ_ESTADO[detalle.animal.estado] ?? detalle.animal.estado}
+            {nombreVisible(detalle.animal.nombre)} · {ETQ_ESTADO[detalle.animal.estado] ?? detalle.animal.estado}
           </h2>
           {detalle.animal.necesidadEspecial && (
             <p className="etiqueta">Necesidad especial — se pide evidencia del hogar</p>
@@ -95,7 +96,7 @@ export function TableroPostulaciones({
             {detalle.postulaciones.map((p) => (
               <li key={p.id}>
                 <strong>
-                  {p.adoptante.nombre} · {p.puntaje}
+                  {nombreVisible(p.adoptante.nombre)} · {p.puntaje}
                 </strong>
                 <p>{p.fraseExplicable}</p>
                 <p>

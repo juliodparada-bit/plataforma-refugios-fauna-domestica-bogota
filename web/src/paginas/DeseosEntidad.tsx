@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { api, type Usuario } from './api';
+import { api, type Usuario } from '../api';
 
 export function DeseosEntidad({ usuario, alVolver }: { usuario: Usuario; alVolver: () => void }) {
   const [items, setItems] = useState<Awaited<ReturnType<typeof api.misDeseos>>>([]);
@@ -102,7 +102,7 @@ export function DeseosEntidad({ usuario, alVolver }: { usuario: Usuario; alVolve
           Publicar ítem
         </button>
       </form>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error" role="alert">{error}</p>}
       <ul className="lista">
         {items.map((i) => {
           const reserva = i.reservas[0];

@@ -5,16 +5,18 @@
 | Programa | Tecnólogo en Análisis y Desarrollo de Software (ADSO) |
 | Código | 228118 |
 | Institución | Servicio Nacional de Aprendizaje — SENA |
-| Aprendiz | Julio David Parada León (ficha 3228973 B) |
+| Aprendices | Julio David Parada León y Brayan Alejandro Sánchez (ficha 3228973 B) |
 | Modalidad | Presencial nocturna (mixta) |
-| Rol | Product Owner (análisis, diseño, desarrollo, pruebas y entrega) |
+| Roles | Julio: Product Owner del expediente. Ambos: construcción y sustentación del prototipo |
 | Nombre académico | Plataforma digital para la gestión integral de refugios de fauna doméstica en Bogotá |
-| Marca de producto | En definición (el nombre académico no cambia) |
+| Marca de producto | Mestizo |
+| Eslogan | Por convivencia, no por raza. |
+| Frase del catálogo | No busca una raza. Busca un hogar. |
 | Ámbito | Área urbana de Bogotá, D.C. — caninos y felinos domésticos |
 | Repositorio | https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota |
-| Última revisión de coherencia | 18 de agosto de 2026 |
+| Última revisión de coherencia | 3 de septiembre de 2026 |
 
-Este expediente lo organizo yo, Julio David Parada León, como Product Owner y constructor del prototipo. Una sola carpeta: `documentacion/`. Artefactos de ingeniería (IEEE 830, UML, DER, pruebas, manuales) por fases SENA.
+Este expediente lo organizamos Julio David Parada León y Brayan Alejandro Sánchez. Julio firma como Product Owner del hilo documental. Una sola carpeta: `documentacion/`. Artefactos de ingeniería (IEEE 830, UML, DER, pruebas, manuales) por fases SENA.
 
 ---
 
@@ -45,9 +47,9 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 | Fase | Estado | Qué hay hoy |
 |---|---|---|
 | 1. Análisis | Estable | Formulación, ERS, HU, backlog, entrevista de ejemplo (1.4 no es trabajo de campo) |
-| 2. Planeación y diseño | Estable para construir | 2.1 a 2.4 vigentes (wireframes de baja fidelidad; alta fidelidad después) |
-| 3. Ejecución | En curso | Módulos 1 a 5 demostrables en local, con cuentas de ejemplo para entidad, adoptante y donante |
-| 4. Evaluación y entrega | Pendiente de artefactos | Ya hay incrementos usables; faltan 4.1 a 4.5 (pruebas formales, manuales, pitch) |
+| 2. Planeación y diseño | Estable | 2.1 a 2.4 vigentes. El look del prototipo vive en `web/`; los wireframes del 2.4 siguen siendo el contenido y el orden |
+| 3. Ejecución | En curso | Módulos 1 a 5 demostrables en local ([3.1](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md), [3.2](03-ejecucion-y-desarrollo/3.2-sprints.md)) |
+| 4. Evaluación y entrega | Vigente para sustentación | [4.1](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) a [4.5](04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md). Guion en http://localhost:5173/sustentacion |
 
 ---
 
@@ -71,7 +73,7 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 | [2.1 Arquitectura](02-planeacion-y-diseno/2.1-arquitectura-de-la-solucion.md) | Estilo, contexto, contenedores, stack |
 | [2.2 UML](02-planeacion-y-diseno/2.2-uml.md) | Casos de uso por épica, actividades, secuencia, clases, estados |
 | [2.3 Base de datos](02-planeacion-y-diseno/2.3-base-de-datos.md) | DER, modelo relacional, diccionario |
-| [2.4 Interfaz](02-planeacion-y-diseno/2.4-interfaz-ui-ux.md) | Mapa de navegación y wireframes de baja fidelidad |
+| [2.4 Interfaz](02-planeacion-y-diseno/2.4-interfaz-ui-ux.md) | Mapa de navegación y wireframes (look en `web/`) |
 
 ### Fase 3 — Ejecución
 
@@ -79,12 +81,19 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 |---|---|
 | [Índice fase 3](03-ejecucion-y-desarrollo/00-indice-de-la-fase.md) | Sprints y convenciones |
 | [3.1 Entorno](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md) | Cómo levantar API, web y PostgreSQL |
+| [3.2 Sprints](03-ejecucion-y-desarrollo/3.2-sprints.md) | Módulos 1 a 5 |
+| [3.3 Evidencias](03-ejecucion-y-desarrollo/3.3-evidencias.md) | Repo y semilla |
 
 ### Fase 4 — Evaluación y entrega
 
 | Archivo | Para qué sirve |
 |---|---|
-| [Índice fase 4](04-evaluacion-pruebas-y-entrega/00-indice-de-la-fase.md) | Pruebas, manuales, despliegue, pitch |
+| [Índice fase 4](04-evaluacion-pruebas-y-entrega/00-indice-de-la-fase.md) | Mapa de la fase |
+| [4.1 Pruebas](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) | Unitarias, e2e y casos negativos |
+| [4.2 Manual técnico](04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md) | Dónde está cada respuesta de ingeniería |
+| [4.3 Manual de usuario](04-evaluacion-pruebas-y-entrega/4.3-manual-usuario.md) | Qué hace cada rol |
+| [4.4 Despliegue](04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) | Puertos locales |
+| [4.5 Sustentación](04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md) | Guion de 15 minutos |
 
 ---
 
@@ -95,5 +104,6 @@ Las decisiones de alcance (métrica norte, sin recaudo, complemento del IDPYBA, 
 ## Convenio
 
 - Un solo hilo: `documentacion/`.
-- Marca comercial: **en definición**. Hasta cerrarla, en pantallas y diagramas uso «la plataforma».
+- Marca de producto: **Mestizo**. Eslogan: *Por convivencia, no por raza.* El nombre académico del expediente no cambia.
+- Presentan el prototipo: Julio David Parada León y Brayan Alejandro Sánchez.
 - Entrevista real con un refugio: pendiente. El 1.4 es simulación.

@@ -3,7 +3,8 @@ import {
   api,
   type ColaItem,
   type SolicitudVerificacion,
-} from './api';
+} from '../api';
+import { nombreVisible } from '../demo';
 
 const ETIQUETAS: Record<string, string> = {
   rut: 'RUT',
@@ -48,12 +49,12 @@ export function ColaValidador({ alVolver }: { alVolver: () => void }) {
         ← Tablero
       </button>
       <h1>Cola de verificación</h1>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error" role="alert">{error}</p>}
       {cola.length === 0 && <p>No hay solicitudes pendientes.</p>}
       <ul className="lista">
         {cola.map((item) => (
           <li key={item.id}>
-            <strong>{item.entidad.nombre}</strong>
+            <strong>{nombreVisible(item.entidad.nombre)}</strong>
             <p>
               {ETIQUETAS[item.tipoNivel]} · {item.entidad.localidad.nombre} ·{' '}
               {ETIQUETAS[item.estado] ?? item.estado}
@@ -120,7 +121,7 @@ function DetalleValidador({
       <button type="button" className="enlace" onClick={alVolver}>
         ← Cola
       </button>
-      <h1>{detalle.entidad?.nombre}</h1>
+      <h1>{nombreVisible(detalle.entidad?.nombre ?? '')}</h1>
       <p>
         {ETIQUETAS[detalle.tipoNivel]} · {detalle.entidad?.localidad} ·{' '}
         {ETIQUETAS[detalle.estado] ?? detalle.estado}
@@ -169,7 +170,7 @@ function DetalleValidador({
             <input type="checkbox" name="visita" /> Marcar visita o video (no es
             obligatorio para aprobar)
           </label>
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error" role="alert">{error}</p>}
           <button type="submit" className="primario" disabled={enviando}>
             {enviando ? 'Guardando…' : 'Registrar decisión'}
           </button>

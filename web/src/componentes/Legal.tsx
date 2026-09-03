@@ -1,3 +1,6 @@
+import { NombreMarca } from './Marca';
+import { ESLOGAN } from '../marca';
+
 export type DocLegal = 'terminos' | 'datos';
 
 export function Legal({
@@ -8,27 +11,27 @@ export function Legal({
   alVolver: () => void;
 }) {
   return (
-    <main className="hoja legal">
-      <button type="button" className="enlace" onClick={alVolver}>
-        ← Volver
+    <article className="hoja legal">
+      <button type="button" className="secundario" onClick={alVolver}>
+        Cerrar
       </button>
       {doc === 'terminos' ? <Terminos /> : <Datos />}
       <p className="ayuda">
         Prototipo formativo ADSO. No es un producto oficial del IDPYBA ni de la
-        Alcaldía. Marca comercial: en definición.
+        Alcaldía. La marca del producto es <NombreMarca className="es-en-linea" />.
       </p>
-    </main>
+    </article>
   );
 }
 
 function Terminos() {
   return (
     <>
-      <p className="ojo">Uso de la plataforma</p>
-      <h1>Términos y condiciones</h1>
+      <p className="ojo">Uso de <NombreMarca className="es-en-linea" /></p>
+      <h1 id="legal-titulo">Términos y condiciones</h1>
       <p>
-        Al crear una cuenta aceptas estas reglas. El prototipo opera en el área
-        urbana de Bogotá y solo para caninos y felinos domésticos.
+        Al crear una cuenta en <NombreMarca className="es-en-linea" /> aceptas estas reglas. El prototipo opera
+        en el área urbana de Bogotá y solo para caninos y felinos domésticos.
       </p>
       <h2>Para qué sirve</h2>
       <p>
@@ -56,10 +59,10 @@ function Terminos() {
         evidencias de verificación y el contacto de entrega de un donante no lo
         son. No publiques datos de terceros sin autorización.
       </p>
-      <h2>Cuentas de ejemplo</h2>
+      <h2>Cuentas de piloto</h2>
       <p>
-        Las fichas y correos marcados EJEMPLO son de demostración local. No
-        corresponden a personas, animales ni refugios reales.
+        Las cuentas de piloto local no corresponden a personas, animales ni
+        refugios reales.
       </p>
     </>
   );
@@ -69,7 +72,7 @@ function Datos() {
   return (
     <>
       <p className="ojo">Ley 1581 de 2012 · Decreto 1377 de 2013</p>
-      <h1>Tratamiento de datos personales</h1>
+      <h1 id="legal-titulo">Tratamiento de datos personales</h1>
       <p>
         Quien recolecta datos debe tener autorización, finalidad clara, medidas
         de seguridad y permitir consulta o corrección. Este aviso cumple el
@@ -77,8 +80,9 @@ function Datos() {
       </p>
       <h2>Responsable</h2>
       <p>
-        Julio David Parada León, prototipo formativo ADSO (ficha 3228973 B).
-        Entorno de piloto local / demostración. No es un operador de recaudo.
+        Julio David Parada León, prototipo formativo ADSO (ficha 3228973 B),
+        responsable de <NombreMarca className="es-en-linea" /> en entorno de piloto local / demostración. No es
+        un operador de recaudo.
       </p>
       <h2>Qué datos y para qué</h2>
       <ul>
@@ -95,7 +99,7 @@ function Datos() {
       </p>
       <h2>Seguridad</h2>
       <p>
-        Contraseña con hash y sal (bcrypt). Sesión en cookie httpOnly (`sid`).
+        Contraseña con hash y sal (bcryptjs, costo 12). Sesión en cookie httpOnly (`sid`).
         En un despliegue piloto se usará HTTPS. Las evidencias no son listables
         sin autenticación.
       </p>
@@ -118,7 +122,9 @@ export function PieLegal({
 }) {
   return (
     <footer className="pie-legal">
-      <p>Sin recaudo · Solo Bogotá urbana · Caninos y felinos</p>
+      <p>
+        <NombreMarca /> · {ESLOGAN} · Sin recaudo · Solo Bogotá urbana
+      </p>
       <p>
         <button type="button" className="enlace" onClick={alTerminos}>
           Términos

@@ -13,8 +13,11 @@ import {
 } from '@prisma/client';
 import { mkdir, writeFile } from 'fs/promises';
 import { join, normalize, sep } from 'path';
+import { exigirEntidad, exigirPublicadora } from '../comun/entidad';
+import { esCuentaPiloto } from '../comun/demo';
 import { PrismaService } from '../prisma/prisma.service';
 import { calcularPuntaje } from '../dominio/puntaje';
+import type { PublicarAnimalDto } from './dto/publicar.dto';
 
 const MAX_BYTES = 5_242_880;
 const MIME_FOTO = ['image/jpeg', 'image/png', 'image/webp'];
@@ -34,10 +37,14 @@ export class AnimalesService {
 
   async publicar(
     usuarioId: string,
-    datos: Record<string, string>,
+    datos: PublicarAnimalDto,
     foto: ArchivoFoto | undefined,
   ) {
-    const entidad = await this.exigirPublicadora(usuarioId);
+    const entidad = await exigirPublicadora(
+      this.prisma,
+      usuarioId,
+      'Aún no puedes publicar: falta la verificación.',
+    );
     if (!foto) {
       throw new BadRequestException('Debes adjuntar al menos una foto.');
     }
@@ -115,7 +122,7 @@ export class AnimalesService {
       where,
       include: {
         localidad: true,
-        entidad: true,
+        entidad: { include: { usuario: { select: { correo: true } } } },
         fotos: { where: { esPortada: true }, take: 1 },
       },
       orderBy: { creadoEn: 'desc' },
@@ -151,12 +158,12 @@ export class AnimalesService {
   }
 
   async mios(usuarioId: string) {
-    const entidad = await this.exigirEntidad(usuarioId);
+    const entidad = await exigirEntidad(this.prisma, usuarioId);
     const filas = await this.prisma.animal.findMany({
       where: { entidadId: entidad.id },
       include: {
         localidad: true,
-        entidad: true,
+        entidad: { include: { usuario: { select: { correo: true } } } },
         fotos: { where: { esPortada: true }, take: 1 },
         postulaciones: { select: { id: true, estado: true } },
       },
@@ -175,7 +182,7 @@ export class AnimalesService {
       where: { id },
       include: {
         localidad: true,
-        entidad: { include: { localidad: true } },
+        entidad: { include: { localidad: true, usuario: { select: { correo: true } } } },
         fotos: { orderBy: { orden: 'asc' } },
       },
     });
@@ -224,6 +231,7 @@ export class AnimalesService {
         badge: animal.entidad.estadoVerificacion,
         localidad: animal.entidad.localidad.nombre,
       },
+      demo: esCuentaPiloto(animal.entidad.usuario.correo),
       fotos: animal.fotos.map((f) => ({
         id: f.id,
         url: `/api/animales/${animal.id}/fotos/${f.id}`,
@@ -268,7 +276,7 @@ export class AnimalesService {
     estado?: EstadoAnimal;
     creadoEn?: Date;
     localidad: { nombre: string };
-    entidad: { id: string; nombre: string; estadoVerificacion: string };
+    entidad: { id: string; nombre: string; estadoVerificacion: string; usuario?: { correo: string } };
     fotos: { id: string }[];
   }) {
     return {
@@ -285,6 +293,7 @@ export class AnimalesService {
       entidadNombre: a.entidad.nombre,
       fotoUrl: a.fotos[0] ? `/api/animales/${a.id}/fotos/${a.fotos[0].id}` : null,
       creadoEn: a.creadoEn,
+      demo: esCuentaPiloto(a.entidad.usuario?.correo),
     };
   }
 
@@ -294,22 +303,6 @@ export class AnimalesService {
     if (!t.raza) n += 2;
     if (t.edadAprox === 'adulto' || t.edadAprox === 'senior') n += 2;
     return n;
-  }
-
-  private async exigirPublicadora(usuarioId: string) {
-    const entidad = await this.exigirEntidad(usuarioId);
-    if (entidad.estadoVerificacion !== 'nivel_1' && entidad.estadoVerificacion !== 'nivel_2') {
-      throw new ForbiddenException('Aún no puedes publicar: falta la verificación.');
-    }
-    return entidad;
-  }
-
-  async exigirEntidad(usuarioId: string) {
-    const entidad = await this.prisma.entidad.findUnique({ where: { usuarioId } });
-    if (!entidad) {
-      throw new ForbiddenException('Esta cuenta no es una entidad.');
-    }
-    return entidad;
   }
 
   private especie(valor?: string): Especie {

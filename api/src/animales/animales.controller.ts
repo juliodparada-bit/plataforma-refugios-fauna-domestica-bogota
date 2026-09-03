@@ -10,6 +10,8 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
@@ -19,6 +21,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { SesionOpcionalGuard } from '../auth/sesion-opcional.guard';
 import { SesionGuard, type SesionPayload } from '../auth/sesion.guard';
 import { AnimalesService } from './animales.service';
+import { PublicarAnimalDto } from './dto/publicar.dto';
 
 type ReqSesion = Request & { sesion?: SesionPayload };
 
@@ -70,9 +73,16 @@ export class AnimalesController {
       limits: { fileSize: 5_242_880 },
     }),
   )
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: false,
+    }),
+  )
   publicar(
     @Req() req: ReqSesion,
-    @Body() cuerpo: Record<string, string>,
+    @Body() cuerpo: PublicarAnimalDto,
     @UploadedFile() foto: Express.Multer.File | undefined,
   ) {
     return this.servicio.publicar(

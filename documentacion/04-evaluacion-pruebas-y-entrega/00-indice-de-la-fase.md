@@ -5,47 +5,25 @@
 | Código | DOC-EV-00 |
 | Fase SENA | Evaluación y control |
 | Competencias | 220501097 · 220501098 |
-| Estado | Índice — artefactos 4.1 a 4.5 pendientes |
-| Depende de | Incrementos demostrables de la fase 3 (ya existen módulos 1 y 2) |
+| Estado | Vigente para la sustentación del prototipo local |
+| Depende de | Incrementos demostrables de la fase 3 (módulos 1 a 5) |
 
-Cierro el ciclo PHVA: verificar lo construido, desplegarlo y sustentarlo. Los módulos de identidad y verificación ya se pueden mostrar en local; este índice se llena al preparar pruebas formales y sustentación.
-
----
-
-## Artefactos que se van a producir
-
-### 4.1 Plan y casos de prueba
-
-- Alcance de pruebas del prototipo (lo que se prueba y lo que no: no hay pasarela que probar).
-- Casos de prueba trazados a HU y a RF (unitarias donde aporten, integración de flujos, usabilidad con el refugio piloto).
-- Casos negativos obligatorios: especie no permitida; entidad no verificada que intenta publicar; donante que no ve datos ajenos.
-- Registro de ejecución (pasó / falló / evidencia).
-
-### 4.2 Manual técnico
-
-Arquitectura real, cómo levantar el entorno, modelo de datos, endpoints de la API, variables de entorno, cómo se calcula el puntaje de compatibilidad.
-
-### 4.3 Manual de usuario
-
-Guía paso a paso:
-
-- Entidad: verificarse, publicar animal, gestionar postulaciones, confirmar un bulto.
-- Adoptante: cinco preguntas, postularse.
-- Donante: reservar un ítem.
-
-### 4.4 Despliegue
-
-- Entorno de piloto (URL).
-- Checklist de producción mínima: HTTPS, copias de respaldo de la base, sin secretos en el cliente.
-- Nota de limitaciones del prototipo.
-
-### 4.5 Sustentación
-
-- Pitch de 5 a 8 minutos: problema, no competir con el IDPYBA, métrica norte, demo (publicar, postular, cubrir ítem) y el alcance cerrado (sin pasarela ni apadrinamiento).
-- Respuestas preparadas a: «¿dónde está la pasarela?», «¿por qué no apadrinamiento?», «¿es oficial del Distrito?».
+Cierro el ciclo: verificar lo construido, decir cómo se corre y sustentarlo. Los cinco módulos se muestran en local.
 
 ---
 
-## Criterio de éxito de la entrega (se copia de la formulación)
+## Artefactos
 
-Mínimo viable de demostración: un refugio publica tres animales, llega una postulación y un ítem de insumos queda cubierto. Deseable: diez animales, cinco ítems cubiertos, una adopción con seguimiento a 15 días.
+| Archivo | Para qué sirve |
+|---|---|
+| [4.1 Pruebas](4.1-pruebas.md) | Unitarias, e2e y casos negativos |
+| [4.2 Manual técnico](4.2-manual-tecnico.md) | Mapa a 2.1, 2.3, 3.1 y la API |
+| [4.3 Manual de usuario](4.3-manual-usuario.md) | Qué hace cada rol en el prototipo |
+| [4.4 Despliegue](4.4-despliegue.md) | Puertos locales; no hay URL de piloto |
+| [4.5 Sustentación](4.5-sustentacion.md) | Guion de 15 minutos (`/sustentacion`) |
+
+---
+
+## Criterio de éxito de la entrega (formulación)
+
+Mínimo viable de demostración: un refugio publica animales, llega una postulación y un ítem de insumos queda cubierto. En la semilla local eso ya está listo para mostrar.

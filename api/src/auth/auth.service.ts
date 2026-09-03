@@ -6,8 +6,10 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Rol } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
+import { esCuentaPiloto } from '../comun/demo';
+import { selloPermitePublicar } from '../comun/entidad';
 import { EntrarDto } from './dto/entrar.dto';
 import { RegistrarDto } from './dto/registrar.dto';
 
@@ -130,8 +132,7 @@ export class AuthService {
   }) {
     const puedePublicar =
       usuario.rol === Rol.entidad &&
-      (usuario.entidad?.estadoVerificacion === 'nivel_1' ||
-        usuario.entidad?.estadoVerificacion === 'nivel_2');
+      selloPermitePublicar(usuario.entidad?.estadoVerificacion ?? '');
 
     return {
       id: usuario.id,
@@ -140,6 +141,7 @@ export class AuthService {
       rol: usuario.rol,
       localidad: usuario.localidad.nombre,
       tienePerfilAdoptante: Boolean(usuario.perfilAdoptante),
+      demo: esCuentaPiloto(usuario.correo),
       entidad: usuario.entidad
         ? {
             id: usuario.entidad.id,

@@ -1,12 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { api, type Usuario } from './api';
-
-const BADGE: Record<string, string> = {
-  nivel_1: 'Nivel 1',
-  nivel_2: 'Nivel 2',
-  en_revision: 'En revisión',
-  rechazada: 'Rechazada',
-};
+import { api, type Usuario } from '../api';
+import { etiquetaEspecie, etiquetaSello } from '../etiquetas';
+import { SelloFicha } from '../componentes/SelloFicha';
+import { esFichaDemo, marcaDiagonal, nombreVisible } from '../demo';
 
 export function PerfilEntidad({
   id,
@@ -51,34 +47,36 @@ export function PerfilEntidad({
   }
 
   return (
+    <SelloFicha
+      activo={esFichaDemo({ demo: data.demo, nombre: data.nombre })}
+      texto={marcaDiagonal(data.nombre)}
+      className="es-hoja"
+    >
     <main className="hoja">
       <button type="button" className="enlace" onClick={alVolver}>
         ← Catálogo
       </button>
       <p className="ojo">Refugio con sello a la vista</p>
-      <h1>{data.nombre}</h1>
+      <h1>{nombreVisible(data.nombre)}</h1>
       <p>
-        <span className="etiqueta etiqueta-sello">{BADGE[data.badge] ?? data.badge}</span>{' '}
+        <span className="etiqueta etiqueta-sello">{etiquetaSello(data.badge)}</span>{' '}
         {data.localidad}
       </p>
       <p className="ayuda">
         Un ítem cubierto aquí es un cupo que puede abrirse. Sin recaudo y sin
         datos del donante en la bitácora.
       </p>
-      {data.nombre.startsWith('EJEMPLO') && (
-        <aside className="aviso aviso-ejemplo">
-          <p>Esta entidad es un ejemplo de demostración. No es un refugio real.</p>
-        </aside>
-      )}
       <h2>Animales publicados</h2>
       {data.animales?.length ? (
         <ul className="lista tarjetas">
           {data.animales.map((a) => (
           <li key={a.id}>
+            <SelloFicha activo={esFichaDemo({ demo: a.demo ?? data.demo, nombre: a.nombre })} texto={marcaDiagonal(a.nombre)} compacto>
             {a.fotoUrl && <img className="miniatura" src={a.fotoUrl} alt="" />}
-            <strong>{a.nombre}</strong>
+            </SelloFicha>
+            <strong>{nombreVisible(a.nombre)}</strong>
             <p>
-              {a.especie === 'canino' ? 'Canino' : 'Felino'} · {a.localidad}
+              {etiquetaEspecie(a.especie)} · {a.localidad}
             </p>
             {a.necesidadEspecial && <p className="etiqueta">Necesidad especial</p>}
             <button type="button" className="primario" onClick={() => alAbrirAnimal(a.id)}>
@@ -95,7 +93,7 @@ export function PerfilEntidad({
       <ul className="lista">
         {data.bitacora.map((b, i) => (
           <li key={i}>
-            {b.descripcion} · {b.cantidad} {b.unidad} · {new Date(b.cubiertoEn).toLocaleDateString('es-CO')}
+            {nombreVisible(b.descripcion)} · {b.cantidad} {b.unidad} · {new Date(b.cubiertoEn).toLocaleDateString('es-CO')}
           </li>
         ))}
       </ul>
@@ -105,7 +103,7 @@ export function PerfilEntidad({
           <p>{ok}</p>
         </aside>
       )}
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error" role="alert">{error}</p>}
       <ul className="lista">
         {data.deseos.map((d) => (
           <li key={d.id}>
@@ -113,7 +111,7 @@ export function PerfilEntidad({
               {d.categoria} · {d.prioridad}
             </strong>
             <p>
-              {d.descripcion} · {d.cantidad} {d.unidad} · {d.estado}
+              {nombreVisible(d.descripcion)} · {d.cantidad} {d.unidad} · {d.estado}
             </p>
             {d.estado === 'pendiente' && usuario?.rol === 'donante' && (
               <form className="formulario" onSubmit={(e) => void reservar(e, d.id)}>
@@ -139,5 +137,6 @@ export function PerfilEntidad({
         ))}
       </ul>
     </main>
+    </SelloFicha>
   );
 }

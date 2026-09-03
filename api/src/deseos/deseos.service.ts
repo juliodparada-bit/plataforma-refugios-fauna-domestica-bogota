@@ -9,6 +9,8 @@ import { EstadoItem, EstadoReserva } from '@prisma/client';
 import { mkdir, writeFile } from 'fs/promises';
 import { join, normalize, sep } from 'path';
 import { PrismaService } from '../prisma/prisma.service';
+import { exigirEntidad, exigirPublicadora } from '../comun/entidad';
+import { esCuentaPiloto } from '../comun/demo';
 
 const MAX_BYTES = 5_242_880;
 const MIME_FOTO = ['image/jpeg', 'image/png', 'image/webp'];
@@ -34,7 +36,11 @@ export class DeseosService {
       prioridad: 'baja' | 'media' | 'alta';
     },
   ) {
-    const entidad = await this.exigirPublicadora(usuarioId);
+    const entidad = await exigirPublicadora(
+      this.prisma,
+      usuarioId,
+      'Aún no puedes publicar ítems: falta la verificación.',
+    );
     return this.prisma.itemDeseo.create({
       data: {
         entidadId: entidad.id,
@@ -49,7 +55,7 @@ export class DeseosService {
   }
 
   async mios(usuarioId: string) {
-    const entidad = await this.exigirEntidad(usuarioId);
+    const entidad = await exigirEntidad(this.prisma, usuarioId);
     await this.caducarVencidas();
     return this.prisma.itemDeseo.findMany({
       where: { entidadId: entidad.id },
@@ -204,7 +210,7 @@ export class DeseosService {
   async perfilPublico(entidadId: string) {
     const entidad = await this.prisma.entidad.findUnique({
       where: { id: entidadId },
-      include: { localidad: true },
+      include: { localidad: true, usuario: { select: { correo: true } } },
     });
     if (!entidad) {
       throw new NotFoundException('No encontré esa entidad.');
@@ -224,6 +230,7 @@ export class DeseosService {
       nombre: entidad.nombre,
       localidad: entidad.localidad.nombre,
       badge: entidad.estadoVerificacion,
+      demo: esCuentaPiloto(entidad.usuario.correo),
       bitacora,
       deseos,
       animales: animales.map((a) => ({
@@ -234,6 +241,7 @@ export class DeseosService {
         historia: a.historia.slice(0, 90),
         necesidadEspecial: a.necesidadEspecial,
         fotoUrl: a.fotos[0] ? `/api/animales/${a.id}/fotos/${a.fotos[0].id}` : null,
+        demo: esCuentaPiloto(entidad.usuario.correo),
       })),
     };
   }
@@ -274,21 +282,5 @@ export class DeseosService {
         }),
       ]);
     }
-  }
-
-  private async exigirPublicadora(usuarioId: string) {
-    const entidad = await this.exigirEntidad(usuarioId);
-    if (entidad.estadoVerificacion !== 'nivel_1' && entidad.estadoVerificacion !== 'nivel_2') {
-      throw new ForbiddenException('Aún no puedes publicar ítems: falta la verificación.');
-    }
-    return entidad;
-  }
-
-  private async exigirEntidad(usuarioId: string) {
-    const entidad = await this.prisma.entidad.findUnique({ where: { usuarioId } });
-    if (!entidad) {
-      throw new ForbiddenException('Esta cuenta no es una entidad.');
-    }
-    return entidad;
   }
 }

@@ -1,0 +1,452 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Manrope:wght@400;500;600;700&display=swap');
+
+body[data-guia='1'] {
+  background: #07091a;
+  color: #eef1ff;
+}
+
+.guia {
+  --acento: #7c5cff;
+  --acento-2: #19e3c4;
+  --peligro: #ff6b8a;
+  --papel: rgba(255, 255, 255, 0.07);
+  --linea: rgba(255, 255, 255, 0.12);
+  min-height: 100dvh;
+  font-family: Manrope, 'Segoe UI', sans-serif;
+  color: #eef1ff;
+  background:
+    radial-gradient(900px 480px at 8% -10%, rgba(124, 92, 255, 0.35), transparent 60%),
+    radial-gradient(700px 420px at 110% 8%, rgba(25, 227, 196, 0.18), transparent 55%),
+    radial-gradient(600px 380px at 70% 110%, rgba(255, 107, 138, 0.12), transparent 50%),
+    #07091a;
+}
+
+.guia-progreso {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.guia-progreso span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--acento), var(--acento-2));
+  transition: width 0.35s ease;
+}
+
+.guia-tope {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  backdrop-filter: blur(16px);
+  background: rgba(7, 9, 26, 0.78);
+  border-bottom: 1px solid var(--linea);
+  padding: 0.85rem 1.25rem 0.95rem;
+}
+
+.guia-tope-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1.25rem;
+  max-width: 74rem;
+  margin: 0 auto;
+}
+
+.guia-marca {
+  margin: 0;
+  font-family: 'Bricolage Grotesque', Georgia, sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.guia-equipo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.45rem 0 0;
+}
+
+.guia-persona {
+  display: inline-flex;
+  flex-direction: column;
+  border: 1px solid var(--linea);
+  background: var(--papel);
+  border-radius: 0.7rem;
+  padding: 0.28rem 0.7rem 0.32rem;
+}
+
+.guia-persona strong {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.guia-persona span {
+  font-size: 0.68rem;
+  color: #b7bddc;
+}
+
+.guia-avance {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.guia-meta {
+  font-size: 0.8rem;
+  color: #b7bddc;
+}
+
+.guia-pildoras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-width: 74rem;
+  margin: 0.7rem auto 0;
+}
+
+.guia-pildora {
+  border: 1px solid var(--linea);
+  background: transparent;
+  color: #d5daf4;
+  border-radius: 999px;
+  padding: 0.22rem 0.72rem;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.guia-pildora:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(124, 92, 255, 0.2);
+}
+
+.guia-pildora.es-activa {
+  background: var(--acento);
+  color: #fff;
+  border-color: var(--acento);
+  font-weight: 700;
+}
+
+.guia-pildora.es-bloque {
+  background: rgba(25, 227, 196, 0.14);
+  border-color: rgba(25, 227, 196, 0.35);
+  color: var(--acento-2);
+  cursor: default;
+}
+
+.guia-boton {
+  border: 1px solid var(--linea);
+  background: transparent;
+  color: #eef1ff;
+  border-radius: 999px;
+  padding: 0.38rem 0.9rem;
+  cursor: pointer;
+}
+
+.guia-boton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.guia-boton.es-primario {
+  background: var(--acento-2);
+  color: #04241e;
+  border-color: var(--acento-2);
+  font-weight: 700;
+}
+
+.guia-cuerpo {
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 1.6rem 1.25rem 4.5rem;
+  animation: guia-entra 0.38s ease;
+}
+
+@keyframes guia-entra {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.guia-cuerpo h2 {
+  font-family: 'Bricolage Grotesque', Georgia, sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.55rem;
+  line-height: 1.15;
+}
+
+.guia-cuerpo h3 {
+  font-family: 'Bricolage Grotesque', Georgia, sans-serif;
+  font-size: 1.15rem;
+  margin: 1.4rem 0 0.55rem;
+}
+
+.guia-muted,
+.guia-texto {
+  color: #c5cbe8;
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 52rem;
+}
+
+.guia-lead {
+  font-size: 1.12rem;
+  color: #eef1ff;
+  margin: 0 0 1.15rem;
+  max-width: 48rem;
+  line-height: 1.55;
+}
+
+.guia-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 0 0 1.2rem;
+}
+
+.guia-stat {
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: 1.1rem;
+  padding: 1rem 1.05rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.guia-stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(124, 92, 255, 0.55);
+}
+
+.guia-stat strong {
+  display: block;
+  font-family: 'Bricolage Grotesque', Georgia, sans-serif;
+  font-size: 1.35rem;
+  color: var(--acento-2);
+}
+
+.guia-stat span {
+  display: block;
+  color: #b7bddc;
+  font-size: 0.88rem;
+  margin-top: 0.2rem;
+}
+
+.guia-tabla-wrap {
+  overflow-x: auto;
+  margin: 0 0 1.15rem;
+  border: 1px solid var(--linea);
+  border-radius: 1.1rem;
+  background: rgba(10, 12, 28, 0.55);
+}
+
+.guia-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.guia-tabla th,
+.guia-tabla td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.72rem 0.85rem;
+  border-bottom: 1px solid var(--linea);
+}
+
+.guia-tabla th {
+  background: rgba(124, 92, 255, 0.16);
+  font-weight: 700;
+  white-space: nowrap;
+  color: #f4f1ff;
+}
+
+.guia-tabla tr:last-child td {
+  border-bottom: 0;
+}
+
+.guia-fila--success td {
+  box-shadow: inset 3px 0 0 var(--acento-2);
+}
+
+.guia-fila--info td {
+  box-shadow: inset 3px 0 0 var(--acento);
+}
+
+.guia-fila--warning td {
+  box-shadow: inset 3px 0 0 var(--peligro);
+}
+
+.guia-code {
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 0.88em;
+  background: rgba(25, 227, 196, 0.12);
+  color: var(--acento-2);
+  padding: 0.05rem 0.32rem;
+  border-radius: 0.28rem;
+}
+
+.guia-tarjeta {
+  border: 1px solid var(--linea);
+  border-radius: 1.1rem;
+  background: var(--papel);
+  padding: 1rem 1.1rem;
+}
+
+.guia-tarjeta header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.guia-sello {
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.12rem 0.55rem;
+  background: rgba(25, 227, 196, 0.16);
+  color: var(--acento-2);
+}
+
+.guia-atajo {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: #8f96b8;
+}
+
+.guia-enlace {
+  color: var(--acento-2);
+  font-size: 0.8rem;
+}
+
+.guia-portada {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.25rem;
+  align-items: stretch;
+  margin-bottom: 1.4rem;
+}
+
+.guia-portada-copy {
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: 1.35rem;
+  padding: 1.35rem 1.4rem;
+}
+
+.guia-portada-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 0.75rem;
+}
+
+.guia-portada-marca h2 {
+  margin: 0;
+  line-height: 1.05;
+}
+
+.guia-portada-marca .nombre-marca {
+  font-size: clamp(2.35rem, 5vw, 3.4rem);
+  color: #fff;
+}
+
+.guia-marca .nombre-marca {
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+.guia-stat .nombre-marca {
+  font-size: 1.55rem;
+  color: var(--acento-2);
+}
+
+.guia-eslogan {
+  margin: 0.2rem 0 0;
+  color: var(--acento-2);
+  font-weight: 600;
+  font-size: 1.02rem;
+}
+
+.guia-portada-marca .marca-simbolo {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+}
+
+.guia-kicker {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--acento-2);
+  font-weight: 700;
+}
+
+.guia-presentan {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.guia-presenta {
+  background: linear-gradient(160deg, rgba(124, 92, 255, 0.28), rgba(25, 227, 196, 0.08));
+  border: 1px solid var(--linea);
+  border-radius: 1.2rem;
+  padding: 1rem 1.1rem;
+}
+
+.guia-presenta p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #b7bddc;
+}
+
+.guia-presenta strong {
+  display: block;
+  font-family: 'Bricolage Grotesque', Georgia, sans-serif;
+  font-size: 1.15rem;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 900px) {
+  .guia-stats,
+  .guia-portada {
+    grid-template-columns: 1fr;
+  }
+
+  .guia-avance {
+    margin-left: 0;
+  }
+}
+
+@media print {
+  .guia {
+    background: #fff;
+    color: #111;
+  }
+
+  .guia-tope {
+    position: static;
+    background: #fff;
+    color: #111;
+  }
+
+  .guia-boton,
+  .guia-pildoras,
+  .guia-atajo,
+  .guia-progreso {
+    display: none;
+  }
+}

@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { api, type PerfilAdoptante } from './api';
+import { api, type PerfilAdoptante } from '../api';
 
 export function Cuestionario({ alListo, alVolver }: { alListo: () => void; alVolver: () => void }) {
   const [error, setError] = useState('');
@@ -40,12 +40,12 @@ export function Cuestionario({ alListo, alVolver }: { alListo: () => void; alVol
       <button type="button" className="enlace" onClick={alVolver}>
         ← Atrás
       </button>
-      <h1>Tu hogar (5 preguntas)</h1>
-      <p>No es una auditoría. Es para decirle al refugio si pueden convivir.</p>
+      <h1>Cuéntanos cómo es tu hogar 🏡</h1>
+      <p>No es un examen. Es una conversación honesta para que el animal que llegue, llegue al lugar correcto.</p>
       <aside className="aviso aviso-datos">
         <p>
-          Estas respuestas las ve el refugio al postularte. No salen en el
-          catálogo público.
+          Solo el refugio verá estas respuestas cuando te postules. Son tuyas y de nadie más.
+          Aquí no hay respuestas incorrectas, solo verdades que ayudan.
         </p>
       </aside>
       {!listo && <p>Cargando…</p>}
@@ -64,7 +64,7 @@ export function Cuestionario({ alListo, alVolver }: { alListo: () => void; alVol
           </select>
         </label>
         <label>
-          Horas de compañía al día
+          ¿Cuántas horas al día puede estar acompañado?
           <input
             name="horasCompania"
             type="number"
@@ -107,16 +107,16 @@ export function Cuestionario({ alListo, alVolver }: { alListo: () => void; alVol
           </select>
         </label>
         <label>
-          Energía que puedes sostener
+          ¿Qué energía puedes acompañar con amor?
           <select name="energiaSostenible" required defaultValue={inicial?.energiaSostenible ?? 'media'}>
             <option value="baja">Baja</option>
             <option value="media">Media</option>
             <option value="alta">Alta</option>
           </select>
         </label>
-        {error && <p className="error">{error}</p>}
+        {error && <p className="error" role="alert">{error}</p>}
         <button type="submit" className="primario" disabled={enviando}>
-          {enviando ? 'Guardando…' : 'Guardar y ver catálogo'}
+          {enviando ? 'Guardando tu historia…' : 'Listo — quiero conocer a quien me espera 🐾'}
         </button>
       </form>
       )}

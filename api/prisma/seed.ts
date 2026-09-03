@@ -13,7 +13,7 @@ import {
   Sexo,
   Talla,
 } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { deflateSync } from 'zlib';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
@@ -44,8 +44,6 @@ const LOCALIDADES = [
 ];
 
 const CLAVE_EJEMPLO = 'EjemploLocal123';
-const MARCA_EJEMPLO =
-  'EJEMPLO (no es un caso real; solo sirve para demostrar el prototipo en local). ';
 
 function crc32(buf: Buffer) {
   let c = 0xffffffff;
@@ -181,7 +179,7 @@ async function main() {
 
   const usuarioEntidad = await usuarioEjemplo({
     correo: 'entidad.ejemplo@local.test',
-    nombre: 'EJEMPLO — Entidad (no es un refugio real)',
+    nombre: 'Camila Restrepo',
     rol: Rol.entidad,
     localidadId: kennedy.id,
     hash: hashEjemplo,
@@ -190,14 +188,14 @@ async function main() {
   const entidad = await prisma.entidad.upsert({
     where: { usuarioId: usuarioEntidad.id },
     update: {
-      nombre: 'EJEMPLO — Hogar de paso Kennedy (no es un refugio real)',
+      nombre: 'Hogar de paso Kennedy',
       nivelSolicitado: Nivel.nivel_1,
       estadoVerificacion: EstadoVerificacionEntidad.nivel_1,
       localidadId: kennedy.id,
     },
     create: {
       usuarioId: usuarioEntidad.id,
-      nombre: 'EJEMPLO — Hogar de paso Kennedy (no es un refugio real)',
+      nombre: 'Hogar de paso Kennedy',
       nivelSolicitado: Nivel.nivel_1,
       estadoVerificacion: EstadoVerificacionEntidad.nivel_1,
       localidadId: kennedy.id,
@@ -217,7 +215,7 @@ async function main() {
           entidadId: entidad.id,
           tipoNivel: Nivel.nivel_1,
           estado: EstadoSolicitudVerificacion.aprobada,
-          motivo: 'Semilla de ejemplo local. No es una verificación real.',
+          motivo: 'Semilla del piloto local. No es una verificación real.',
           resueltoEn: new Date(),
         },
       });
@@ -226,7 +224,7 @@ async function main() {
 
   const usuarioAdoptante = await usuarioEjemplo({
     correo: 'adoptante.ejemplo@local.test',
-    nombre: 'EJEMPLO — Adoptante (no es una persona real)',
+    nombre: 'Ana López',
     rol: Rol.adoptante,
     localidadId: kennedy.id,
     hash: hashEjemplo,
@@ -253,14 +251,17 @@ async function main() {
 
   await usuarioEjemplo({
     correo: 'donante.ejemplo@local.test',
-    nombre: 'EJEMPLO — Donante de insumos (no es una persona real)',
+    nombre: 'Diego Morales',
     rol: Rol.donante,
     localidadId: engativa.id,
     hash: hashEjemplo,
   });
 
   const ejemplosPrevios = await prisma.animal.findMany({
-    where: { entidadId: entidad.id, nombre: { contains: '(EJEMPLO)' } },
+    where: {
+      entidadId: entidad.id,
+      nombre: { in: ['Luna', 'Mote', 'Nube'] },
+    },
     select: { id: true },
   });
   const idsEjemplo = ejemplosPrevios.map((a) => a.id);
@@ -270,7 +271,13 @@ async function main() {
     await prisma.animal.deleteMany({ where: { id: { in: idsEjemplo } } });
   }
   const itemsPrevios = await prisma.itemDeseo.findMany({
-    where: { entidadId: entidad.id, descripcion: { startsWith: 'EJEMPLO' } },
+    where: {
+      entidadId: entidad.id,
+      OR: [
+        { descripcion: { contains: 'bulto de alimento para adultos' } },
+        { descripcion: { contains: 'pipetas antipulgas' } },
+      ],
+    },
     select: { id: true },
   });
   const idsItems = itemsPrevios.map((i) => i.id);
@@ -289,14 +296,13 @@ async function main() {
   const luna = await prisma.animal.create({
     data: {
       entidadId: entidad.id,
-      nombre: 'Luna (EJEMPLO)',
+      nombre: 'Luna',
       especie: Especie.canino,
       sexo: Sexo.hembra,
       talla: Talla.mediano,
       edadAprox: 'adulto',
       energia: Energia.media,
       historia:
-        MARCA_EJEMPLO +
         'Llegó flaca del humedal. Convive con gatos si hay tiempo de presentación. Necesita medicación continua; el perfil no se oculta.',
       raza: null,
       necesidadEspecial: true,
@@ -312,14 +318,13 @@ async function main() {
   const mote = await prisma.animal.create({
     data: {
       entidadId: entidad.id,
-      nombre: 'Mote (EJEMPLO)',
+      nombre: 'Mote',
       especie: Especie.felino,
       sexo: Sexo.macho,
       talla: Talla.pequeno,
       edadAprox: 'joven',
       energia: Energia.baja,
       historia:
-        MARCA_EJEMPLO +
         'Duerme en la ventana y pide comida con un maullido corto. Buen candidato para apartamento tranquilo.',
       raza: null,
       necesidadEspecial: false,
@@ -335,15 +340,14 @@ async function main() {
   const nube = await prisma.animal.create({
     data: {
       entidadId: entidad.id,
-      nombre: 'Nube (EJEMPLO)',
+      nombre: 'Nube',
       especie: Especie.canino,
       sexo: Sexo.macho,
       talla: Talla.grande,
       edadAprox: 'senior',
       energia: Energia.baja,
       historia:
-        MARCA_EJEMPLO +
-        'Ya fue entregado en el piloto de demostración. Sirve para ver un cupo liberado (animal.estado = adoptado).',
+        'Ya fue entregado en el piloto local. Sirve para ver un cupo liberado (animal.estado = adoptado).',
       raza: 'mestizo',
       necesidadEspecial: false,
       conviveNinos: true,
@@ -384,7 +388,7 @@ async function main() {
     data: {
       entidadId: entidad.id,
       categoria: 'alimento',
-      descripcion: 'EJEMPLO — bulto de alimento para adultos 15 kg',
+      descripcion: 'bulto de alimento para adultos 15 kg',
       cantidad: 2,
       unidad: 'bulto',
       prioridad: 'alta',
@@ -397,7 +401,7 @@ async function main() {
     data: {
       entidadId: entidad.id,
       categoria: 'medicina',
-      descripcion: 'EJEMPLO — pipetas antipulgas × 6',
+      descripcion: 'pipetas antipulgas × 6',
       cantidad: 6,
       unidad: 'unidad',
       prioridad: 'media',
@@ -415,7 +419,7 @@ async function main() {
       itemDeseoId: itemCubierto.id,
       donanteId: donante.id,
       estado: EstadoReserva.cubierto,
-      contactoEntrega: 'EJEMPLO — contacto privado, no sale en bitácora',
+      contactoEntrega: 'contacto privado, no sale en bitácora',
       fechaLimite: limite,
     },
   });

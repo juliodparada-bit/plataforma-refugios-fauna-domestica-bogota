@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { api, type Localidad, type Usuario } from './api';
+import { api, type Localidad, type Usuario } from '../api';
 
 export function AltaAnimal({
   usuario,
@@ -156,7 +156,7 @@ export function AltaAnimal({
           Foto (mínimo una)
           <input name="foto" type="file" accept="image/jpeg,image/png,image/webp" required />
         </label>
-        {error && <p className="error">{error}</p>}
+        {error && <p className="error" role="alert">{error}</p>}
         <button type="submit" className="primario" disabled={enviando}>
           {enviando ? 'Publicando…' : 'Publicar'}
         </button>

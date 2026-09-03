@@ -1,32 +1,24 @@
-import { FormEvent, useEffect, useState } from 'react';
-import { AltaAnimal } from './AltaAnimal';
-import { api, type Localidad, type Rol, type Usuario } from './api';
-import { CuentasEjemplo } from './CuentasEjemplo';
-import { Catalogo } from './Catalogo';
-import { ColaValidador } from './ColaValidador';
-import { Cuestionario } from './Cuestionario';
-import { DeseosEntidad } from './DeseosEntidad';
-import { Legal, PieLegal, type DocLegal } from './Legal';
-import { MisPostulaciones } from './MisPostulaciones';
-import { PerfilAnimal } from './PerfilAnimal';
-import { PerfilEntidad } from './PerfilEntidad';
-import { TableroPostulaciones } from './TableroPostulaciones';
-import { VerificacionEntidad } from './VerificacionEntidad';
-
-type Pagina =
-  | 'catalogo'
-  | 'registro'
-  | 'entrar'
-  | 'tablero'
-  | 'verificacion'
-  | 'cola'
-  | 'animal'
-  | 'entidadPub'
-  | 'alta'
-  | 'postulaciones'
-  | 'cuestionario'
-  | 'deseos'
-  | 'misPostulaciones';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { api, type Usuario } from './api';
+import { Legal, PieLegal, type DocLegal } from './componentes/Legal';
+import { MenuRol } from './componentes/MenuRol';
+import { Marca } from './componentes/Marca';
+import { useFocoDialogo } from './hooks/useFocoDialogo';
+import { useTema } from './hooks/useTema';
+import type { Pagina } from './navegacion';
+import { AltaAnimal } from './paginas/AltaAnimal';
+import { Catalogo } from './paginas/Catalogo';
+import { ColaValidador } from './paginas/ColaValidador';
+import { Cuestionario } from './paginas/Cuestionario';
+import { DeseosEntidad } from './paginas/DeseosEntidad';
+import { Entrar } from './paginas/Entrar';
+import { MisPostulaciones } from './paginas/MisPostulaciones';
+import { PerfilAnimal } from './paginas/PerfilAnimal';
+import { PerfilEntidad } from './paginas/PerfilEntidad';
+import { Registro } from './paginas/Registro';
+import { Tablero } from './paginas/Tablero';
+import { TableroPostulaciones } from './paginas/TableroPostulaciones';
+import { VerificacionEntidad } from './paginas/VerificacionEntidad';
 
 export function App() {
   const [pagina, setPagina] = useState<Pagina>('catalogo');
@@ -34,6 +26,29 @@ export function App() {
   const [cargando, setCargando] = useState(true);
   const [seleccion, setSeleccion] = useState<string | null>(null);
   const [docLegal, setDocLegal] = useState<DocLegal | null>(null);
+  const { tema, alternar } = useTema();
+  const legalRef = useRef<HTMLDivElement>(null);
+  const cerrarLegal = useCallback(() => setDocLegal(null), []);
+  useFocoDialogo(Boolean(docLegal), legalRef, cerrarLegal);
+
+  useEffect(() => {
+    const titulos: Record<Pagina, string> = {
+      catalogo: 'Catálogo',
+      registro: 'Crear cuenta',
+      entrar: 'Entrar',
+      tablero: 'Cuenta',
+      verificacion: 'Verificación',
+      cola: 'Cola de validación',
+      animal: 'Perfil del animal',
+      entidadPub: 'Perfil de la entidad',
+      alta: 'Publicar animal',
+      postulaciones: 'Postulaciones',
+      cuestionario: 'Cuestionario',
+      deseos: 'Listas de deseos',
+      misPostulaciones: 'Mis postulaciones',
+    };
+    document.title = `${titulos[pagina]} · Mestizo — Por convivencia, no por raza.`;
+  }, [pagina]);
 
   useEffect(() => {
     api
@@ -44,6 +59,39 @@ export function App() {
       .catch(() => setUsuario(null))
       .finally(() => setCargando(false));
   }, []);
+
+  useEffect(() => {
+    if (cargando) return;
+    const privadas: Pagina[] = [
+      'tablero',
+      'verificacion',
+      'cola',
+      'alta',
+      'postulaciones',
+      'cuestionario',
+      'deseos',
+      'misPostulaciones',
+    ];
+    if (!usuario) {
+      if (privadas.includes(pagina)) setPagina('catalogo');
+      return;
+    }
+    const sello = Boolean(usuario.entidad?.puedePublicar);
+    if (pagina === 'cola' && usuario.rol !== 'validador') {
+      setPagina('tablero');
+    } else if (
+      (pagina === 'verificacion' && usuario.rol !== 'entidad') ||
+      ((pagina === 'alta' || pagina === 'postulaciones' || pagina === 'deseos') &&
+        (usuario.rol !== 'entidad' || !sello))
+    ) {
+      setPagina('tablero');
+    } else if (
+      (pagina === 'cuestionario' || pagina === 'misPostulaciones') &&
+      usuario.rol !== 'adoptante'
+    ) {
+      setPagina('tablero');
+    }
+  }, [usuario, pagina, cargando]);
 
   function irLegal(doc: DocLegal) {
     setDocLegal(doc);
@@ -57,24 +105,46 @@ export function App() {
 
   if (cargando) {
     return (
-      <div className="marco">
-        <main className="hoja hoja-carga">
-          <p className="ojo">Refugios Bogotá</p>
-          <h1>Un cupo libre es un rescate que sí cabe.</h1>
-          <p>Cargando el catálogo…</p>
+      <>
+        <a className="saltar" href="#contenido">
+          Saltar al contenido
+        </a>
+        <div className="marco">
+          <header className="barra">
+            <Marca as="div" />
+          </header>
+          <main id="contenido" className="hoja" tabIndex={-1} aria-busy="true" aria-label="Cargando">
+          <div className="esqueleto" style={{ height: '14rem', borderRadius: '1.1rem', marginBottom: '1.25rem' }} />
+          <div style={{ display: 'grid', gap: '0.55rem' }}>
+            <div className="esqueleto esqueleto-linea" style={{ width: '55%', height: '1.8rem' }} />
+            <div className="esqueleto esqueleto-linea" style={{ width: '80%' }} />
+            <div className="esqueleto esqueleto-linea" style={{ width: '65%' }} />
+          </div>
+          <ul className="lista tarjetas" style={{ marginTop: '2rem' }}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <li key={i} className="esqueleto-tarjeta" aria-hidden="true">
+                <div className="esqueleto esqueleto-foto" />
+                <div className="esqueleto-cuerpo">
+                  <div className="esqueleto esqueleto-linea" style={{ width: '60%' }} />
+                  <div className="esqueleto esqueleto-linea" style={{ width: '80%' }} />
+                </div>
+              </li>
+            ))}
+          </ul>
         </main>
-      </div>
+        </div>
+      </>
     );
   }
 
   return (
     <>
-    <div className="marco">
+    <a className="saltar" href="#contenido">
+      Saltar al contenido
+    </a>
+    <div className="marco" {...(docLegal ? { inert: true } : {})}>
       <header className="barra">
-        <button type="button" className="marca" onClick={() => setPagina('catalogo')}>
-          Refugios Bogotá
-          <span>Adopción con sello · insumos con bitácora</span>
-        </button>
+        <Marca onClick={() => setPagina('catalogo')} />
         <MenuRol
           clase="menu-escritorio"
           pagina={pagina}
@@ -82,9 +152,19 @@ export function App() {
           alIr={setPagina}
           alSalir={() => void salir()}
         />
+        <button
+          type="button"
+          className="btn-tema"
+          onClick={alternar}
+          aria-pressed={tema === 'oscuro'}
+          aria-label={tema === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          title={tema === 'oscuro' ? 'Modo claro' : 'Modo oscuro'}
+        >
+          <span aria-hidden="true">{tema === 'oscuro' ? '☀️' : '🌙'}</span>
+        </button>
       </header>
 
-      <div className="cuerpo">
+      <div className="cuerpo" id="contenido" tabIndex={-1}>
 
       {pagina === 'catalogo' && (
         <Catalogo
@@ -138,7 +218,7 @@ export function App() {
         />
       )}
 
-      {pagina === 'verificacion' && usuario && (
+      {pagina === 'verificacion' && usuario?.rol === 'entidad' && (
         <VerificacionEntidad
           usuario={usuario}
           alVolver={() => setPagina('tablero')}
@@ -146,7 +226,7 @@ export function App() {
         />
       )}
 
-      {pagina === 'cola' && usuario && (
+      {pagina === 'cola' && usuario?.rol === 'validador' && (
         <ColaValidador alVolver={() => setPagina('tablero')} />
       )}
 
@@ -177,7 +257,7 @@ export function App() {
         />
       )}
 
-      {pagina === 'alta' && usuario && (
+      {pagina === 'alta' && usuario?.entidad?.puedePublicar && (
         <AltaAnimal
           usuario={usuario}
           alVolver={() => setPagina('tablero')}
@@ -188,11 +268,11 @@ export function App() {
         />
       )}
 
-      {pagina === 'postulaciones' && usuario && (
+      {pagina === 'postulaciones' && usuario?.entidad?.puedePublicar && (
         <TableroPostulaciones alVolver={() => setPagina('tablero')} />
       )}
 
-      {pagina === 'cuestionario' && usuario && (
+      {pagina === 'cuestionario' && usuario?.rol === 'adoptante' && (
         <Cuestionario
           alVolver={() => setPagina('tablero')}
           alListo={() => {
@@ -202,11 +282,11 @@ export function App() {
         />
       )}
 
-      {pagina === 'deseos' && usuario && (
+      {pagina === 'deseos' && usuario?.entidad?.puedePublicar && (
         <DeseosEntidad usuario={usuario} alVolver={() => setPagina('tablero')} />
       )}
 
-      {pagina === 'misPostulaciones' && usuario && (
+      {pagina === 'misPostulaciones' && usuario?.rol === 'adoptante' && (
         <MisPostulaciones alVolver={() => setPagina('tablero')} />
       )}
 
@@ -222,450 +302,16 @@ export function App() {
       />
     </div>
     {docLegal && (
-      <div className="capa-legal">
-        <Legal doc={docLegal} alVolver={() => setDocLegal(null)} />
+      <div
+        ref={legalRef}
+        className="capa-legal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="legal-titulo"
+      >
+        <Legal doc={docLegal} alVolver={cerrarLegal} />
       </div>
     )}
     </>
-  );
-}
-
-function Registro({
-  alListo,
-  alTerminos,
-  alDatos,
-}: {
-  alListo: (u: Usuario) => void;
-  alTerminos: () => void;
-  alDatos: () => void;
-}) {
-  const [localidades, setLocalidades] = useState<Localidad[]>([]);
-  const [error, setError] = useState('');
-  const [enviando, setEnviando] = useState(false);
-  const [rol, setRol] = useState<Exclude<Rol, 'validador'> | ''>('');
-  const [terminosOk, setTerminosOk] = useState(false);
-  const [datosOk, setDatosOk] = useState(false);
-
-  useEffect(() => {
-    api.localidades().then(setLocalidades).catch(() => setError('No pude cargar las localidades.'));
-  }, []);
-
-  async function enviar(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError('');
-    const datos = new FormData(e.currentTarget);
-    const consentimiento = datos.get('consentimiento') === 'on';
-    const terminos = datos.get('terminos') === 'on';
-    if (!consentimiento || !terminos) {
-      setError('Debes aceptar los términos y el tratamiento de datos personales.');
-      return;
-    }
-    setEnviando(true);
-    try {
-      const { usuario } = await api.registro({
-        nombre: String(datos.get('nombre')),
-        correo: String(datos.get('correo')),
-        contrasena: String(datos.get('contrasena')),
-        localidadId: String(datos.get('localidadId')),
-        rol: String(datos.get('rol')) as Exclude<Rol, 'validador'>,
-        consentimientoDatos: true,
-      });
-      alListo(usuario);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo crear la cuenta.');
-    } finally {
-      setEnviando(false);
-    }
-  }
-
-  return (
-    <main className="hoja">
-      <section className="hero hero-corto">
-        <p className="ojo">Un hogar o un bulto, no un monto a ciegas</p>
-        <h1>Crea tu cuenta y libera un cupo.</h1>
-        <p className="lema">Sin recaudo. Sin raza como filtro. Con sello a la vista.</p>
-      </section>
-      <p>
-        Elige cómo vas a participar. Adoptar, cubrir un ítem o publicar desde un
-        refugio verificado: la plataforma no cobra ni intermedia dinero.
-      </p>
-      <p className="ayuda">
-        Si solo quieres ver el prototipo, usa las cuentas de ejemplo en Entrar. No
-        son personas ni refugios reales.
-      </p>
-      <form className="formulario" onSubmit={(e) => void enviar(e)}>
-        <label>
-          Nombre
-          <input name="nombre" required maxLength={120} />
-        </label>
-        <label>
-          Correo
-          <input name="correo" type="email" required />
-        </label>
-        <label>
-          Contraseña
-          <input name="contrasena" type="password" required minLength={8} />
-        </label>
-        <label>
-          Localidad en Bogotá
-          <select name="localidadId" required defaultValue="">
-            <option value="" disabled>
-              Elige…
-            </option>
-            {localidades.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.nombre}
-              </option>
-            ))}
-          </select>
-        </label>
-        <fieldset>
-          <legend>Quiero ser</legend>
-          <div className="roles">
-            <label className="rol-card">
-              <input
-                type="radio"
-                name="rol"
-                value="adoptante"
-                required
-                onChange={() => setRol('adoptante')}
-              />
-              <strong>Adoptante</strong>
-              <span>Cinco preguntas y un puntaje que sí se explica.</span>
-            </label>
-            <label className="rol-card">
-              <input type="radio" name="rol" value="donante" onChange={() => setRol('donante')} />
-              <strong>Donante de insumos</strong>
-              <span>Reservas un ítem concreto. Coordinas por WhatsApp.</span>
-            </label>
-            <label className="rol-card">
-              <input type="radio" name="rol" value="entidad" onChange={() => setRol('entidad')} />
-              <strong>Entidad / hogar de paso</strong>
-              <span>Publicas cuando el sello esté aprobado.</span>
-            </label>
-          </div>
-        </fieldset>
-        {rol === 'entidad' && (
-          <p className="ayuda">
-            Podrás publicar animales e ítems cuando la verificación esté aprobada.
-          </p>
-        )}
-        <aside className="aviso aviso-datos">
-          <p>
-            Recogemos nombre, correo, localidad y rol para operar la cuenta. La
-            contraseña se guarda con hash. Las evidencias de verificación y el
-            contacto del donante no son públicos.
-          </p>
-        </aside>
-        <label className="radio">
-          <input
-            type="checkbox"
-            name="terminos"
-            checked={terminosOk}
-            onChange={(e) => setTerminosOk(e.target.checked)}
-          />{' '}
-          Acepto los{' '}
-          <button type="button" className="enlace" onClick={alTerminos}>
-            términos y condiciones
-          </button>
-        </label>
-        <label className="radio">
-          <input
-            type="checkbox"
-            name="consentimiento"
-            checked={datosOk}
-            onChange={(e) => setDatosOk(e.target.checked)}
-          />{' '}
-          Autorizo el{' '}
-          <button type="button" className="enlace" onClick={alDatos}>
-            tratamiento de datos
-          </button>{' '}
-          (Ley 1581 de 2012)
-        </label>
-        <p className="ayuda">El rol validador no se crea desde aquí.</p>
-        {error && <p className="error">{error}</p>}
-        <button type="submit" className="primario" disabled={enviando || !terminosOk || !datosOk}>
-          {enviando ? 'Creando…' : 'Crear cuenta'}
-        </button>
-      </form>
-    </main>
-  );
-}
-
-function Entrar({
-  alListo,
-  alRegistro,
-  alTerminos,
-  alDatos,
-}: {
-  alListo: (u: Usuario) => void;
-  alRegistro: () => void;
-  alTerminos: () => void;
-  alDatos: () => void;
-}) {
-  const [error, setError] = useState('');
-  const [enviando, setEnviando] = useState(false);
-
-  async function enviar(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError('');
-    const datos = new FormData(e.currentTarget);
-    setEnviando(true);
-    try {
-      const { usuario } = await api.entrar(
-        String(datos.get('correo')),
-        String(datos.get('contrasena')),
-      );
-      alListo(usuario);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Correo o contraseña incorrectos.');
-    } finally {
-      setEnviando(false);
-    }
-  }
-
-  return (
-    <main className="hoja">
-      <section className="hero hero-corto">
-        <p className="ojo">Sesión</p>
-        <h1>Entra y libera un cupo, o cubre un bulto.</h1>
-        <p className="lema">Adopta, dona un ítem o gestiona un refugio con sello.</p>
-      </section>
-      <CuentasEjemplo />
-      <form className="formulario" onSubmit={(e) => void enviar(e)}>
-        <label>
-          Correo
-          <input name="correo" type="email" required autoComplete="username" />
-        </label>
-        <label>
-          Contraseña
-          <input
-            name="contrasena"
-            type="password"
-            required
-            autoComplete="current-password"
-          />
-        </label>
-        {error && <p className="error">{error}</p>}
-        <button type="submit" className="primario" disabled={enviando}>
-          {enviando ? 'Entrando…' : 'Entrar'}
-        </button>
-      </form>
-      <p>
-        <button type="button" className="enlace" onClick={alRegistro}>
-          Crear cuenta
-        </button>
-        {' · '}
-        <button type="button" className="enlace" onClick={alTerminos}>
-          Términos
-        </button>
-        {' · '}
-        <button type="button" className="enlace" onClick={alDatos}>
-          Datos personales
-        </button>
-      </p>
-    </main>
-  );
-}
-
-function Tablero({
-  usuario,
-  alVerificacion,
-  alCola,
-  alAlta,
-  alPostulaciones,
-  alCuestionario,
-  alDeseos,
-  alCatalogo,
-  alMisPostulaciones,
-}: {
-  usuario: Usuario;
-  alVerificacion: () => void;
-  alCola: () => void;
-  alAlta: () => void;
-  alPostulaciones: () => void;
-  alCuestionario: () => void;
-  alDeseos: () => void;
-  alCatalogo: () => void;
-  alMisPostulaciones: () => void;
-}) {
-  return (
-    <main className="hoja">
-      <section className="hero hero-corto">
-        <p className="ojo">{etiquetaRol(usuario.rol)}</p>
-        <h1>
-          {usuario.rol === 'adoptante' && 'Tu hogar puede encajar con alguien que espera.'}
-          {usuario.rol === 'donante' && 'Un ítem concreto llega más lejos que una transferencia libre.'}
-          {usuario.rol === 'entidad' && 'Cada entrega es un cupo que se abre.'}
-          {usuario.rol === 'validador' && 'El sello se gana con evidencia, no con una visita obligatoria.'}
-        </h1>
-        <p>Hola, {usuario.nombre}. Localidad: {usuario.localidad}.</p>
-      </section>
-      {usuario.nombre.startsWith('EJEMPLO') && (
-        <aside className="aviso aviso-ejemplo">
-          <p>Esta sesión es una cuenta de ejemplo. No corresponde a una persona ni a un refugio real.</p>
-        </aside>
-      )}
-
-      {usuario.rol === 'entidad' && usuario.entidad && (
-        <aside className="aviso aviso-datos">
-          {usuario.entidad.puedePublicar ? (
-            <p>
-              Sello {usuario.entidad.estadoVerificacion === 'nivel_1' ? 'Nivel 1' : 'Nivel 2'}.
-              Publica historia y foto; pide insumos sin recaudo.
-            </p>
-          ) : (
-            <p>
-              Aún no puedes publicar. Estado:{' '}
-              <strong>{usuario.entidad.estadoVerificacion}</strong>.
-            </p>
-          )}
-        </aside>
-      )}
-
-      <div className="tablero-grid">
-        {usuario.rol === 'entidad' && usuario.entidad && (
-          <>
-            <button type="button" className="atajo" onClick={alVerificacion}>
-              <strong>{usuario.entidad.puedePublicar ? 'Ver sello' : 'Pedir verificación'}</strong>
-              <span>Las evidencias solo las ves tú y el validador.</span>
-            </button>
-            {usuario.entidad.puedePublicar && (
-              <>
-                <button type="button" className="atajo" onClick={alAlta}>
-                  <strong>Publicar un animal</strong>
-                  <span>La historia va primero. La raza no filtra el catálogo.</span>
-                </button>
-                <button type="button" className="atajo" onClick={alPostulaciones}>
-                  <strong>Postulaciones</strong>
-                  <span>Preselecciona, entrega y suma un cupo.</span>
-                </button>
-                <button type="button" className="atajo" onClick={alDeseos}>
-                  <strong>Lista de deseos</strong>
-                  <span>Alimento, medicina o aseo. Sin Nequi.</span>
-                </button>
-              </>
-            )}
-          </>
-        )}
-        {usuario.rol === 'adoptante' && (
-          <>
-            <button type="button" className="atajo" onClick={alCatalogo}>
-              <strong>Ver quién espera</strong>
-              <span>Lee la historia. El puntaje te dice si conviven.</span>
-            </button>
-            <button type="button" className="atajo" onClick={alCuestionario}>
-              <strong>{usuario.tienePerfilAdoptante ? 'Editar las 5 preguntas' : 'Responder 5 preguntas'}</strong>
-              <span>Vivienda, horas, niños, otros animales y energía.</span>
-            </button>
-            <button type="button" className="atajo" onClick={alMisPostulaciones}>
-              <strong>Mis postulaciones</strong>
-              <span>El refugio ve tu puntaje y tus respuestas, no un ranking opaco.</span>
-            </button>
-          </>
-        )}
-        {usuario.rol === 'donante' && (
-          <button type="button" className="atajo" onClick={alCatalogo}>
-            <strong>Ir al catálogo y a un refugio</strong>
-            <span>Reserva un bulto o unas pipetas. Tu teléfono no sale en la bitácora.</span>
-          </button>
-        )}
-        {usuario.rol === 'validador' && (
-          <button type="button" className="atajo" onClick={alCola}>
-            <strong>Abrir la cola</strong>
-            <span>Aprueba, rechaza o pide complemento. La visita es opcional.</span>
-          </button>
-        )}
-      </div>
-    </main>
-  );
-}
-
-function etiquetaRol(rol: Rol) {
-  switch (rol) {
-    case 'adoptante':
-      return 'Adoptante';
-    case 'donante':
-      return 'Donante de insumos';
-    case 'entidad':
-      return 'Entidad';
-    case 'validador':
-      return 'Validador';
-  }
-}
-
-function MenuRol({
-  clase,
-  pagina,
-  usuario,
-  alIr,
-  alSalir,
-}: {
-  clase: string;
-  pagina: Pagina;
-  usuario: Usuario | null;
-  alIr: (p: Pagina) => void;
-  alSalir: () => void;
-}) {
-  const activo = (p: Pagina) => (pagina === p ? 'activo' : undefined);
-  return (
-    <nav className={clase} aria-label="Principal">
-      <button type="button" className={activo('catalogo')} onClick={() => alIr('catalogo')}>
-        Catálogo
-      </button>
-      {!usuario && (
-        <>
-          <button type="button" className={activo('entrar')} onClick={() => alIr('entrar')}>
-            Entrar
-          </button>
-          <button type="button" className={activo('registro')} onClick={() => alIr('registro')}>
-            Crear cuenta
-          </button>
-        </>
-      )}
-      {usuario?.rol === 'adoptante' && (
-        <button
-          type="button"
-          className={activo('misPostulaciones')}
-          onClick={() => alIr('misPostulaciones')}
-        >
-          Postulaciones
-        </button>
-      )}
-      {usuario?.rol === 'entidad' && (
-        <>
-          <button
-            type="button"
-            className={activo('postulaciones')}
-            onClick={() => alIr('postulaciones')}
-          >
-            Postulaciones
-          </button>
-          <button type="button" className={activo('deseos')} onClick={() => alIr('deseos')}>
-            Deseos
-          </button>
-          {usuario.entidad?.puedePublicar && (
-            <button type="button" className={activo('alta')} onClick={() => alIr('alta')}>
-              Publicar
-            </button>
-          )}
-        </>
-      )}
-      {usuario?.rol === 'validador' && (
-        <button type="button" className={activo('cola')} onClick={() => alIr('cola')}>
-          Cola
-        </button>
-      )}
-      {usuario && (
-        <>
-          <button type="button" className={activo('tablero')} onClick={() => alIr('tablero')}>
-            Cuenta
-          </button>
-          <button type="button" onClick={alSalir}>
-            Salir
-          </button>
-        </>
-      )}
-    </nav>
   );
 }

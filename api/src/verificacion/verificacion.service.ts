@@ -8,10 +8,10 @@ import {
 import {
   EstadoSolicitudVerificacion,
   Nivel,
-  type Entidad,
 } from '@prisma/client';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { join, normalize, sep } from 'path';
+import { exigirEntidad, selloPermitePublicar } from '../comun/entidad';
 import { PrismaService } from '../prisma/prisma.service';
 
 const MAX_BYTES = 5_242_880;
@@ -39,7 +39,7 @@ export class VerificacionService {
     datos: { nombre: string; localidadId: string; tipoNivel: string },
     archivos: ArchivoSubido[],
   ) {
-    const entidad = await this.exigirEntidad(usuarioId);
+    const entidad = await exigirEntidad(this.prisma, usuarioId);
     const tipoNivel = this.nivel(datos.tipoNivel);
     this.validarMinimo(tipoNivel, archivos);
 
@@ -144,7 +144,7 @@ export class VerificacionService {
   }
 
   async mia(usuarioId: string) {
-    const entidad = await this.exigirEntidad(usuarioId);
+    const entidad = await exigirEntidad(this.prisma, usuarioId);
     const ultima = await this.prisma.verificacion.findFirst({
       where: { entidadId: entidad.id },
       orderBy: { creadoEn: 'desc' },
@@ -167,9 +167,7 @@ export class VerificacionService {
         localidadId: entidad.localidadId,
         nivelSolicitado: entidad.nivelSolicitado,
         estadoVerificacion: entidad.estadoVerificacion,
-        puedePublicar:
-          entidad.estadoVerificacion === 'nivel_1' ||
-          entidad.estadoVerificacion === 'nivel_2',
+        puedePublicar: selloPermitePublicar(entidad.estadoVerificacion),
       },
       solicitud: ultima,
     };
@@ -356,16 +354,6 @@ export class VerificacionService {
       localidad: entidad.localidad.nombre,
       badge: entidad.estadoVerificacion,
     };
-  }
-
-  private async exigirEntidad(usuarioId: string): Promise<Entidad> {
-    const entidad = await this.prisma.entidad.findUnique({
-      where: { usuarioId },
-    });
-    if (!entidad) {
-      throw new ForbiddenException('Esta cuenta no es una entidad.');
-    }
-    return entidad;
   }
 
   private nivel(valor: string): Nivel {

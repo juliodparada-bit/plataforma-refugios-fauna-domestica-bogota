@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { api, type Localidad, type Usuario } from './api';
+import { api, type Localidad, type Usuario } from '../api';
 
 const ETIQUETAS: Record<string, string> = {
   rut: 'RUT',
@@ -213,7 +213,7 @@ export function VerificacionEntidad({
             </>
           )}
 
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error" role="alert">{error}</p>}
           <button type="submit" className="primario" disabled={enviando}>
             {enviando ? 'Enviando…' : 'Enviar a revisión'}
           </button>

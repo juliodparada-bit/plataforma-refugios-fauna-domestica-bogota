@@ -1,4 +1,6 @@
-export const CUENTAS_EJEMPLO = [
+import { NombreMarca } from './Marca';
+
+export const CUENTAS_PILOTO = [
   {
     rol: 'Entidad verificada (Nivel 1)',
     correo: 'entidad.ejemplo@local.test',
@@ -19,13 +21,13 @@ export const CUENTAS_EJEMPLO = [
 export function CuentasEjemplo() {
   return (
     <aside className="aviso aviso-ejemplo">
-      <p className="ojo">Solo ejemplos de demostración</p>
+      <p className="ojo">Cuentas de piloto</p>
       <p>
-        Estas cuentas no son personas ni refugios reales. Sirven para probar cada
-        rol en local. La contraseña de las tres es <code>EjemploLocal123</code>.
+        Sirven para recorrer <NombreMarca className="es-en-linea" /> en local. No son personas ni refugios reales.
+        Las tres usan la clave <code>EjemploLocal123</code>.
       </p>
       <ul className="lista-ejemplo">
-        {CUENTAS_EJEMPLO.map((c) => (
+        {CUENTAS_PILOTO.map((c) => (
           <li key={c.correo}>
             <strong>{c.rol}</strong>
             <br />

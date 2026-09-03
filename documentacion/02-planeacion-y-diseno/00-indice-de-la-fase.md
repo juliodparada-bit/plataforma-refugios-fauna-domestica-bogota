@@ -5,7 +5,7 @@
 | Código | DOC-PL-00 |
 | Fase SENA | Planeación |
 | Competencias | 220501094 · 220501095 |
-| Estado | Estable para construir — 2.1 a 2.4 vigentes (alta fidelidad de UI queda después de validar wireframes) |
+| Estado | Estable — 2.1 a 2.4 vigentes. El look del prototipo está en `web/` |
 | Depende de | [Análisis 1.1 a 1.4](../01-analisis/00-indice-de-la-fase.md) (la entrevista real sigue pendiente; el diseño avanza sobre el alcance escrito) |
 
 Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métrica norte o si se incluye recaudo, vuelvo al análisis.
@@ -22,7 +22,7 @@ Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métri
 
 - Estilo (capas / cliente-servidor).
 - Diagrama de contexto y de contenedores.
-- Stack propuesto (React + NestJS + PostgreSQL; alternativa Java/Spring si el centro lo exige).
+- Stack del prototipo (React 19 + Vite 6 + TypeScript, NestJS 11, Prisma, PostgreSQL 16). Alternativa Java/Spring si el centro lo exigiera: cambian el lenguaje, no las capas ni los RF.
 - Decisión de recaudo: el sistema no recauda dinero.
 
 ### 2.2 UML
@@ -48,11 +48,10 @@ Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métri
 
 ### 2.4 Interfaz (UI/UX)
 
-**Estado: vigente (baja fidelidad).** Ver [2.4 Interfaz](2.4-interfaz-ui-ux.md).
+**Estado: vigente (contenido en wireframes; look en `web/`).** Ver [2.4 Interfaz](2.4-interfaz-ui-ux.md).
 
 - Mapa de navegación (público, adoptante/donante, entidad, validador).
 - Wireframes de: registro, sesión, solicitud de verificación, cola, alta de animal, catálogo, cuestionario, tablero de postulaciones, publicar ítem, lista de deseos.
-- Alta fidelidad **después** de validar estos wireframes.
 - RF-10 (anti-sesgo) convertido en reglas de pantalla.
 
 ---
