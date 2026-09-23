@@ -458,7 +458,7 @@ h2 {
   margin: 0;
 }
 
-.formulario input,
+.formulario input:not([type="checkbox"], [type="radio"]),
 .formulario select,
 .formulario textarea,
 .filtros select {
@@ -470,6 +470,15 @@ h2 {
   min-height: 2.75rem;
   width: 100%;
   font-size: 1rem;
+}
+
+.formulario input[type="checkbox"],
+.formulario input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+  min-height: 0;
+  flex-shrink: 0;
+  accent-color: var(--primario);
 }
 
 .formulario textarea {
@@ -978,8 +987,8 @@ button.atajo:focus-visible {
   box-shadow: 0 10px 22px rgba(20, 32, 22, 0.1);
 }
 
-.rol-card input {
-  margin-right: 0.35rem;
+.rol-card input[type="radio"] {
+  align-self: center;
 }
 
 .atajo strong {
