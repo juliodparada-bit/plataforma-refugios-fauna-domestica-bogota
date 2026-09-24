@@ -41,6 +41,11 @@ export class DeseosController {
     return this.servicio.mios(req.sesion.sub);
   }
 
+  @Get('entidades')
+  listar() {
+    return this.servicio.listarPublicas();
+  }
+
   @Get('entidades/:id/deseos')
   publicos(@Param('id') id: string) {
     return this.servicio.publicos(id);

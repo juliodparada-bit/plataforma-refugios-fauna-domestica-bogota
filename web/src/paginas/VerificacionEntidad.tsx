@@ -35,17 +35,20 @@ export function VerificacionEntidad({
   const [puedeEnviar, setPuedeEnviar] = useState(true);
 
   useEffect(() => {
-    void api.localidades().then(setLocalidades);
-    void api.miVerificacion().then((r) => {
-      setEstado(r.entidad.estadoVerificacion);
-      setLocalidadId(r.entidad.localidadId);
-      setMotivo(r.solicitud?.motivo ?? null);
-      setEstadoSolicitud(r.solicitud?.estado ?? null);
-      setPuedeEnviar(r.solicitud?.estado !== 'en_revision');
-      if (r.entidad.nivelSolicitado === 'nivel_1' || r.entidad.nivelSolicitado === 'nivel_2') {
-        setNivel(r.entidad.nivelSolicitado);
-      }
-    });
+    void api.localidades().then(setLocalidades).catch(() => undefined);
+    void api
+      .miVerificacion()
+      .then((r) => {
+        setEstado(r.entidad.estadoVerificacion);
+        setLocalidadId(r.entidad.localidadId);
+        setMotivo(r.solicitud?.motivo ?? null);
+        setEstadoSolicitud(r.solicitud?.estado ?? null);
+        setPuedeEnviar(r.solicitud?.estado !== 'en_revision');
+        if (r.entidad.nivelSolicitado === 'nivel_1' || r.entidad.nivelSolicitado === 'nivel_2') {
+          setNivel(r.entidad.nivelSolicitado);
+        }
+      })
+      .catch((e) => setError(e instanceof Error ? e.message : 'No pude cargar la verificación.'));
   }, []);
 
   async function enviar(e: FormEvent<HTMLFormElement>) {
@@ -82,7 +85,7 @@ export function VerificacionEntidad({
     try {
       await api.enviarVerificacion(datos);
       const yo = await api.yo();
-      alActualizar(yo);
+      if (yo) alActualizar(yo);
       const mia = await api.miVerificacion();
       setEstado(mia.entidad.estadoVerificacion);
       setMotivo(mia.solicitud?.motivo ?? null);

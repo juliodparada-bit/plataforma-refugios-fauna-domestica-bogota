@@ -2,18 +2,32 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Rol } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
+import { mkdir, writeFile } from 'fs/promises';
+import { extname, join, normalize, sep } from 'path';
 import { PrismaService } from '../prisma/prisma.service';
 import { esCuentaPiloto } from '../comun/demo';
 import { selloPermitePublicar } from '../comun/entidad';
+import { ActualizarCuentaDto } from './dto/actualizar-cuenta.dto';
 import { EntrarDto } from './dto/entrar.dto';
 import { RegistrarDto } from './dto/registrar.dto';
 
 const MENSAJE_LOGIN = 'Correo o contraseña incorrectos.';
+const MAX_FOTO = 5_242_880;
+const MIME_FOTO = ['image/jpeg', 'image/png', 'image/webp'];
+const RAIZ_FOTO = join(process.cwd(), 'uploads', 'perfiles');
+
+export type ArchivoPerfil = {
+  originalname: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+};
 
 @Injectable()
 export class AuthService {
@@ -93,6 +107,87 @@ export class AuthService {
   }
 
   async yo(usuarioId: string) {
+    const usuario = await this.cargar(usuarioId);
+    return this.publico(usuario);
+  }
+
+  async actualizar(usuarioId: string, dto: ActualizarCuentaDto) {
+    const localidad = await this.prisma.localidad.findUnique({
+      where: { id: dto.localidadId },
+    });
+    if (!localidad) {
+      throw new BadRequestException('La localidad no es válida.');
+    }
+
+    const actual = await this.cargar(usuarioId);
+    const nombre = dto.nombre.trim();
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.usuario.update({
+        where: { id: usuarioId },
+        data: { nombre, localidadId: dto.localidadId },
+      });
+      if (actual.rol === Rol.entidad && actual.entidad) {
+        const hogar = (dto.entidadNombre ?? actual.entidad.nombre).trim();
+        if (hogar.length < 2) {
+          throw new BadRequestException('El nombre del hogar es demasiado corto.');
+        }
+        await tx.entidad.update({
+          where: { id: actual.entidad.id },
+          data: { nombre: hogar, localidadId: dto.localidadId },
+        });
+      }
+    });
+
+    return this.yo(usuarioId);
+  }
+
+  async guardarFoto(usuarioId: string, archivo: ArchivoPerfil | undefined) {
+    if (!archivo) {
+      throw new BadRequestException('Adjunta una foto (JPEG, PNG o WebP).');
+    }
+    if (archivo.size > MAX_FOTO) {
+      throw new BadRequestException('La foto no puede superar 5 MB.');
+    }
+    if (!MIME_FOTO.includes(archivo.mimetype)) {
+      throw new BadRequestException('Usa una foto JPEG, PNG o WebP.');
+    }
+    await this.cargar(usuarioId);
+    const ext =
+      archivo.mimetype === 'image/png'
+        ? '.png'
+        : archivo.mimetype === 'image/webp'
+          ? '.webp'
+          : extname(archivo.originalname).toLowerCase() === '.jpg'
+            ? '.jpg'
+            : '.jpeg';
+    await mkdir(RAIZ_FOTO, { recursive: true });
+    const relativo = join('uploads', 'perfiles', `${usuarioId}${ext}`);
+    await writeFile(join(process.cwd(), relativo), archivo.buffer);
+    await this.prisma.usuario.update({
+      where: { id: usuarioId },
+      data: { fotoPerfilRuta: relativo, fotoPerfilMime: archivo.mimetype },
+    });
+    return this.yo(usuarioId);
+  }
+
+  async rutaFoto(usuarioId: string) {
+    const usuario = await this.prisma.usuario.findUnique({
+      where: { id: usuarioId },
+      select: { fotoPerfilRuta: true, fotoPerfilMime: true },
+    });
+    if (!usuario?.fotoPerfilRuta) {
+      throw new NotFoundException('Esta cuenta no tiene foto de perfil.');
+    }
+    const absoluta = normalize(join(process.cwd(), usuario.fotoPerfilRuta));
+    const raiz = normalize(RAIZ_FOTO) + sep;
+    if (!absoluta.startsWith(raiz)) {
+      throw new NotFoundException('Esta cuenta no tiene foto de perfil.');
+    }
+    return { absoluta, mime: usuario.fotoPerfilMime ?? 'image/jpeg' };
+  }
+
+  private async cargar(usuarioId: string) {
     const usuario = await this.prisma.usuario.findUnique({
       where: { id: usuarioId },
       include: {
@@ -104,7 +199,7 @@ export class AuthService {
     if (!usuario) {
       throw new UnauthorizedException('La sesión ya no es válida.');
     }
-    return this.publico(usuario);
+    return usuario;
   }
 
   emitirToken(usuarioId: string, rol: Rol) {
@@ -122,6 +217,9 @@ export class AuthService {
     nombre: string;
     correo: string;
     rol: Rol;
+    fotoPerfilRuta: string | null;
+    consentimientoEn: Date;
+    actualizadoEn: Date;
     localidad: { id: string; nombre: string };
     entidad: {
       id: string;
@@ -139,7 +237,12 @@ export class AuthService {
       nombre: usuario.nombre,
       correo: usuario.correo,
       rol: usuario.rol,
+      localidadId: usuario.localidad.id,
       localidad: usuario.localidad.nombre,
+      fotoUrl: usuario.fotoPerfilRuta
+        ? `/api/auth/yo/foto?t=${usuario.actualizadoEn.getTime()}`
+        : null,
+      consentimientoEn: usuario.consentimientoEn.toISOString(),
       tienePerfilAdoptante: Boolean(usuario.perfilAdoptante),
       demo: esCuentaPiloto(usuario.correo),
       entidad: usuario.entidad

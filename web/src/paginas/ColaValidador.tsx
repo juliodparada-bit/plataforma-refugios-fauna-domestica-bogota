@@ -22,13 +22,17 @@ export function ColaValidador({ alVolver }: { alVolver: () => void }) {
   const [cola, setCola] = useState<ColaItem[]>([]);
   const [detalle, setDetalle] = useState<SolicitudVerificacion | null>(null);
   const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(true);
 
   async function cargar() {
     setCola(await api.colaVerificacion());
   }
 
   useEffect(() => {
-    void cargar().catch((e) => setError(e instanceof Error ? e.message : 'No pude cargar la cola.'));
+    setCargando(true);
+    void cargar()
+      .catch((e) => setError(e instanceof Error ? e.message : 'No pude cargar la cola.'))
+      .finally(() => setCargando(false));
   }, []);
 
   if (detalle) {
@@ -50,7 +54,13 @@ export function ColaValidador({ alVolver }: { alVolver: () => void }) {
       </button>
       <h1>Cola de verificación</h1>
       {error && <p className="error" role="alert">{error}</p>}
-      {cola.length === 0 && <p>No hay solicitudes pendientes.</p>}
+      {cargando && <p>Cargando…</p>}
+      {!cargando && cola.length === 0 && !error && (
+        <div className="vacio">
+          <h3>No hay solicitudes pendientes</h3>
+          <p>Cuando un hogar envíe evidencias, aparecen aquí.</p>
+        </div>
+      )}
       <ul className="lista">
         {cola.map((item) => (
           <li key={item.id}>
@@ -64,7 +74,10 @@ export function ColaValidador({ alVolver }: { alVolver: () => void }) {
               type="button"
               className="primario"
               onClick={() => {
-                void api.detalleVerificacion(item.id).then(setDetalle);
+                void api
+                  .detalleVerificacion(item.id)
+                  .then(setDetalle)
+                  .catch((e) => setError(e instanceof Error ? e.message : 'No pude abrir la solicitud.'));
               }}
             >
               Abrir

@@ -103,6 +103,12 @@ export function DeseosEntidad({ usuario, alVolver }: { usuario: Usuario; alVolve
         </button>
       </form>
       {error && <p className="error" role="alert">{error}</p>}
+      {items.length === 0 && !error && (
+        <div className="vacio">
+          <h3>Aún no hay ítems</h3>
+          <p>Publica alimento, medicina o aseo. Sin recaudo ni Nequi.</p>
+        </div>
+      )}
       <ul className="lista">
         {items.map((i) => {
           const reserva = i.reservas[0];

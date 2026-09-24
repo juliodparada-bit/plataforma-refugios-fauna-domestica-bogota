@@ -17,6 +17,9 @@ export function useTema() {
     document.documentElement.setAttribute('data-tema', tema);
     document.documentElement.style.colorScheme = tema === 'oscuro' ? 'dark' : 'light';
     localStorage.setItem(CLAVE, tema);
+    const colorBarra = tema === 'oscuro' ? '#100c14' : '#5a4450';
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', colorBarra);
   }, [tema]);
 
   function alternar() {

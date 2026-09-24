@@ -5,7 +5,10 @@ export type Usuario = {
   nombre: string;
   correo: string;
   rol: Rol;
+  localidadId?: string;
   localidad: string;
+  fotoUrl?: string | null;
+  consentimientoEn?: string;
   tienePerfilAdoptante?: boolean;
   demo?: boolean;
   entidad: {
@@ -17,6 +20,22 @@ export type Usuario = {
 };
 
 export type Localidad = { id: string; nombre: string; codigo: string };
+
+export type TarjetaEntidad = {
+  id: string;
+  nombre: string;
+  localidad: string;
+  badge: string;
+  pendientes: number;
+  necesidades: Array<{
+    id: string;
+    categoria: string;
+    descripcion: string;
+    cantidad: number;
+    unidad: string;
+    prioridad: string;
+  }>;
+};
 
 export type EvidenciaResumen = {
   id: string;
@@ -103,37 +122,76 @@ export type ColaItem = {
 
 const API = '/api';
 
+export class ErrorApi extends Error {
+  status: number;
+  constructor(mensaje: string, status: number) {
+    super(mensaje);
+    this.name = 'ErrorApi';
+    this.status = status;
+  }
+}
+
+function esAbortado(err: unknown) {
+  return err instanceof DOMException && err.name === 'AbortError';
+}
+
+function mensajeDeCuerpo(cuerpo: unknown, fallback: string) {
+  if (cuerpo && typeof cuerpo === 'object' && 'message' in cuerpo && cuerpo.message) {
+    return Array.isArray(cuerpo.message) ? cuerpo.message.join(' ') : String(cuerpo.message);
+  }
+  return fallback;
+}
+
 async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   const esFormData = typeof FormData !== 'undefined' && init?.body instanceof FormData;
   if (!esFormData && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
-  const res = await fetch(`${API}${ruta}`, {
-    credentials: 'include',
-    ...init,
-    headers,
-  });
-  const texto = await res.text();
-  const cuerpo = texto ? (JSON.parse(texto) as unknown) : null;
-  if (!res.ok) {
-    const mensaje =
-      cuerpo &&
-      typeof cuerpo === 'object' &&
-      'message' in cuerpo &&
-      cuerpo.message
-        ? Array.isArray(cuerpo.message)
-          ? cuerpo.message.join(' ')
-          : String(cuerpo.message)
-        : 'No se pudo completar la operación.';
-    throw new Error(mensaje);
+
+  let res: Response;
+  try {
+    res = await fetch(`${API}${ruta}`, {
+      credentials: 'include',
+      ...init,
+      headers,
+    });
+  } catch (err) {
+    if (esAbortado(err)) throw err;
+    throw new Error('No pude conectar con la API. ¿Está encendida en el puerto 3000?');
   }
+
+  const texto = await res.text();
+  let cuerpo: unknown = null;
+  if (texto) {
+    try {
+      cuerpo = JSON.parse(texto) as unknown;
+    } catch {
+      cuerpo = null;
+    }
+  }
+
+  if (!res.ok) {
+    const fallback =
+      res.status === 502 || res.status === 503 || res.status === 504
+        ? 'La API no responde. ¿Está encendida en el puerto 3000?'
+        : 'No se pudo completar la operación.';
+    throw new ErrorApi(mensajeDeCuerpo(cuerpo, fallback), res.status);
+  }
+
   return cuerpo as T;
 }
 
 export const api = {
-  localidades: () => pedir<Localidad[]>('/localidades'),
-  yo: () => pedir<Usuario>('/auth/yo'),
+  localidades: (init?: RequestInit) => pedir<Localidad[]>('/localidades', init),
+  yo: async (init?: RequestInit) => {
+    try {
+      return await pedir<Usuario | null>('/auth/yo', init);
+    } catch (err) {
+      if (err instanceof ErrorApi && err.status === 401) return null;
+      throw err;
+    }
+  },
   registro: (datos: {
     nombre: string;
     correo: string;
@@ -152,6 +210,20 @@ export const api = {
       body: JSON.stringify({ correo, contrasena }),
     }),
   salir: () => pedir<{ ok: boolean }>('/auth/salir', { method: 'POST' }),
+  actualizarCuenta: (datos: {
+    nombre: string;
+    localidadId: string;
+    entidadNombre?: string;
+  }) =>
+    pedir<Usuario>('/auth/yo', {
+      method: 'PATCH',
+      body: JSON.stringify(datos),
+    }),
+  subirFotoPerfil: (archivo: File) => {
+    const datos = new FormData();
+    datos.append('foto', archivo);
+    return pedir<Usuario>('/auth/yo/foto', { method: 'POST', body: datos });
+  },
   miVerificacion: () =>
     pedir<{
       entidad: {
@@ -178,15 +250,15 @@ export const api = {
     }),
   urlEvidencia: (verificacionId: string, evidenciaId: string) =>
     `/api/verificaciones/${verificacionId}/evidencias/${evidenciaId}`,
-  catalogo: (q?: { especie?: string; localidadId?: string }) => {
+  catalogo: (q?: { especie?: string; localidadId?: string }, init?: RequestInit) => {
     const p = new URLSearchParams();
     if (q?.especie) p.set('especie', q.especie);
     if (q?.localidadId) p.set('localidadId', q.localidadId);
     const qs = p.toString();
-    return pedir<TarjetaAnimal[]>(`/animales${qs ? `?${qs}` : ''}`);
+    return pedir<TarjetaAnimal[]>(`/animales${qs ? `?${qs}` : ''}`, init);
   },
   misAnimales: () => pedir<TarjetaAnimal[]>('/animales/mios'),
-  animal: (id: string) => pedir<DetalleAnimal>(`/animales/${id}`),
+  animal: (id: string, init?: RequestInit) => pedir<DetalleAnimal>(`/animales/${id}`, init),
   publicarAnimal: (datos: FormData) => pedir<DetalleAnimal>('/animales', { method: 'POST', body: datos }),
   perfil: () => pedir<PerfilAdoptante | null>('/perfil'),
   guardarPerfil: (datos: PerfilAdoptante) =>
@@ -222,7 +294,8 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(cuerpo),
     }),
-  entidadPublica: (id: string) =>
+  entidades: (init?: RequestInit) => pedir<TarjetaEntidad[]>('/entidades', init),
+  entidadPublica: (id: string, init?: RequestInit) =>
     pedir<{
       id: string;
       nombre: string;
@@ -249,7 +322,7 @@ export const api = {
         fotoUrl: string | null;
         demo?: boolean;
       }>;
-    }>(`/entidades/${id}`),
+    }>(`/entidades/${id}`, init),
   publicarDeseo: (datos: {
     categoria: string;
     descripcion: string;

@@ -5,11 +5,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { EstadoItem, EstadoReserva } from '@prisma/client';
+import { EstadoItem, EstadoReserva, EstadoVerificacionEntidad } from '@prisma/client';
 import { mkdir, writeFile } from 'fs/promises';
 import { join, normalize, sep } from 'path';
 import { PrismaService } from '../prisma/prisma.service';
-import { exigirEntidad, exigirPublicadora } from '../comun/entidad';
+import { exigirEntidad, exigirPublicadora, selloPermitePublicar } from '../comun/entidad';
 import { esCuentaPiloto } from '../comun/demo';
 
 const MAX_BYTES = 5_242_880;
@@ -69,6 +69,57 @@ export class DeseosService {
       },
       orderBy: { creadoEn: 'desc' },
     });
+  }
+
+  async listarPublicas() {
+    await this.caducarVencidas();
+    const entidades = await this.prisma.entidad.findMany({
+      where: {
+        estadoVerificacion: {
+          in: [EstadoVerificacionEntidad.nivel_1, EstadoVerificacionEntidad.nivel_2],
+        },
+      },
+      include: {
+        localidad: { select: { nombre: true } },
+        itemsDeseo: {
+          where: { estado: EstadoItem.pendiente },
+          orderBy: [{ prioridad: 'asc' }, { creadoEn: 'desc' }],
+          take: 3,
+          select: {
+            id: true,
+            categoria: true,
+            descripcion: true,
+            cantidad: true,
+            unidad: true,
+            prioridad: true,
+          },
+        },
+        _count: {
+          select: {
+            itemsDeseo: { where: { estado: EstadoItem.pendiente } },
+          },
+        },
+      },
+      orderBy: { nombre: 'asc' },
+    });
+
+    return entidades
+      .filter((e) => selloPermitePublicar(e.estadoVerificacion))
+      .map((e) => {
+        const orden: Record<string, number> = { alta: 0, media: 1, baja: 2 };
+        const necesidades = [...e.itemsDeseo].sort(
+          (a, b) => orden[a.prioridad] - orden[b.prioridad],
+        );
+        return {
+          id: e.id,
+          nombre: e.nombre,
+          localidad: e.localidad.nombre,
+          badge: e.estadoVerificacion,
+          pendientes: e._count.itemsDeseo,
+          necesidades,
+        };
+      })
+      .sort((a, b) => b.pendientes - a.pendientes || a.nombre.localeCompare(b.nombre, 'es'));
   }
 
   async publicos(entidadId: string) {

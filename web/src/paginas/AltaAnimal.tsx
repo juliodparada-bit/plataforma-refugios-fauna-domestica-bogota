@@ -15,7 +15,7 @@ export function AltaAnimal({
   const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
-    void api.localidades().then(setLocalidades);
+    void api.localidades().then(setLocalidades).catch(() => setError('No pude cargar las localidades.'));
   }, []);
 
   async function enviar(e: FormEvent<HTMLFormElement>) {

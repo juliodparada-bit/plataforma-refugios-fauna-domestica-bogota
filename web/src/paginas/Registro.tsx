@@ -1,19 +1,22 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { api, type Localidad, type Rol, type Usuario } from '../api';
+import { Pagina } from '../componentes/Pagina';
 
 export function Registro({
   alListo,
   alTerminos,
   alDatos,
+  rolInicial,
 }: {
   alListo: (u: Usuario) => void;
   alTerminos: () => void;
   alDatos: () => void;
+  rolInicial?: Exclude<Rol, 'validador'>;
 }) {
   const [localidades, setLocalidades] = useState<Localidad[]>([]);
   const [error, setError] = useState('');
   const [enviando, setEnviando] = useState(false);
-  const [rol, setRol] = useState<Exclude<Rol, 'validador'> | ''>('');
+  const [rol, setRol] = useState<Exclude<Rol, 'validador'> | ''>(rolInicial ?? '');
   const [terminosOk, setTerminosOk] = useState(false);
   const [datosOk, setDatosOk] = useState(false);
 
@@ -50,18 +53,14 @@ export function Registro({
   }
 
   return (
-    <main className="hoja">
-      <section className="hero hero-corto">
-        <p className="ojo">El primer paso siempre es el más bonito</p>
-        <h1>Crea tu cuenta y empieza a cambiar una vida.</h1>
-        <p className="lema">Lo que hagas aquí le importa a alguien que todavía no te conoce.</p>
-      </section>
-      <p>
-        Elige cómo vas a participar. Adoptando, cubriendo un ítem concreto o publicando
-        desde un refugio verificado. Cada rol alimenta el mismo círculo de bien.
-      </p>
+    <Pagina
+      className="hoja-estrecha"
+      kicker="Registro"
+      titulo="Crear cuenta"
+      proposito="Elige cómo vas a participar: adoptar, donar un insumo o publicar desde un hogar de paso."
+    >
       <p className="ayuda">
-        Si quieres explorar primero, puedes usar las cuentas de piloto al entrar. No hay prisa.
+        Si quieres explorar primero, usa las cuentas de piloto al entrar.
       </p>
       <form
         className="formulario"
@@ -102,18 +101,40 @@ export function Registro({
                 name="rol"
                 value="adoptante"
                 required
+                checked={rol === 'adoptante'}
                 onChange={() => setRol('adoptante')}
               />
+              <span className="guia-icono" aria-hidden="true">
+                🐾
+              </span>
               <strong>Quiero adoptar</strong>
               <span>Cinco preguntas honestas. Un puntaje que explica por qué encajan.</span>
             </label>
             <label className="rol-card">
-              <input type="radio" name="rol" value="donante" onChange={() => setRol('donante')} />
+              <input
+                type="radio"
+                name="rol"
+                value="donante"
+                checked={rol === 'donante'}
+                onChange={() => setRol('donante')}
+              />
+              <span className="guia-icono" aria-hidden="true">
+                🌾
+              </span>
               <strong>Quiero donar un insumo</strong>
               <span>Reservas algo concreto: alimento, medicina, aseo. Sabes exactamente a dónde va.</span>
             </label>
             <label className="rol-card">
-              <input type="radio" name="rol" value="entidad" onChange={() => setRol('entidad')} />
+              <input
+                type="radio"
+                name="rol"
+                value="entidad"
+                checked={rol === 'entidad'}
+                onChange={() => setRol('entidad')}
+              />
+              <span className="guia-icono" aria-hidden="true">
+                🏠
+              </span>
               <strong>Soy un refugio o hogar de paso</strong>
               <span>Publicas historias reales cuando el sello esté aprobado. La comunidad te respalda.</span>
             </label>
@@ -137,11 +158,13 @@ export function Registro({
             name="terminos"
             checked={terminosOk}
             onChange={(e) => setTerminosOk(e.target.checked)}
-          />{' '}
-          Acepto los{' '}
-          <button type="button" className="enlace" onClick={alTerminos}>
-            términos y condiciones
-          </button>
+          />
+          <span>
+            Acepto los{' '}
+            <button type="button" className="enlace" onClick={alTerminos}>
+              términos y condiciones
+            </button>
+          </span>
         </label>
         <label className="radio">
           <input
@@ -149,12 +172,14 @@ export function Registro({
             name="consentimiento"
             checked={datosOk}
             onChange={(e) => setDatosOk(e.target.checked)}
-          />{' '}
-          Autorizo el{' '}
-          <button type="button" className="enlace" onClick={alDatos}>
-            tratamiento de datos
-          </button>{' '}
-          (Ley 1581 de 2012)
+          />
+          <span>
+            Autorizo el{' '}
+            <button type="button" className="enlace" onClick={alDatos}>
+              tratamiento de datos
+            </button>{' '}
+            (Ley 1581 de 2012)
+          </span>
         </label>
         <p className="ayuda">El rol validador no se crea desde aquí.</p>
         {error && (
@@ -163,9 +188,9 @@ export function Registro({
           </p>
         )}
         <button type="submit" className="primario" disabled={enviando || !terminosOk || !datosOk}>
-          {enviando ? 'Un momento, casi estás…' : 'Crear cuenta y empezar ✨'}
+          {enviando ? 'Creando cuenta…' : 'Crear cuenta'}
         </button>
       </form>
-    </main>
+    </Pagina>
   );
 }
