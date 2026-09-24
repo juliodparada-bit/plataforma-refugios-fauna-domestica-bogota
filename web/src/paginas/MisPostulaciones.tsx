@@ -13,12 +13,15 @@ type Fila = {
 export function MisPostulaciones({ alVolver }: { alVolver: () => void }) {
   const [filas, setFilas] = useState<Fila[]>([]);
   const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
+    setCargando(true);
     void api
       .misPostulaciones()
       .then((lista) => setFilas(lista as Fila[]))
-      .catch((e) => setError(e instanceof Error ? e.message : 'No pude cargar.'));
+      .catch((e) => setError(e instanceof Error ? e.message : 'No pude cargar.'))
+      .finally(() => setCargando(false));
   }, []);
 
   return (
@@ -28,7 +31,13 @@ export function MisPostulaciones({ alVolver }: { alVolver: () => void }) {
       </button>
       <h1>Mis postulaciones</h1>
       {error && <p className="error" role="alert">{error}</p>}
-      {filas.length === 0 && !error && <p>Aún no te has postulado.</p>}
+      {cargando && <p>Cargando…</p>}
+      {!cargando && filas.length === 0 && !error && (
+        <div className="vacio">
+          <h3>Aún no te has postulado</h3>
+          <p>Elige una historia en el catálogo cuando quieras dar el paso.</p>
+        </div>
+      )}
       <ul className="lista">
         {filas.map((p) => (
           <li key={p.id}>

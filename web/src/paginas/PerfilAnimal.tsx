@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { api, type DetalleAnimal, type Usuario } from '../api';
 import { etiquetaEspecie, etiquetaSello, etiquetaTalla } from '../etiquetas';
-import { SelloFicha } from '../componentes/SelloFicha';
-import { esFichaDemo, historiaVisible, marcaDiagonal, nombreVisible } from '../demo';
+import { historiaVisible, nombreVisible } from '../demo';
 
 export function PerfilAnimal({
   id,
@@ -28,7 +27,20 @@ export function PerfilAnimal({
   const [viveEnBogota, setViveEnBogota] = useState(false);
 
   useEffect(() => {
-    void api.animal(id).then(setAnimal).catch((e) => setError(e instanceof Error ? e.message : 'No encontré el perfil.'));
+    const ac = new AbortController();
+    setAnimal(null);
+    setError('');
+    setOk('');
+    void api
+      .animal(id, { signal: ac.signal })
+      .then((detalle) => {
+        if (!ac.signal.aborted) setAnimal(detalle);
+      })
+      .catch((e) => {
+        if (e instanceof DOMException && e.name === 'AbortError') return;
+        setError(e instanceof Error ? e.message : 'No encontré el perfil.');
+      });
+    return () => ac.abort();
   }, [id]);
 
   async function postular() {
@@ -93,10 +105,6 @@ export function PerfilAnimal({
         ← Catálogo
       </motion.button>
       {animal.fotos[0] && (
-        <SelloFicha
-          activo={esFichaDemo({ demo: animal.demo, nombre: animal.nombre, entidadNombre: animal.entidad.nombre, historia: animal.historia })}
-          texto={marcaDiagonal(animal.nombre)}
-        >
           <motion.img
             className="portada"
             src={animal.fotos[0].url}
@@ -106,7 +114,6 @@ export function PerfilAnimal({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           />
-        </SelloFicha>
       )}
       <motion.p
         className="ojo"
@@ -123,7 +130,7 @@ export function PerfilAnimal({
       >
         {nombreVisible(animal.nombre)}
       </motion.h1>
-      <p className="lema-suave">Si algo dentro de ti ya respondió al leer su nombre, escúchalo.</p>
+      <p className="pagina-proposito">Historia primero. La raza, si aparece, va al final.</p>
       <motion.ul
         className="chips"
         aria-label="Características"

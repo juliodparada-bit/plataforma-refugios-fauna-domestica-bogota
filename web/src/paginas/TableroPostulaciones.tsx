@@ -19,13 +19,17 @@ export function TableroPostulaciones({
   const [animalId, setAnimalId] = useState<string | null>(null);
   const [detalle, setDetalle] = useState<Awaited<ReturnType<typeof api.postulacionesDe>> | null>(null);
   const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(true);
 
   async function cargarLista() {
     setAnimales(await api.misAnimales());
   }
 
   useEffect(() => {
-    void cargarLista().catch((e) => setError(e instanceof Error ? e.message : 'No pude cargar.'));
+    setCargando(true);
+    void cargarLista()
+      .catch((e) => setError(e instanceof Error ? e.message : 'No pude cargar.'))
+      .finally(() => setCargando(false));
   }, []);
 
   useEffect(() => {
@@ -33,7 +37,10 @@ export function TableroPostulaciones({
       setDetalle(null);
       return;
     }
-    void api.postulacionesDe(animalId).then(setDetalle);
+    void api
+      .postulacionesDe(animalId)
+      .then(setDetalle)
+      .catch((e) => setError(e instanceof Error ? e.message : 'No pude abrir las postulaciones.'));
   }, [animalId]);
 
   async function resolver(
@@ -64,7 +71,14 @@ export function TableroPostulaciones({
         Cupos liberados (animales en estado adoptado): <strong>{cupos}</strong>
       </p>
       {error && <p className="error" role="alert">{error}</p>}
-      {!animalId && (
+      {!animalId && cargando && <p>Cargando…</p>}
+      {!animalId && !cargando && animales.length === 0 && !error && (
+        <div className="vacio">
+          <h3>Aún no has publicado animales</h3>
+          <p>Publica una historia desde Cuenta para ver postulaciones aquí.</p>
+        </div>
+      )}
+      {!animalId && animales.length > 0 && (
         <ul className="lista">
           {animales.map((a) => (
             <li key={a.id}>
@@ -91,6 +105,12 @@ export function TableroPostulaciones({
           </h2>
           {detalle.animal.necesidadEspecial && (
             <p className="etiqueta">Necesidad especial — se pide evidencia del hogar</p>
+          )}
+          {detalle.postulaciones.length === 0 && (
+            <div className="vacio">
+              <h3>Nadie se ha postulado aún</h3>
+              <p>Cuando un adoptante envíe su caso, aparece aquí con el puntaje.</p>
+            </div>
           )}
           <ul className="lista">
             {detalle.postulaciones.map((p) => (

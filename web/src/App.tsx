@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api, type Usuario } from './api';
+import { api, type Rol, type Usuario } from './api';
 import { Legal, PieLegal, type DocLegal } from './componentes/Legal';
 import { MenuRol } from './componentes/MenuRol';
 import { Marca } from './componentes/Marca';
@@ -12,7 +12,9 @@ import { ColaValidador } from './paginas/ColaValidador';
 import { Cuestionario } from './paginas/Cuestionario';
 import { DeseosEntidad } from './paginas/DeseosEntidad';
 import { Entrar } from './paginas/Entrar';
+import { Inicio } from './paginas/Inicio';
 import { MisPostulaciones } from './paginas/MisPostulaciones';
+import { Necesidades } from './paginas/Necesidades';
 import { PerfilAnimal } from './paginas/PerfilAnimal';
 import { PerfilEntidad } from './paginas/PerfilEntidad';
 import { Registro } from './paginas/Registro';
@@ -21,11 +23,13 @@ import { TableroPostulaciones } from './paginas/TableroPostulaciones';
 import { VerificacionEntidad } from './paginas/VerificacionEntidad';
 
 export function App() {
-  const [pagina, setPagina] = useState<Pagina>('catalogo');
+  const [pagina, setPagina] = useState<Pagina>('inicio');
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [cargando, setCargando] = useState(true);
   const [seleccion, setSeleccion] = useState<string | null>(null);
+  const [rolRegistro, setRolRegistro] = useState<Exclude<Rol, 'validador'> | undefined>();
   const [docLegal, setDocLegal] = useState<DocLegal | null>(null);
+  const [errorArranque, setErrorArranque] = useState('');
   const { tema, alternar } = useTema();
   const legalRef = useRef<HTMLDivElement>(null);
   const cerrarLegal = useCallback(() => setDocLegal(null), []);
@@ -33,6 +37,7 @@ export function App() {
 
   useEffect(() => {
     const titulos: Record<Pagina, string> = {
+      inicio: 'Inicio',
       catalogo: 'Catálogo',
       registro: 'Crear cuenta',
       entrar: 'Entrar',
@@ -45,20 +50,40 @@ export function App() {
       postulaciones: 'Postulaciones',
       cuestionario: 'Cuestionario',
       deseos: 'Listas de deseos',
+      necesidades: 'Necesidades',
       misPostulaciones: 'Mis postulaciones',
     };
     document.title = `${titulos[pagina]} · Mestizo — Por convivencia, no por raza.`;
   }, [pagina]);
 
-  useEffect(() => {
-    api
-      .yo()
+  const cargarSesion = useCallback((signal?: AbortSignal) => {
+    setErrorArranque('');
+    return api
+      .yo({ signal })
       .then((u) => {
         setUsuario(u);
+        if (u) {
+          setPagina((p) =>
+            p === 'inicio' ? (u.rol === 'donante' ? 'necesidades' : 'catalogo') : p,
+          );
+        }
       })
-      .catch(() => setUsuario(null))
-      .finally(() => setCargando(false));
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+        setUsuario(null);
+        setErrorArranque(
+          err instanceof Error ? err.message : 'No pude hablar con la API.',
+        );
+      });
   }, []);
+
+  useEffect(() => {
+    const ac = new AbortController();
+    void cargarSesion(ac.signal).finally(() => {
+      if (!ac.signal.aborted) setCargando(false);
+    });
+    return () => ac.abort();
+  }, [cargarSesion]);
 
   useEffect(() => {
     if (cargando) return;
@@ -70,10 +95,19 @@ export function App() {
       'postulaciones',
       'cuestionario',
       'deseos',
+      'necesidades',
       'misPostulaciones',
     ];
     if (!usuario) {
       if (privadas.includes(pagina)) setPagina('catalogo');
+      return;
+    }
+    if (pagina === 'inicio') {
+      setPagina(usuario.rol === 'donante' ? 'necesidades' : 'catalogo');
+      return;
+    }
+    if (pagina === 'necesidades' && usuario.rol !== 'donante') {
+      setPagina('catalogo');
       return;
     }
     const sello = Boolean(usuario.entidad?.puedePublicar);
@@ -98,9 +132,19 @@ export function App() {
   }
 
   async function salir() {
-    await api.salir();
+    try {
+      await api.salir();
+    } catch {
+      /* la cookie local ya no cuenta: limpiamos el estado igual */
+    }
     setUsuario(null);
-    setPagina('catalogo');
+    setPagina('inicio');
+  }
+
+  async function reintentarArranque() {
+    setCargando(true);
+    await cargarSesion();
+    setCargando(false);
   }
 
   if (cargando) {
@@ -114,11 +158,10 @@ export function App() {
             <Marca as="div" />
           </header>
           <main id="contenido" className="hoja" tabIndex={-1} aria-busy="true" aria-label="Cargando">
-          <div className="esqueleto" style={{ height: '14rem', borderRadius: '1.1rem', marginBottom: '1.25rem' }} />
-          <div style={{ display: 'grid', gap: '0.55rem' }}>
-            <div className="esqueleto esqueleto-linea" style={{ width: '55%', height: '1.8rem' }} />
-            <div className="esqueleto esqueleto-linea" style={{ width: '80%' }} />
-            <div className="esqueleto esqueleto-linea" style={{ width: '65%' }} />
+          <div className="pagina-cabecera">
+            <div className="esqueleto esqueleto-linea" style={{ width: '22%', height: '0.7rem' }} />
+            <div className="esqueleto esqueleto-linea" style={{ width: '40%', height: '1.7rem' }} />
+            <div className="esqueleto esqueleto-linea" style={{ width: '70%' }} />
           </div>
           <ul className="lista tarjetas" style={{ marginTop: '2rem' }}>
             {Array.from({ length: 3 }).map((_, i) => (
@@ -144,27 +187,55 @@ export function App() {
     </a>
     <div className="marco" {...(docLegal ? { inert: true } : {})}>
       <header className="barra">
-        <Marca onClick={() => setPagina('catalogo')} />
-        <MenuRol
-          clase="menu-escritorio"
-          pagina={pagina}
-          usuario={usuario}
-          alIr={setPagina}
-          alSalir={() => void salir()}
+        <Marca
+          onClick={() =>
+            setPagina(usuario ? (usuario.rol === 'donante' ? 'necesidades' : 'catalogo') : 'inicio')
+          }
         />
-        <button
-          type="button"
-          className="btn-tema"
-          onClick={alternar}
-          aria-pressed={tema === 'oscuro'}
-          aria-label={tema === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-          title={tema === 'oscuro' ? 'Modo claro' : 'Modo oscuro'}
-        >
-          <span aria-hidden="true">{tema === 'oscuro' ? '☀️' : '🌙'}</span>
-        </button>
+        <div className="barra-acciones">
+          <MenuRol
+            clase="menu-escritorio"
+            pagina={pagina}
+            usuario={usuario}
+            alIr={setPagina}
+            alSalir={() => void salir()}
+          />
+          <button
+            type="button"
+            className="btn-tema"
+            onClick={alternar}
+            aria-pressed={tema === 'oscuro'}
+            aria-label={tema === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            title={tema === 'oscuro' ? 'Modo claro' : 'Modo oscuro'}
+          >
+            <span aria-hidden="true">{tema === 'oscuro' ? '☀️' : '🌙'}</span>
+          </button>
+        </div>
       </header>
 
       <div className="cuerpo" id="contenido" tabIndex={-1}>
+
+      {errorArranque && (
+        <aside className="aviso" role="alert">
+          <p>{errorArranque}</p>
+          <div className="acciones">
+            <button type="button" className="secundario" onClick={() => void reintentarArranque()}>
+              Reintentar conexión
+            </button>
+          </div>
+        </aside>
+      )}
+
+      {pagina === 'inicio' && (
+        <Inicio
+          yaHaySesion={Boolean(usuario)}
+          alCatalogo={() => setPagina('catalogo')}
+          alRegistro={(rol) => {
+            setRolRegistro(rol);
+            setPagina('registro');
+          }}
+        />
+      )}
 
       {pagina === 'catalogo' && (
         <Catalogo
@@ -176,16 +247,30 @@ export function App() {
             setSeleccion(id);
             setPagina('entidadPub');
           }}
-          alRegistro={() => setPagina('registro')}
+          alRegistro={() => {
+            setRolRegistro(undefined);
+            setPagina('registro');
+          }}
+          alInicio={() => setPagina('inicio')}
           mostrarCta={!usuario}
+        />
+      )}
+
+      {pagina === 'necesidades' && usuario?.rol === 'donante' && (
+        <Necesidades
+          alAbrir={(id) => {
+            setSeleccion(id);
+            setPagina('entidadPub');
+          }}
         />
       )}
 
       {pagina === 'registro' && (
         <Registro
+          rolInicial={rolRegistro}
           alListo={(u) => {
             setUsuario(u);
-            setPagina('tablero');
+            setPagina(u.rol === 'donante' ? 'necesidades' : 'tablero');
           }}
           alTerminos={() => irLegal('terminos')}
           alDatos={() => irLegal('datos')}
@@ -196,9 +281,12 @@ export function App() {
         <Entrar
           alListo={(u) => {
             setUsuario(u);
-            setPagina('tablero');
+            setPagina(u.rol === 'donante' ? 'necesidades' : 'tablero');
           }}
-          alRegistro={() => setPagina('registro')}
+          alRegistro={() => {
+            setRolRegistro(undefined);
+            setPagina('registro');
+          }}
           alTerminos={() => irLegal('terminos')}
           alDatos={() => irLegal('datos')}
         />
@@ -207,6 +295,7 @@ export function App() {
       {pagina === 'tablero' && usuario && (
         <Tablero
           usuario={usuario}
+          alActualizar={setUsuario}
           alVerificacion={() => setPagina('verificacion')}
           alCola={() => setPagina('cola')}
           alAlta={() => setPagina('alta')}
@@ -214,6 +303,7 @@ export function App() {
           alCuestionario={() => setPagina('cuestionario')}
           alDeseos={() => setPagina('deseos')}
           alCatalogo={() => setPagina('catalogo')}
+          alNecesidades={() => setPagina('necesidades')}
           alMisPostulaciones={() => setPagina('misPostulaciones')}
         />
       )}
@@ -248,7 +338,9 @@ export function App() {
         <PerfilEntidad
           id={seleccion}
           usuario={usuario}
-          alVolver={() => setPagina('catalogo')}
+          alVolver={() =>
+            setPagina(usuario?.rol === 'donante' ? 'necesidades' : 'catalogo')
+          }
           alEntrar={() => setPagina('entrar')}
           alAbrirAnimal={(id) => {
             setSeleccion(id);
@@ -276,7 +368,9 @@ export function App() {
         <Cuestionario
           alVolver={() => setPagina('tablero')}
           alListo={() => {
-            void api.yo().then(setUsuario);
+            void api.yo().then((u) => {
+              if (u) setUsuario(u);
+            });
             setPagina('catalogo');
           }}
         />

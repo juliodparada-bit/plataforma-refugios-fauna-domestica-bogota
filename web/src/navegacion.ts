@@ -1,4 +1,5 @@
 export type Pagina =
+  | 'inicio'
   | 'catalogo'
   | 'registro'
   | 'entrar'
@@ -11,4 +12,5 @@ export type Pagina =
   | 'postulaciones'
   | 'cuestionario'
   | 'deseos'
+  | 'necesidades'
   | 'misPostulaciones';

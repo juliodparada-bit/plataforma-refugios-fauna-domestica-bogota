@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { api, type Usuario } from '../api';
 import { CuentasEjemplo } from '../componentes/CuentasEjemplo';
+import { Pagina } from '../componentes/Pagina';
 
 export function Entrar({
   alListo,
@@ -35,12 +36,12 @@ export function Entrar({
   }
 
   return (
-    <main className="hoja">
-      <section className="hero hero-corto">
-        <p className="ojo">Bienvenido de vuelta</p>
-        <h1>Alguien te ha estado esperando.</h1>
-        <p className="lema">Cada vez que entras, traes contigo la posibilidad de cambiar algo.</p>
-      </section>
+    <Pagina
+      className="hoja-estrecha"
+      kicker="Sesión"
+      titulo="Entrar"
+      proposito="Correo y contraseña. También puedes usar una cuenta de piloto."
+    >
       <CuentasEjemplo />
       <form className="formulario" onSubmit={(e) => void enviar(e)}>
         <label>
@@ -71,7 +72,7 @@ export function Entrar({
           </p>
         )}
         <button type="submit" className="primario" disabled={enviando}>
-          {enviando ? 'Abriendo la puerta…' : 'Entrar'}
+          {enviando ? 'Entrando…' : 'Entrar'}
         </button>
       </form>
       <p>
@@ -87,6 +88,6 @@ export function Entrar({
           Datos personales
         </button>
       </p>
-    </main>
+    </Pagina>
   );
 }

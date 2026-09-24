@@ -8,7 +8,9 @@ El cliente llama estas rutas con el prefijo `/api` (proxy de Vite).
 |---|---|---|
 | POST | `/auth/registro` | HU-01 |
 | POST | `/auth/entrar` · `/auth/salir` | HU-02 |
-| GET | `/auth/yo` | HU-02 |
+| GET | `/auth/yo` | HU-02 (200 sin cookie: visitante, no 401) |
+| PATCH | `/auth/yo` | Cuenta: nombre, localidad y nombre del hogar |
+| GET · POST | `/auth/yo/foto` | Foto de perfil (JPEG/PNG/WebP) |
 | GET | `/localidades` | Catálogo de 19 localidades urbanas |
 | POST | `/verificaciones` | HU-03 |
 | GET | `/verificaciones/mia` | HU-03 |
@@ -25,6 +27,7 @@ El cliente llama estas rutas con el prefijo `/api` (proxy de Vite).
 | GET | `/animales/:id/postulaciones` | HU-09 |
 | POST | `/postulaciones/:id/resolver` | HU-09 |
 | POST | `/deseos` · GET `/deseos/mios` | HU-10 |
+| GET | `/entidades` | Hogares con sello y necesidades pendientes |
 | GET | `/entidades/:id` · GET `/entidades/:id/deseos` | HU-10, RF-20 |
 | POST | `/deseos/:id/reservar` · `/reservas/:id/confirmar` | HU-11 |
 | GET | `/reservas/:id/evidencia` | HU-11 |

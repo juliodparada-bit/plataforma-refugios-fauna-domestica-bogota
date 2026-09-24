@@ -23,6 +23,24 @@ export function etiquetaTalla(valor: string) {
   return TALLA[valor] ?? valor;
 }
 
+export function etiquetaCategoria(valor: string) {
+  const mapa: Record<string, string> = {
+    alimento: 'Alimento',
+    medicina: 'Medicina',
+    aseo: 'Aseo',
+  };
+  return mapa[valor] ?? valor;
+}
+
+export function iconoCategoria(valor: string) {
+  const mapa: Record<string, string> = {
+    alimento: '🌾',
+    medicina: '💊',
+    aseo: '🧼',
+  };
+  return mapa[valor] ?? '✦';
+}
+
 export function etiquetaRol(rol: 'adoptante' | 'donante' | 'entidad' | 'validador') {
   switch (rol) {
     case 'adoptante':

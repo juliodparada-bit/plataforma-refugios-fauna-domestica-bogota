@@ -1,8 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { api, type Usuario } from '../api';
 import { etiquetaEspecie, etiquetaSello } from '../etiquetas';
-import { SelloFicha } from '../componentes/SelloFicha';
-import { esFichaDemo, marcaDiagonal, nombreVisible } from '../demo';
+import { nombreVisible } from '../demo';
 
 export function PerfilEntidad({
   id,
@@ -22,7 +21,19 @@ export function PerfilEntidad({
   const [ok, setOk] = useState('');
 
   useEffect(() => {
-    void api.entidadPublica(id).then(setData).catch((e) => setError(e instanceof Error ? e.message : 'No encontré la entidad.'));
+    const ac = new AbortController();
+    setData(null);
+    setError('');
+    void api
+      .entidadPublica(id, { signal: ac.signal })
+      .then((perfil) => {
+        if (!ac.signal.aborted) setData(perfil);
+      })
+      .catch((e) => {
+        if (e instanceof DOMException && e.name === 'AbortError') return;
+        setError(e instanceof Error ? e.message : 'No encontré la entidad.');
+      });
+    return () => ac.abort();
   }, [id]);
 
   async function reservar(e: FormEvent<HTMLFormElement>, itemId: string) {
@@ -41,20 +52,27 @@ export function PerfilEntidad({
   if (!data) {
     return (
       <main className="hoja">
-        <p>{error || 'Cargando…'}</p>
+        <button type="button" className="enlace" onClick={alVolver}>
+          {usuario?.rol === 'donante' ? '← Necesidades' : '← Catálogo'}
+        </button>
+        {error ? (
+          <div className="vacio">
+            <h3>No pude abrir este hogar</h3>
+            <p className="error" role="alert">
+              {error}
+            </p>
+          </div>
+        ) : (
+          <p>Cargando…</p>
+        )}
       </main>
     );
   }
 
   return (
-    <SelloFicha
-      activo={esFichaDemo({ demo: data.demo, nombre: data.nombre })}
-      texto={marcaDiagonal(data.nombre)}
-      className="es-hoja"
-    >
     <main className="hoja">
       <button type="button" className="enlace" onClick={alVolver}>
-        ← Catálogo
+        {usuario?.rol === 'donante' ? '← Necesidades' : '← Catálogo'}
       </button>
       <p className="ojo">Refugio con sello a la vista</p>
       <h1>{nombreVisible(data.nombre)}</h1>
@@ -71,9 +89,7 @@ export function PerfilEntidad({
         <ul className="lista tarjetas">
           {data.animales.map((a) => (
           <li key={a.id}>
-            <SelloFicha activo={esFichaDemo({ demo: a.demo ?? data.demo, nombre: a.nombre })} texto={marcaDiagonal(a.nombre)} compacto>
             {a.fotoUrl && <img className="miniatura" src={a.fotoUrl} alt="" />}
-            </SelloFicha>
             <strong>{nombreVisible(a.nombre)}</strong>
             <p>
               {etiquetaEspecie(a.especie)} · {a.localidad}
@@ -104,6 +120,7 @@ export function PerfilEntidad({
         </aside>
       )}
       {error && <p className="error" role="alert">{error}</p>}
+      {data.deseos.length === 0 && <p>Este hogar no tiene ítems pendientes ahora.</p>}
       <ul className="lista">
         {data.deseos.map((d) => (
           <li key={d.id}>
@@ -137,6 +154,5 @@ export function PerfilEntidad({
         ))}
       </ul>
     </main>
-    </SelloFicha>
   );
 }

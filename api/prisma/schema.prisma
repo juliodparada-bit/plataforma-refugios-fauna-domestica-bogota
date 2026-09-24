@@ -131,6 +131,8 @@ model Usuario {
   localidadId         String    @map("localidad_id") @db.Uuid
   consentimientoDatos Boolean   @map("consentimiento_datos")
   consentimientoEn    DateTime  @map("consentimiento_en")
+  fotoPerfilRuta      String?   @map("foto_perfil_ruta") @db.VarChar(400)
+  fotoPerfilMime      String?   @map("foto_perfil_mime") @db.VarChar(80)
   creadoEn            DateTime  @default(now()) @map("creado_en")
   actualizadoEn       DateTime  @updatedAt @map("actualizado_en")
 
