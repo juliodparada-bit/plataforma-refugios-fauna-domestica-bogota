@@ -14,7 +14,7 @@
 | Frase del catálogo | No busca una raza. Busca un hogar. |
 | Ámbito | Área urbana de Bogotá, D.C. — caninos y felinos domésticos |
 | Repositorio | https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota |
-| Última revisión de coherencia | 3 de septiembre de 2026 |
+| Última revisión de coherencia | 21 de octubre de 2026 |
 
 Este expediente lo organizamos Julio David Parada León y Brayan Alejandro Sánchez. Julio firma como Product Owner del hilo documental. Una sola carpeta: `documentacion/`. Artefactos de ingeniería (IEEE 830, UML, DER, pruebas, manuales) por fases SENA.
 
@@ -48,7 +48,7 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 |---|---|---|
 | 1. Análisis | Estable | Formulación, ERS, HU, backlog, entrevista de ejemplo (1.4 no es trabajo de campo) |
 | 2. Planeación y diseño | Estable | 2.1 a 2.4 vigentes. El look del prototipo vive en `web/`; los wireframes del 2.4 siguen siendo el contenido y el orden |
-| 3. Ejecución | En curso | Módulos 1 a 5 demostrables en local ([3.1](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md), [3.2](03-ejecucion-y-desarrollo/3.2-sprints.md), [tablero 3.5](03-ejecucion-y-desarrollo/3.5-tablero-de-ejecucion.md), [Git Flow 3.4](03-ejecucion-y-desarrollo/3.4-git-flow.md)) |
+| 3. Ejecución | En curso | Módulos 1 a 5 demostrables en local (web + Flutter). [3.1](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md), [3.2](03-ejecucion-y-desarrollo/3.2-sprints.md), [tablero 3.5](03-ejecucion-y-desarrollo/3.5-tablero-de-ejecucion.md), [Git Flow 3.4](03-ejecucion-y-desarrollo/3.4-git-flow.md) |
 | 4. Evaluación y entrega | Vigente para sustentación | [4.1](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) a [4.5](04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md). Guion en http://localhost:5173/sustentacion |
 
 ---
@@ -80,7 +80,7 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 | Archivo | Para qué sirve |
 |---|---|
 | [Índice fase 3](03-ejecucion-y-desarrollo/00-indice-de-la-fase.md) | Sprints y convenciones |
-| [3.1 Entorno](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md) | Cómo levantar API, web y PostgreSQL |
+| [3.1 Entorno](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md) | Cómo levantar API, web, PostgreSQL y la app Flutter (`mobile/`) |
 | [3.2 Sprints](03-ejecucion-y-desarrollo/3.2-sprints.md) | Módulos 1 a 5 |
 | [3.3 Evidencias](03-ejecucion-y-desarrollo/3.3-evidencias.md) | Repo y semilla |
 | [3.4 Git Flow](03-ejecucion-y-desarrollo/3.4-git-flow.md) | Ramas, PRs, commits; cómo programan Julio y Brayan |
@@ -99,7 +99,7 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 
 ---
 
-Las decisiones de alcance (métrica norte, sin recaudo, complemento del IDPYBA, web por URL) están escritas en la [formulación 1.1](01-analisis/1.1-formulacion-del-proyecto.md), secciones 5 y 6. No las repito aquí.
+Las decisiones de alcance (métrica norte, sin recaudo, complemento del IDPYBA, web por URL y companion Flutter) están escritas en la [formulación 1.1](01-analisis/1.1-formulacion-del-proyecto.md), secciones 5 y 6. No las repito aquí.
 
 ---
 

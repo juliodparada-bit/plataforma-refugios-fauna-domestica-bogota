@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
+import { extraerToken } from './token';
 
 export type SesionPayload = {
   sub: string;
@@ -18,7 +19,7 @@ export class SesionGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
-    const token = (req.cookies as Record<string, string> | undefined)?.sid;
+    const token = extraerToken(req);
     if (!token) {
       throw new UnauthorizedException('Debes iniciar sesión.');
     }

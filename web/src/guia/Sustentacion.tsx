@@ -381,8 +381,8 @@ function StackTecnologico() {
           ],
           [
             'Sesión',
-            'JWT en cookie httpOnly',
-            'El token va firmado. El JS no lo lee. bcryptjs hashea la contraseña.',
+            'JWT cookie o Bearer',
+            'Web: cookie httpOnly sid. Flutter: Authorization Bearer. El JS del navegador no lee la cookie. bcryptjs hashea la contraseña.',
           ],
         ]}
       />
@@ -391,7 +391,7 @@ function StackTecnologico() {
         headers={['Pieza', 'Decisión', 'Motivo']}
         rows={[
           ['Pagos', 'Ninguno', 'Ítem, cantidad y unidad. Una pasarela contradice el alcance.'],
-          ['App nativa', 'Ninguna en este incremento', 'Un cliente web. Si mañana hay app, consume esta API.'],
+          ['Tiendas de apps', 'Fuera de alcance', 'Hay companion Flutter en mobile/ sobre esta API. No se publica en Play Store.'],
           ['Contenedor', 'Docker / Podman', 'El mismo Postgres en el puerto 5433.'],
         ]}
       />
@@ -435,8 +435,9 @@ function Login() {
         con credentials: el navegador adjunta la cookie solo a nuestro origen.
       </Lead>
       <p className="guia-texto">
-        El cuerpo de la respuesta no trae el token en JSON: trae el usuario. El
-        secreto viaja en <code className="guia-code">Set-Cookie</code>.
+        El cuerpo de login y registro también trae <code className="guia-code">{'{ token, usuario }'}</code> para
+        la app Flutter. En el navegador el secreto viaja en{' '}
+        <code className="guia-code">Set-Cookie</code> y el JavaScript no lo lee.
       </p>
       <Tabla
         headers={['Dato', 'Valor en la demo']}
@@ -454,13 +455,14 @@ function Login() {
 function Jwt() {
   return (
     <>
-      <h2>JWT donde el frontend no lo toca.</h2>
+      <h2>JWT: cookie en la web, Bearer en el celular.</h2>
       <Lead>
         El token lo firma Nest con <code className="guia-code">JwtService</code> y{' '}
-        <code className="guia-code">JWT_SECRETO</code>. El transporte no es un
-        Bearer que el cliente arme a mano: es la cabecera{' '}
-        <code className="guia-code">Cookie</code>. Un script inyectado no lee
-        httpOnly; sí podría leer localStorage.
+        <code className="guia-code">JWT_SECRETO</code>. En la web el transporte es
+        la cookie <code className="guia-code">sid</code> (httpOnly). En Flutter el
+        cliente envía <code className="guia-code">Authorization: Bearer</code>. Un
+        script inyectado en el navegador no lee httpOnly; sí podría leer
+        localStorage.
       </Lead>
       <Tabla
         headers={['Qué se espera', 'Qué hicimos']}
@@ -701,8 +703,8 @@ function Cierre() {
             'Fuera de alcance. Categoría, cantidad y unidad. El dinero se coordina por WhatsApp.',
           ],
           [
-            '¿Por qué cookie y no Bearer?',
-            'El JWT existe. El transporte es httpOnly. El cliente no guarda el token.',
+            '¿Por qué cookie y no solo Bearer?',
+            'En la web, httpOnly. En Flutter, Bearer en almacén seguro. Misma firma JWT.',
           ],
           [
             '¿El puntaje es machine learning?',

@@ -59,7 +59,7 @@ Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métri
 ## Lo que esta fase no incluye
 
 - Código de producción (eso es fase 3).
-- Pasarela, apadrinamiento ni app nativa (esta última, pendiente de reevaluación según formulación 6.3).
+- Pasarela, apadrinamiento ni publicación en tiendas de apps. El companion Flutter (`mobile/`) sí forma parte del prototipo (formulación 6.3).
 - «Diseñar todo UML posible»: solo los diagramas que explican el alcance del proyecto.
 
 ---

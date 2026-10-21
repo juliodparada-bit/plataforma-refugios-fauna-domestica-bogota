@@ -41,7 +41,7 @@ export class AuthController {
   ) {
     const { token, usuario } = await this.auth.registrar(dto);
     this.ponerCookie(res, token);
-    return { usuario };
+    return { token, usuario };
   }
 
   @Post('entrar')
@@ -51,7 +51,8 @@ export class AuthController {
   ) {
     const { token, usuario } = await this.auth.entrar(dto);
     this.ponerCookie(res, token);
-    return { usuario };
+    // El token va en el cuerpo para Flutter (Bearer). La cookie `sid` sigue para la web.
+    return { token, usuario };
   }
 
   @Post('salir')
