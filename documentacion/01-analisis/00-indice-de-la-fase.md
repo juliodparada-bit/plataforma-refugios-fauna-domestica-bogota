@@ -12,7 +12,7 @@ Esta fase responde **qué problema resuelvo y qué debe hacer el software**. UML
 
 **Cómo leerla:** vista previa (`Ctrl+Shift+V`). Orden: 1.1 → 1.2 → 1.3. El 1.4 es ejemplo del instrumento; no cierra requisitos.
 
-El alcance cerrado (métrica norte, sin recaudo, web por URL, complemento del IDPYBA) está en la [formulación 1.1](1.1-formulacion-del-proyecto.md), secciones 5 y 6.
+El alcance cerrado (métrica norte, sin recaudo, web por URL más companion Flutter, complemento del IDPYBA) está en la [formulación 1.1](1.1-formulacion-del-proyecto.md), secciones 5 y 6.
 
 ---
 

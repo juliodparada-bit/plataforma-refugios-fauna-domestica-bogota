@@ -16,7 +16,7 @@ Construyo el software por incrementos, en el orden del product backlog ([1.3](..
 
 | Archivo | Para qué sirve |
 |---|---|
-| [3.1 Entorno](3.1-entorno-de-desarrollo.md) | Cómo levantar Postgres, API y cliente |
+| [3.1 Entorno](3.1-entorno-de-desarrollo.md) | Cómo levantar Postgres, API, cliente web y Flutter (`mobile/`) |
 | [3.2 Sprints](3.2-sprints.md) | Módulos 1 a 5 y HU que cierra cada uno |
 | [3.3 Evidencias](3.3-evidencias.md) | Repo, semilla y evidencia de producto |
 | [3.4 Git Flow](3.4-git-flow.md) | Ramas `main` / `feature/HU-xx-…`, PRs, commits; PR #1 de Brayan |
@@ -27,4 +27,4 @@ Construyo el software por incrementos, en el orden del product backlog ([1.3](..
 ## Fuera de esta fase
 
 - Pruebas formales, manuales y pitch: [fase 4](../04-evaluacion-pruebas-y-entrega/00-indice-de-la-fase.md).
-- Recaudo, apadrinamiento, aprendizaje automático o app nativa.
+- Recaudo, apadrinamiento o aprendizaje automático. Hay un companion Flutter en `mobile/` que habla con la misma API; no sustituye el cliente web del expediente.

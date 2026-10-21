@@ -99,7 +99,9 @@ function Datos() {
       </p>
       <h2>Seguridad</h2>
       <p>
-        Contraseña con hash y sal (bcryptjs, costo 12). Sesión en cookie httpOnly (`sid`).
+        Contraseña con hash y sal (bcryptjs, costo 12). En la web la sesión va en
+        cookie httpOnly (`sid`); en la app Flutter, el mismo JWT viaja como
+        `Authorization: Bearer`.
         En un despliegue piloto se usará HTTPS. Las evidencias no son listables
         sin autenticación.
       </p>

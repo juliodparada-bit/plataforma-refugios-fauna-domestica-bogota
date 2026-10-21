@@ -1,6 +1,6 @@
 # API de Mestizo (NestJS)
 
-Backend del prototipo. Cómo levantarlo: [3.1 Entorno](../documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md). Sesión: cookie `httpOnly` `sid` (JWT). Hash: bcryptjs.
+Backend del prototipo. Cómo levantarlo: [3.1 Entorno](../documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md). Sesión: JWT firmado (bcryptjs). Web: cookie `httpOnly` `sid`. Flutter: cuerpo `{ token, usuario }` y cabecera `Authorization: Bearer`. `extraerToken` en `src/auth/token.ts`.
 
 El cliente llama estas rutas con el prefijo `/api` (proxy de Vite).
 
@@ -28,7 +28,7 @@ El cliente llama estas rutas con el prefijo `/api` (proxy de Vite).
 | POST | `/postulaciones/:id/resolver` | HU-09 |
 | POST | `/deseos` · GET `/deseos/mios` | HU-10 |
 | GET | `/entidades` | Hogares con sello y necesidades pendientes |
-| GET | `/entidades/:id` · GET `/entidades/:id/deseos` | HU-10, RF-20 |
+| GET | `/entidades/:id` | HU-10, RF-20 (el perfil ya embebe los deseos públicos) |
 | POST | `/deseos/:id/reservar` · `/reservas/:id/confirmar` | HU-11 |
 | GET | `/reservas/:id/evidencia` | HU-11 |
 

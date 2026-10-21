@@ -46,11 +46,6 @@ export class DeseosController {
     return this.servicio.listarPublicas();
   }
 
-  @Get('entidades/:id/deseos')
-  publicos(@Param('id') id: string) {
-    return this.servicio.publicos(id);
-  }
-
   @Get('entidades/:id')
   perfil(@Param('id') id: string) {
     return this.servicio.perfilPublico(id);

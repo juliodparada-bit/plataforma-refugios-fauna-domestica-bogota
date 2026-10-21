@@ -6,6 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
 import type { SesionPayload } from './sesion.guard';
+import { extraerToken } from './token';
 
 @Injectable()
 export class SesionOpcionalGuard implements CanActivate {
@@ -13,7 +14,7 @@ export class SesionOpcionalGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
-    const token = (req.cookies as Record<string, string> | undefined)?.sid;
+    const token = extraerToken(req);
     if (!token) {
       return true;
     }
