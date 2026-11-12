@@ -4,7 +4,7 @@
 
 | Integrante (usuario GitHub) | S1 | S2 | S3 | S4 | S5 | S6 | S7 | S8 | S9 |
 |---|---|---|---|---|---|---|---|---|---|
-| @juliodparada-bit | E2E | Front | Front: Entrar | API | | | | | |
+| @juliodparada-bit | E2E | Front | Front: Entrar | API | E2E | | | | |
 | @brayaansanchezp29-debug | pendiente | | | | | | | | |
 
 ## Cobertura semanal
@@ -17,6 +17,7 @@ Línea base medida antes de los tests nuevos. El frontend aún no tiene tests de
 | S2 | 58 | 47 | 58 y 47 |
 | S3 | 75 | 47 | 75 y 47. El backend ya superaba el 40 |
 | S4 | 75 | 88 | 75 y 88 |
+| S5 | 75 | 88 | se mantiene: ya supera el 60 |
 
 ## Registro de vocero aleatorio
 

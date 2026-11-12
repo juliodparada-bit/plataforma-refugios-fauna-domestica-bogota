@@ -45,3 +45,6 @@ mobile/android/app/release/
 # IDE
 .idea/
 *.swp
+
+# archivo que escribe un test de contrato al servir una foto
+api/coverage-foto-prueba.txt
