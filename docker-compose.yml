@@ -1,0 +1,17 @@
+# Base de pruebas de la semana 6. No es la de desarrollo (compose.yml, puerto 5433).
+# Puerto 5434 y base refugios_test. Los tests leen DATABASE_URL; aquí no hay secretos de producción.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: refugios
+      POSTGRES_PASSWORD: refugios_test
+      POSTGRES_DB: refugios_test
+    ports:
+      - "5434:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U refugios -d refugios_test"]
+      interval: 2s
+      retries: 20
