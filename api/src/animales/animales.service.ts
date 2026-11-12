@@ -59,6 +59,13 @@ export class AnimalesService {
     if (nombre.length < 2) {
       throw new BadRequestException('El nombre es obligatorio.');
     }
+    if (nombre.length > 80) {
+      throw new BadRequestException('El nombre no puede superar 80 caracteres.');
+    }
+    const raza = datos.raza?.trim() || null;
+    if (raza && raza.length > 80) {
+      throw new BadRequestException('La raza no puede superar 80 caracteres.');
+    }
     const localidadId = datos.localidadId;
     const localidad = await this.prisma.localidad.findUnique({ where: { id: localidadId } });
     if (!localidad) {
@@ -79,7 +86,7 @@ export class AnimalesService {
         edadAprox,
         energia: this.energia(datos.energia),
         historia,
-        raza: datos.raza?.trim() || null,
+        raza,
         necesidadEspecial: datos.necesidadEspecial === 'true' || datos.necesidadEspecial === 'on',
         conviveNinos: datos.conviveNinos === 'true' || datos.conviveNinos === 'on',
         conviveOtrosAnimales:
