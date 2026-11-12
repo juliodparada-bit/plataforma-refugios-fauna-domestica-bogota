@@ -4,7 +4,7 @@
 
 | Integrante (usuario GitHub) | S1 | S2 | S3 | S4 | S5 | S6 | S7 | S8 | S9 |
 |---|---|---|---|---|---|---|---|---|---|
-| @juliodparada-bit | E2E | Front | Front: Entrar | API | E2E | | | | |
+| @juliodparada-bit | E2E | Front | Front: Entrar | API | E2E | BD | | | |
 | @brayaansanchezp29-debug | pendiente | | | | | | | | |
 
 ## Cobertura semanal
@@ -18,9 +18,19 @@ Línea base medida antes de los tests nuevos. El frontend aún no tiene tests de
 | S3 | 75 | 47 | 75 y 47. El backend ya superaba el 40 |
 | S4 | 75 | 88 | 75 y 88 |
 | S5 | 75 | 88 | se mantiene: ya supera el 60 |
+| S6 | 75 | 88 | se mantiene: ya supera el 70 en líneas, sentencias, ramas y funciones |
 
 ## Registro de vocero aleatorio
 
 | Semana | Vocero | Capa preguntada | Respuesta escrita | Resultado |
 |---|---|---|---|---|
 | S1 | Julio David Parada León | E2E | El test `entrar-contrasena-incorrecta` entra con una clave que no existe y espera la alerta «Correo o contraseña incorrectos.». Arrange abre la página. Act llena el formulario y pulsa Entrar. Assert busca `role=alert`. El mutante fue quitar `role="alert"`: Playwright falló con `element(s) not found`. | |
+
+
+## Regla de rama
+
+El repo es público. El ruleset de `main` exige los checks `frontend` y `backend` del workflow `tests` cuando el administrador puede crearlo. Mientras tanto no se fusiona un PR con ese workflow en rojo.
+
+## Prueba de fuego
+
+Los tests de integración se corrieron dos veces seguidas contra PostgreSQL, con `TRUNCATE` entre tests. En esta sesión no hay Docker, así que `docker compose down -v` queda para el computador de quien no montó la base. Los comandos están en el README.
