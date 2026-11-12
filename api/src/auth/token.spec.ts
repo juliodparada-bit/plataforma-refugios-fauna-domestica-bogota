@@ -24,4 +24,9 @@ describe('extraerToken', () => {
   it('sin cookie ni Bearer no hay sesión', () => {
     expect(extraerToken(req({}))).toBeUndefined();
   });
+
+  it('ignora un Authorization que no es Bearer', () => {
+    expect(extraerToken(req({ authorization: 'Basic abc' }))).toBeUndefined();
+    expect(extraerToken(req({ authorization: 'Bearer' }))).toBeUndefined();
+  });
 });

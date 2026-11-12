@@ -4,7 +4,7 @@
 
 | Integrante (usuario GitHub) | S1 | S2 | S3 | S4 | S5 | S6 | S7 | S8 | S9 |
 |---|---|---|---|---|---|---|---|---|---|
-| @juliodparada-bit | E2E | | | | | | | | |
+| @juliodparada-bit | E2E | Front | | | | | | | |
 | @brayaansanchezp29-debug | pendiente | | | | | | | | |
 
 ## Cobertura semanal

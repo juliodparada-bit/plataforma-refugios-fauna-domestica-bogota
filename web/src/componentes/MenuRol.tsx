@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Usuario } from '../api';
 import type { Pagina } from '../navegacion';
-
-function iniciales(nombre: string) {
-  const partes = nombre.trim().split(/\s+/).filter(Boolean);
-  const letras = (partes[0]?.[0] ?? '') + (partes[1]?.[0] ?? '');
-  return letras.toUpperCase() || '?';
-}
+import { iniciales } from './iniciales';
 
 function AvatarMenu({ usuario }: { usuario: Usuario }) {
   const [rota, setRota] = useState(false);
