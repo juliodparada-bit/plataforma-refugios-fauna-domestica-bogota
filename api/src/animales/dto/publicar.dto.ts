@@ -1,8 +1,9 @@
-import { IsIn, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 export class PublicarAnimalDto {
   @IsString()
   @MinLength(2)
+  @MaxLength(80)
   nombre!: string;
 
   @IsIn(['canino', 'felino'])
@@ -42,5 +43,6 @@ export class PublicarAnimalDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(80)
   raza?: string;
 }
