@@ -23,10 +23,10 @@ module.exports = {
   // El piso de la semana 6. El comando `npm test` falla si la lógica medida baja de aquí.
   coverageThreshold: {
     global: {
-      lines: 47,
-      statements: 47,
-      functions: 43,
-      branches: 37,
+      lines: 88,
+      statements: 88,
+      functions: 92,
+      branches: 70,
     },
   },
 };
