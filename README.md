@@ -12,7 +12,20 @@ Empieza por el [índice maestro](documentacion/00-indice-maestro.md), en vista p
 
 Orden: **1.1 → 1.2 → 1.3 → 2.1 → 2.2 → 2.3 → 2.4**. El código está en `api/`, `web/` y `mobile/` (Flutter, misma API). Cómo levantarlo: [3.1 Entorno](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md). Avance de historias: [tablero 3.5](documentacion/03-ejecucion-y-desarrollo/3.5-tablero-de-ejecucion.md). Ramas y PRs (Git Flow; ambos aprendices): [3.4](documentacion/03-ejecucion-y-desarrollo/3.4-git-flow.md).
 
-En local: Postgres en `5433`, API en `3000`, cliente web en [http://localhost:5173](http://localhost:5173), app Flutter en `mobile/`. Guion de 15 minutos: [http://localhost:5173/sustentacion](http://localhost:5173/sustentacion) ([4.5](documentacion/04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md)). Detalle de la app: [mobile/README.md](mobile/README.md).
+En local: Postgres de desarrollo en `5433` (`compose.yml`), API en `3000`, cliente web en [http://localhost:5173](http://localhost:5173), app Flutter en `mobile/`.
+
+## Pruebas (bootcamp, parte de Julio David Parada León)
+
+La base de pruebas no es la de desarrollo. Vive en `docker-compose.yml`, puerto **5434**, base `refugios_test`.
+
+```bash
+docker compose -f docker-compose.yml up -d --wait
+cd api && DATABASE_URL=postgresql://refugios:refugios_test@127.0.0.1:5434/refugios_test npm test
+cd api && DATABASE_URL=postgresql://refugios:refugios_test@127.0.0.1:5434/refugios_test npm test
+docker compose -f docker-compose.yml down -v
+```
+
+Sin `DATABASE_URL`, `npm test` en `api/` corre la suite y se salta la integración. En `web/`, `npm test` mide la cobertura. En `e2e/`, `pnpm test` abre el cliente con Playwright. La matriz y los mutantes están en `docs/matriz-rotacion.md` y `docs/evidencia/`. Guion de 15 minutos: [http://localhost:5173/sustentacion](http://localhost:5173/sustentacion) ([4.5](documentacion/04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md)). Detalle de la app: [mobile/README.md](mobile/README.md).
 
 **Cuentas de piloto** (solo local): `entidad.ejemplo@local.test`, `adoptante.ejemplo@local.test` y `donante.ejemplo@local.test`, todas con `EjemploLocal123`. Detalle en [3.1](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md).
 
