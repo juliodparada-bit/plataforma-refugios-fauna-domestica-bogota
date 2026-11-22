@@ -1,0 +1,15 @@
+{
+  "name": "mestizo-e2e",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.4",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": {
+    "test": "playwright test",
+    "codegen": "playwright codegen http://localhost:5199",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

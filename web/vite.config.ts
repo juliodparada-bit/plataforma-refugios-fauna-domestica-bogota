@@ -1,6 +1,6 @@
 import type { ServerResponse } from 'http';
-import { defineConfig, type ProxyOptions } from 'vite';
 import react from '@vitejs/plugin-react';
+import { defineConfig, type ProxyOptions } from 'vitest/config';
 
 const proxyApi: Record<string, ProxyOptions> = {
   '/api': {
@@ -27,4 +27,24 @@ export default defineConfig({
   plugins: [react()],
   server: { host: true, port: 5173, proxy: proxyApi },
   preview: { host: true, port: 4173, proxy: proxyApi },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'text-summary'],
+      // Lógica de la interfaz. Quedan fuera el arranque y el guion de sustentación,
+      // que no es una regla del producto.
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: ['src/main.tsx', 'src/guia/**', 'src/**/*.test.{ts,tsx}', 'src/test/**'],
+      thresholds: {
+        lines: 0,
+        statements: 0,
+        branches: 0,
+        functions: 0,
+      },
+    },
+  },
 });
