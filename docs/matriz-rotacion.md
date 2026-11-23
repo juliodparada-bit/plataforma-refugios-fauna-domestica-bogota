@@ -14,6 +14,7 @@ Línea base medida antes de los tests nuevos. El frontend aún no tiene tests de
 | Semana | Frontend (%) | Backend (%) | Umbral configurado |
 |---|---|---|---|
 | S1 | 0 | 4 | 0 en el frontend. Backend: 4 líneas y 3 ramas |
+| S2 | 58 | 47 | 58 y 47 |
 
 ## Registro de vocero aleatorio
 
