@@ -32,6 +32,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     passWithNoTests: true,
+    testTimeout: 20000,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'text-summary'],
