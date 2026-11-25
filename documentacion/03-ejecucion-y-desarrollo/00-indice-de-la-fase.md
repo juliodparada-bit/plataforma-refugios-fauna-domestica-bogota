@@ -16,7 +16,7 @@ Construyo el software por incrementos, en el orden del product backlog ([1.3](..
 
 | Archivo | Para qué sirve |
 |---|---|
-| [3.1 Entorno](3.1-entorno-de-desarrollo.md) | Cómo levantar Postgres, API, cliente web y Flutter; puertos; `.env` |
+| [3.1 Entorno](3.1-entorno-de-desarrollo.md) | Resumen de arranque local. Entregables completos: [4.9 instalación](../04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md) y [4.4 despliegue](../04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) |
 | [3.4 Git Flow](3.4-git-flow.md) | Ramas `main` / `feature/HU-xx-…`, PRs, commits; repo y semilla |
 | [3.5 Tablero de ejecución](3.5-tablero-de-ejecucion.md) | Módulos 1 a 5, HU, pantallas, API y evidencia |
 | [3.6 Retrospectivas de pruebas](3.6-retrospectivas-de-pruebas.md) | Dos notas T6: E2E/front (S1–S2) y recorrido/umbral (S3–S4) |
