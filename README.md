@@ -16,6 +16,18 @@ En local: Postgres en `5433`, API en `3000`, cliente web en [http://localhost:51
 
 **Cuentas de piloto** (solo local): `entidad.ejemplo@local.test`, `adoptante.ejemplo@local.test` y `donante.ejemplo@local.test`, todas con `EjemploLocal123`. Detalle en [3.1](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md).
 
+## Pruebas del bootcamp
+
+En `main` se corren las semanas ya fusionadas:
+
+```bash
+cd web && npm test
+cd api && npm test
+cd e2e && pnpm test tests/entrar-contrasena-incorrecta.test.js
+```
+
+El registro de capas y umbrales está en [docs/matriz-rotacion.md](docs/matriz-rotacion.md). El orden para revisar el trabajo está en [docs/camino-de-auditoria.md](docs/camino-de-auditoria.md). La base de pruebas del puerto 5434 llega con el pull request #14 y no está en esta rama.
+
 ## Alcance del prototipo
 
 Verificación de entidades, catálogo con historia, postulación corta, listas de deseos en especie y bloqueo de fauna no doméstica. Este prototipo **no recauda dinero**.

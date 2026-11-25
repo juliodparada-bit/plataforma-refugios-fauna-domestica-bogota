@@ -20,7 +20,7 @@ module.exports = {
   ],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
-  // El piso de la semana 6. El comando `npm test` falla si la lógica medida baja de aquí.
+  // Umbral vigente en main: el de la semana 2, que la semana 3 no bajó. El comando `npm test` falla si la lógica medida baja de aquí. La subida al piso de la semana 4 está en el pull request #12.
   coverageThreshold: {
     global: {
       lines: 47,
