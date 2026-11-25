@@ -14,9 +14,9 @@
 | Frase del catálogo | No busca una raza. Busca un hogar. |
 | Ámbito | Área urbana de Bogotá, D.C. — caninos y felinos domésticos |
 | Repositorio | https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota |
-| Última revisión de coherencia | 25 de noviembre de 2026 (expediente T6) |
+| Última revisión de coherencia | 25 de noviembre de 2026 (expediente T6 + auditoría idea/código/docs) |
 
-Este expediente lo organizamos Julio David Parada León y Brayan Alejandro Sánchez. Julio firma como Product Owner del hilo documental. Una sola carpeta: `documentacion/`. Artefactos de ingeniería (IEEE 830, UML, DER, pruebas, manuales) por fases SENA.
+Este expediente lo organizamos Julio David Parada León y Brayan Alejandro Sánchez. Julio firma como Product Owner del hilo documental. El expediente SENA vive en `documentacion/` (fases 1–4). `docs/` es **otra** carpeta: material del bootcamp de pruebas (`matriz-rotacion.md`); el camino de auditoría del [PR #16](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/16) no está en `main`. No se mezclan.
 
 ---
 
@@ -94,7 +94,7 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 | [Índice fase 4](04-evaluacion-pruebas-y-entrega/00-indice-de-la-fase.md) | Mapa de la fase |
 | [4.1 Pruebas](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) | Niveles, ambiente, umbrales, Postman, reporte y ciclos |
 | [Matriz de casos](04-evaluacion-pruebas-y-entrega/4.1-matriz-casos.md) | ≥20 casos POSITIVO/NEGATIVO sacados de tests de `main` |
-| [4.2 Manual técnico](04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md) | Dónde está cada respuesta de ingeniería |
+| [4.2 Manual técnico](04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md) | Dónde está cada respuesta; ancla de módulos de código |
 | [4.3 Manual de usuario](04-evaluacion-pruebas-y-entrega/4.3-manual-usuario.md) | Qué hace cada rol |
 | [4.4 Despliegue](04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) | Puertos locales |
 | [4.5 Sustentación](04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md) | Guion de 15 minutos |
@@ -109,7 +109,8 @@ Las decisiones de alcance (métrica norte, sin recaudo, complemento del IDPYBA, 
 
 ## Convenio
 
-- Un solo hilo: `documentacion/`.
+- Expediente SENA: `documentacion/`. Bootcamp de pruebas: `docs/`. Código: `api/`, `web/`, `mobile/`, `e2e/`. Postman T6: `tests/postman/`.
+- Mapa de módulos de código (auth, animales, postulaciones, deseos, verificación, cuenta/foto, Flutter, seed): [4.2](04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md).
 - Marca de producto: **Mestizo**. Eslogan: *Por convivencia, no por raza.* El nombre académico del expediente no cambia.
 - Presentan el prototipo: Julio David Parada León y Brayan Alejandro Sánchez.
 - Entrevista real con un refugio: pendiente. El 1.4 es simulación.

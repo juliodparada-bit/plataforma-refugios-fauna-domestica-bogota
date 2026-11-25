@@ -17,6 +17,10 @@ out/
 # Subidas locales
 uploads/
 
+# Residuo de tests del API (contrato HTTP de foto)
+coverage-foto-prueba.txt
+api/coverage-foto-prueba.txt
+
 # Sistema
 .DS_Store
 Thumbs.db

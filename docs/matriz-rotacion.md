@@ -1,5 +1,7 @@
 # Matriz de rotación de capas
 
+Carpeta `docs/`: artefactos del **bootcamp de pruebas** (rotación por semanas). El expediente ADSO (formulación, ERS, HU, arquitectura, cierre T6) está en `documentacion/`. No son el mismo hilo.
+
 **Grupo**: Mestizo · **Ficha**: 3228973 B · **Stack**: React + NestJS + PostgreSQL
 
 | Integrante (usuario GitHub) | S1 | S2 | S3 | S4 | S5 | S6 | S7 | S8 | S9 |

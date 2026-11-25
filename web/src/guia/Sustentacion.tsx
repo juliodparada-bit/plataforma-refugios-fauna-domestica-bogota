@@ -308,10 +308,11 @@ function StackTecnologico() {
     <>
       <h2>Tres capas. Un prototipo.</h2>
       <Lead>
-        El usuario entra por el navegador. React habla en JSON con NestJS. Nest
-        aplica las reglas —especie, roles, puntaje, estados— y Prisma escribe en
-        PostgreSQL. TypeScript está en las dos puntas. Si el centro pidiera Java,
-        cambiaría el lenguaje, no las capas ni los requisitos.
+        El usuario entra por el navegador o por la app Flutter. Ambos hablan JSON
+        con NestJS. Nest aplica las reglas —especie, roles, puntaje, estados— y
+        Prisma escribe en PostgreSQL. TypeScript está en web y API; Dart en el
+        celular. Si el centro pidiera Java, cambiaría el lenguaje de la API, no
+        las capas ni los requisitos.
       </Lead>
       <h3>Frontend</h3>
       <Tabla
@@ -319,8 +320,8 @@ function StackTecnologico() {
         rows={[
           [
             'Interfaz',
-            'React (SPA)',
-            'Un solo cliente para visitante, adoptante, donante, entidad y validador. El enlace de WhatsApp abre una URL, no una tienda.',
+            'React (SPA) + Flutter',
+            'Dos clientes, una API. La web cubre los cinco roles por URL (WhatsApp abre el enlace). Flutter en mobile/ es companion de desarrollo; no hay Play Store.',
           ],
           [
             'Build',
@@ -445,6 +446,7 @@ function Login() {
           ['Correo', 'adoptante.ejemplo@local.test'],
           ['Contraseña', 'EjemploLocal123'],
           ['Cookie', 'sid · httpOnly · SameSite=Lax'],
+          ['JSON de login', '{ token, usuario } — Flutter usa token; la web no'],
           ['Payload del JWT', 'sub (id de usuario) y rol'],
         ]}
       />
@@ -469,19 +471,19 @@ function Jwt() {
         rows={[
           [
             'El login produce un token',
-            'Se firma el JWT; el cliente recibe el usuario, no el string.',
+            'POST /auth/entrar y /registro responden { token, usuario }. La web ignora el token del JSON; Flutter lo guarda y lo manda como Bearer.',
           ],
           [
             'Almacenamiento seguro',
-            'Cookie sid httpOnly y SameSite Lax. No está en localStorage.',
+            'Web: cookie sid httpOnly y SameSite Lax (el JS no la lee). Flutter: almacén seguro, no localStorage del navegador.',
           ],
           [
-            'Viaja en cabeceras protegidas',
-            'El navegador manda Cookie: sid=… en cada fetch.',
+            'Viaja en cabeceras',
+            'Navegador: Cookie sid. App: Authorization Bearer. Si llegan las dos, extraerToken usa la cookie.',
           ],
           [
             'Guards',
-            'Sin cookie válida: 401. Rol incorrecto: 403.',
+            'GET /auth/yo sin sesión: 200 y null (visitante). Rutas con SesionGuard: 401. Rol incorrecto: 403.',
           ],
         ]}
         rowTone={['success', 'success', 'info', 'success']}
@@ -542,15 +544,17 @@ function Arquitectura() {
     <>
       <h2>React, Nest y Postgres en tres puertos.</h2>
       <Lead>
-        Un solo cliente web, pensado para celular. Vite en 5173 llama a Nest en
-        3000 con el proxy /api. Prisma persiste en PostgreSQL, puerto 5433. CORS
-        admite solo el origen del cliente y viaja con credentials: si no, la
-        cookie de sesión no cruza.
+        Dos clientes y un backend. Vite en 5173 llama a Nest en 3000 con el
+        proxy /api hacia 127.0.0.1. Flutter pega directo al puerto 3000 con
+        Bearer. Prisma persiste en PostgreSQL, puerto 5433. CORS admite el origen
+        de Vite y viaja con credentials: si no, la cookie no cruza. Flutter no
+        manda Origin y pasa.
       </Lead>
       <Tabla
         headers={['Capa', 'Tecnología', 'Contrato']}
         rows={[
-          ['Cliente', 'React + Vite', '5173 · fetch /api con credentials'],
+          ['Cliente web', 'React + Vite', '5173 · fetch /api con credentials (cookie sid)'],
+          ['Cliente móvil', 'Flutter (mobile/)', 'Bearer al puerto 3000; misma API'],
           ['API', 'NestJS + ValidationPipe', '3000 · DTOs con whitelist'],
           ['Datos', 'Prisma + PostgreSQL 16', '5433 · migraciones en git'],
         ]}
@@ -663,8 +667,9 @@ function Git() {
       <h2>El código está en GitHub.</h2>
       <Lead>
         Repositorio público, rama main. El README indica cómo levantar Postgres,
-        la API y el cliente. Existe <code className="guia-code">api/.env.example</code> con
-        DATABASE_URL, JWT_SECRETO y WEB_ORIGEN: los secretos reales no se suben.
+        la API, el cliente web y Flutter. Existe{' '}
+        <code className="guia-code">api/.env.example</code> con DATABASE_URL,
+        JWT_SECRETO y WEB_ORIGEN: los secretos reales no se suben.
       </Lead>
       <p className="guia-texto">
         Organizamos el trabajo por módulos del expediente: identidad,
@@ -676,8 +681,9 @@ function Git() {
           <span className="guia-sello">público</span>
         </header>
         <p>
-          README + documento 3.1 = instalación. compose.yml para PostgreSQL 16.
-          Cookie de sesión sid. No hay claves de pago porque no hay recaudo.
+          README + documento 3.1 = instalación. compose.yml para PostgreSQL 16
+          (contenedor refugios-pg, puerto 5433). Cookie sid en la web; Bearer en
+          Flutter. No hay claves de pago porque no hay recaudo.
         </p>
       </article>
     </>
