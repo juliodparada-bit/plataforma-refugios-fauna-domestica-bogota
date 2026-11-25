@@ -1,6 +1,7 @@
-import type { ServerResponse } from 'http';
+import type { ServerResponse } from 'node:http';
 import react from '@vitejs/plugin-react';
-import { defineConfig, type ProxyOptions } from 'vitest/config';
+import type { ProxyOptions } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 const proxyApi: Record<string, ProxyOptions> = {
   '/api': {
