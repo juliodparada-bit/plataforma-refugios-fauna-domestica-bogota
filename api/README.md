@@ -1,8 +1,8 @@
 # API de Mestizo (NestJS)
 
-Backend del prototipo. Cómo levantarlo: [3.1 Entorno](../documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md). Sesión: JWT firmado (bcryptjs). Web: cookie `httpOnly` `sid`. Flutter: cuerpo `{ token, usuario }` y cabecera `Authorization: Bearer`. `extraerToken` en `src/auth/token.ts`.
+Backend del prototipo. Arranque: copiar `.env.example` a `.env` (Postgres de desarrollo en **5433**, `PUERTO=3000`). Cómo levantarlo: [3.1 Entorno](../documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md). Sesión: JWT firmado (bcryptjs). Web: cookie `httpOnly` `sid`. Flutter: cuerpo `{ token, usuario }` y cabecera `Authorization: Bearer`. `extraerToken` en `src/auth/token.ts`. El cliente web (Vite **5173**) llama con el prefijo `/api` (proxy). Pruebas y Postman: [4.1](../documentacion/04-evaluacion-pruebas-y-entrega/4.1-pruebas.md).
 
-El cliente llama estas rutas con el prefijo `/api` (proxy de Vite).
+Rutas (el cliente web las llama con el prefijo `/api` del proxy de Vite; Postman apunta a `http://localhost:3000` sin ese prefijo):
 
 | Método | Ruta | HU |
 |---|---|---|

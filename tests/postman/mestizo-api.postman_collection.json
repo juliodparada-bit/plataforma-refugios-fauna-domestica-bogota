@@ -1,0 +1,372 @@
+{
+  "info": {
+    "_postman_id": "a7c3e1d0-6b12-4f08-9c4a-mestizo-t6-api",
+    "name": "Mestizo API (T6)",
+    "description": "Colección de las rutas reales documentadas en api/README.md y en los controladores Nest. Base: http://localhost:3000 (sin prefijo /api; el prefijo lo pone el proxy de Vite).\n\nRequiere la API levantada con api/.env.example (puerto 3000, Postgres 5433).\nCuentas de semilla: adoptante.ejemplo@local.test y entidad.ejemplo@local.test, clave EjemploLocal123.\n\nNo hay rutas de IoT, recaudo ni pasarela.\nEl contrato HTTP automatizado equivalente está en api/src/contrato.http.test.ts y api/src/animales/animales.api.test.ts (Jest + Supertest). Eso no sustituye esta colección.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "tokenAdoptante", "value": "" },
+    { "key": "tokenEntidad", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Salud y catálogo",
+      "item": [
+        {
+          "name": "GET /localidades",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('devuelve un arreglo', function () {",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/localidades",
+            "description": "Catálogo de 19 localidades urbanas. Sin autenticación."
+          }
+        },
+        {
+          "name": "GET /animales",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('JSON arreglo', function () {",
+                  "  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/animales",
+            "description": "Catálogo público. Coincide con el caso CP-20 de la matriz."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /auth/entrar (adoptante piloto)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('devuelve token y usuario', function () {",
+                  "  const cuerpo = pm.response.json();",
+                  "  pm.expect(cuerpo.token).to.be.a('string');",
+                  "  pm.expect(cuerpo.usuario.rol).to.eql('adoptante');",
+                  "  pm.collectionVariables.set('tokenAdoptante', cuerpo.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"adoptante.ejemplo@local.test\",\n  \"contrasena\": \"EjemploLocal123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/entrar",
+            "description": "Cookie sid (web) y token en el cuerpo (Flutter). Nest responde 201."
+          }
+        },
+        {
+          "name": "POST /auth/entrar (entidad piloto)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('guarda Bearer de entidad', function () {",
+                  "  const cuerpo = pm.response.json();",
+                  "  pm.expect(cuerpo.token).to.be.a('string');",
+                  "  pm.expect(cuerpo.usuario.rol).to.eql('entidad');",
+                  "  pm.collectionVariables.set('tokenEntidad', cuerpo.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"entidad.ejemplo@local.test\",\n  \"contrasena\": \"EjemploLocal123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/entrar"
+          }
+        },
+        {
+          "name": "POST /auth/entrar (clave incorrecta)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 401', function () {",
+                  "  pm.response.to.have.status(401);",
+                  "});",
+                  "pm.test('mensaje genérico', function () {",
+                  "  const cuerpo = pm.response.json();",
+                  "  pm.expect(String(cuerpo.message)).to.include('Correo o contraseña incorrectos');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"adoptante.ejemplo@local.test\",\n  \"contrasena\": \"clave-que-no-es\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/entrar",
+            "description": "401. El mensaje no revela si el correo existe."
+          }
+        },
+        {
+          "name": "POST /auth/entrar (correo inválido)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 400', function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"no-es-correo\",\n  \"contrasena\": \"x\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/entrar",
+            "description": "ValidationPipe + @IsEmail. Coincide con animales.api.test.ts."
+          }
+        },
+        {
+          "name": "GET /auth/yo (sin sesión)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200, no 401', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/auth/yo",
+            "description": "SesionOpcionalGuard: visitante. Cuerpo null. HU-02."
+          }
+        },
+        {
+          "name": "GET /auth/yo (Bearer adoptante)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('rol adoptante', function () {",
+                  "  pm.expect(pm.response.json().rol).to.eql('adoptante');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{tokenAdoptante}}" }
+            ],
+            "url": "{{baseUrl}}/auth/yo",
+            "description": "Correr después del login adoptante. Flutter usa este Bearer."
+          }
+        },
+        {
+          "name": "POST /auth/registro (correo ya existente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 409', function () {",
+                  "  pm.response.to.have.status(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ada López\",\n  \"correo\": \"adoptante.ejemplo@local.test\",\n  \"contrasena\": \"Correcta123\",\n  \"localidadId\": \"00000000-0000-4000-8000-000000000000\",\n  \"rol\": \"adoptante\",\n  \"consentimientoDatos\": true\n}"
+            },
+            "url": "{{baseUrl}}/auth/registro",
+            "description": "Conflicto si el correo de semilla ya existe. Un registro 201 exige un correo nuevo y un localidadId real de GET /localidades; no se deja un UUID inventado como caso positivo."
+          }
+        },
+        {
+          "name": "POST /auth/registro (sin consentimiento)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 400', function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ada López\",\n  \"correo\": \"ada.postman@mestizo.test\",\n  \"contrasena\": \"Correcta123\",\n  \"localidadId\": \"00000000-0000-4000-8000-000000000000\",\n  \"rol\": \"adoptante\",\n  \"consentimientoDatos\": false\n}"
+            },
+            "url": "{{baseUrl}}/auth/registro",
+            "description": "RF de consentimiento. No hay INSERT. Coincide con auth.service.test.ts."
+          }
+        }
+      ]
+    },
+    {
+      "name": "401 y 403",
+      "item": [
+        {
+          "name": "GET /animales/mios (sin sesión → 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 401', function () {",
+                  "  pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/animales/mios"
+          }
+        },
+        {
+          "name": "GET /animales/mios (adoptante → 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 403', function () {",
+                  "  pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{tokenAdoptante}}" }
+            ],
+            "url": "{{baseUrl}}/animales/mios",
+            "description": "RolesGuard: publicar/listar propios es de entidad."
+          }
+        },
+        {
+          "name": "GET /animales/mios (entidad → 200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('arreglo', function () {",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{tokenEntidad}}" }
+            ],
+            "url": "{{baseUrl}}/animales/mios"
+          }
+        }
+      ]
+    }
+  ]
+}

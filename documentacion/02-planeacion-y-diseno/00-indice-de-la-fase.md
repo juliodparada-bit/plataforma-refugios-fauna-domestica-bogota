@@ -23,7 +23,7 @@ Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métri
 - Estilo (capas / cliente-servidor).
 - Diagrama de contexto y de contenedores.
 - Stack del prototipo (React 19 + Vite 6 + TypeScript, NestJS 11, Prisma, PostgreSQL 16). Alternativa Java/Spring si el centro lo exigiera: cambian el lenguaje, no las capas ni los RF.
-- Decisión de recaudo: el sistema no recauda dinero.
+- Decisión de recaudo: el sistema no recauda dinero. IoT no aplica: el producto no incluye sensores ni hardware.
 
 ### 2.2 UML
 

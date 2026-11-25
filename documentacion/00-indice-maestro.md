@@ -14,7 +14,7 @@
 | Frase del catálogo | No busca una raza. Busca un hogar. |
 | Ámbito | Área urbana de Bogotá, D.C. — caninos y felinos domésticos |
 | Repositorio | https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota |
-| Última revisión de coherencia | 21 de octubre de 2026 |
+| Última revisión de coherencia | 25 de noviembre de 2026 (expediente T6) |
 
 Este expediente lo organizamos Julio David Parada León y Brayan Alejandro Sánchez. Julio firma como Product Owner del hilo documental. Una sola carpeta: `documentacion/`. Artefactos de ingeniería (IEEE 830, UML, DER, pruebas, manuales) por fases SENA.
 
@@ -48,8 +48,8 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 |---|---|---|
 | 1. Análisis | Estable | Formulación, ERS, HU, backlog, entrevista de ejemplo (1.4 no es trabajo de campo) |
 | 2. Planeación y diseño | Estable | 2.1 a 2.4 vigentes. El look del prototipo vive en `web/`; los wireframes del 2.4 siguen siendo el contenido y el orden |
-| 3. Ejecución | En curso | Módulos 1 a 5 demostrables en local (web + Flutter). [3.1](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md), [3.2](03-ejecucion-y-desarrollo/3.2-sprints.md), [tablero 3.5](03-ejecucion-y-desarrollo/3.5-tablero-de-ejecucion.md), [Git Flow 3.4](03-ejecucion-y-desarrollo/3.4-git-flow.md) |
-| 4. Evaluación y entrega | Vigente para sustentación | [4.1](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) a [4.5](04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md). Guion en http://localhost:5173/sustentacion |
+| 3. Ejecución | En curso | Módulos 1 a 5 demostrables en local (web + Flutter). [3.1](03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md), [3.2](03-ejecucion-y-desarrollo/3.2-sprints.md), [tablero 3.5](03-ejecucion-y-desarrollo/3.5-tablero-de-ejecucion.md), [Git Flow 3.4](03-ejecucion-y-desarrollo/3.4-git-flow.md), [retrospectivas de pruebas 3.6](03-ejecucion-y-desarrollo/3.6-retrospectivas-de-pruebas.md) |
+| 4. Evaluación y entrega | Vigente para T6 | [4.1](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) a [4.7](04-evaluacion-pruebas-y-entrega/4.7-calidad-y-deuda.md). Cierre T6/T7: [4.6](04-evaluacion-pruebas-y-entrega/4.6-cierre-t6-y-t7.md). Guion en http://localhost:5173/sustentacion |
 
 ---
 
@@ -85,17 +85,21 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 | [3.3 Evidencias](03-ejecucion-y-desarrollo/3.3-evidencias.md) | Repo y semilla |
 | [3.4 Git Flow](03-ejecucion-y-desarrollo/3.4-git-flow.md) | Ramas, PRs, commits; cómo programan Julio y Brayan |
 | [3.5 Tablero de ejecución](03-ejecucion-y-desarrollo/3.5-tablero-de-ejecucion.md) | HU Must 01–11 hechas; pantallas y rutas API |
+| [3.6 Retrospectivas de pruebas](03-ejecucion-y-desarrollo/3.6-retrospectivas-de-pruebas.md) | Dos notas T6 sobre el proceso de pruebas (S1–S2 y S3–S4) |
 
 ### Fase 4 — Evaluación y entrega
 
 | Archivo | Para qué sirve |
 |---|---|
 | [Índice fase 4](04-evaluacion-pruebas-y-entrega/00-indice-de-la-fase.md) | Mapa de la fase |
-| [4.1 Pruebas](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) | Unitarias, e2e y casos negativos |
+| [4.1 Pruebas](04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) | Niveles, ambiente, umbrales, Postman, reporte y ciclos |
+| [Matriz de casos](04-evaluacion-pruebas-y-entrega/4.1-matriz-casos.md) | ≥20 casos POSITIVO/NEGATIVO sacados de tests de `main` |
 | [4.2 Manual técnico](04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md) | Dónde está cada respuesta de ingeniería |
 | [4.3 Manual de usuario](04-evaluacion-pruebas-y-entrega/4.3-manual-usuario.md) | Qué hace cada rol |
 | [4.4 Despliegue](04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) | Puertos locales |
 | [4.5 Sustentación](04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md) | Guion de 15 minutos |
+| [4.6 Cierre T6 y T7](04-evaluacion-pruebas-y-entrega/4.6-cierre-t6-y-t7.md) | Qué cierra el trimestre 6 y qué no |
+| [4.7 Calidad y deuda](04-evaluacion-pruebas-y-entrega/4.7-calidad-y-deuda.md) | Lint real, backends de formación, deuda priorizada |
 
 ---
 

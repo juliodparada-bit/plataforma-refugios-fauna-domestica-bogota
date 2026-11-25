@@ -16,11 +16,14 @@ Cierro el ciclo: verificar lo construido, decir cómo se corre y sustentarlo. Lo
 
 | Archivo | Para qué sirve |
 |---|---|
-| [4.1 Pruebas](4.1-pruebas.md) | Unitarias, e2e y casos negativos |
+| [4.1 Pruebas](4.1-pruebas.md) | Niveles, ambiente, umbrales, Postman, reporte y ciclos |
+| [Matriz de casos](4.1-matriz-casos.md) | 32 casos POSITIVO/NEGATIVO de tests en `main` |
 | [4.2 Manual técnico](4.2-manual-tecnico.md) | Mapa a 2.1, 2.3, 3.1 y la API |
 | [4.3 Manual de usuario](4.3-manual-usuario.md) | Qué hace cada rol en el prototipo |
 | [4.4 Despliegue](4.4-despliegue.md) | Puertos locales; no hay URL de piloto |
 | [4.5 Sustentación](4.5-sustentacion.md) | Guion de 15 minutos (`/sustentacion`) |
+| [4.6 Cierre T6 y T7](4.6-cierre-t6-y-t7.md) | Qué cierra el trimestre 6 y qué queda fuera |
+| [4.7 Calidad y deuda](4.7-calidad-y-deuda.md) | Lint, backends de formación, deuda priorizada |
 
 ---
 

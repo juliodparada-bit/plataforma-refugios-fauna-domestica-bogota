@@ -18,4 +18,29 @@ En local: Postgres en `5433`, API en `3000`, cliente web en [http://localhost:51
 
 ## Alcance del prototipo
 
-Verificación de entidades, catálogo con historia, postulación corta, listas de deseos en especie y bloqueo de fauna no doméstica. Este prototipo **no recauda dinero**.
+Verificación de entidades, catálogo con historia, postulación corta, listas de deseos en especie y bloqueo de fauna no doméstica. Este prototipo **no recauda dinero**. **IoT no aplica:** el producto no incluye sensores ni hardware.
+
+Cierre T6 / lo que queda a T7: [4.6](documentacion/04-evaluacion-pruebas-y-entrega/4.6-cierre-t6-y-t7.md).
+
+## Pruebas
+
+Comandos (desde cada carpeta):
+
+```bash
+cd web && npm test          # Vitest + cobertura
+cd api && npm test          # Jest + cobertura
+cd e2e && pnpm test         # Playwright (login fallido)
+```
+
+Umbrales vigentes, leídos de los archivos (no se cambian en el expediente T6):
+
+| Paquete | Archivo | Líneas | Sentencias | Ramas | Funciones |
+|---|---|---|---|---|---|
+| web | `web/vite.config.ts` | 75 | 75 | 77 | 70 (`testTimeout` 20000) |
+| api | `api/jest.config.cjs` | 47 | 47 | 37 | 43 |
+
+Plan, niveles, ambiente, reporte y ciclos detectar–corregir–verificar: [4.1](documentacion/04-evaluacion-pruebas-y-entrega/4.1-pruebas.md). Matriz (≥20 casos del árbol): [4.1-matriz-casos.md](documentacion/04-evaluacion-pruebas-y-entrega/4.1-matriz-casos.md). Colección Postman importable: [tests/postman/mestizo-api.postman_collection.json](tests/postman/mestizo-api.postman_collection.json). Rotación del bootcamp: [docs/matriz-rotacion.md](docs/matriz-rotacion.md).
+
+Pull requests de **construcción** de pruebas en `main`: [#6](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/6), [#7](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/7), [#9](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/9), [#11](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/11). De **umbral / corrección** en `main`: [#8](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/8), [#10](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/10) y el commit [`040b6c4`](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/commit/040b6c43e8d3c762970b0efc655e1cbedc37b223) (`testTimeout` 20 s). API documentada: [api/README.md](api/README.md).
+
+Lint del API (resultado real, no «0 errores»): [4.7](documentacion/04-evaluacion-pruebas-y-entrega/4.7-calidad-y-deuda.md).
