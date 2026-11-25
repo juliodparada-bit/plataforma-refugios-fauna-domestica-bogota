@@ -5,10 +5,10 @@
 | Código | DOC-EV-00 |
 | Fase SENA | Evaluación y control |
 | Competencias | 220501097 · 220501098 |
-| Estado | Vigente para la sustentación del prototipo local |
+| Estado | Vigente para T6 (lista oferta abierta) |
 | Depende de | Incrementos demostrables de la fase 3 (módulos 1 a 5) |
 
-Cierro el ciclo: verificar lo construido, decir cómo se corre y sustentarlo. Los cinco módulos se muestran en local.
+Cierro el ciclo: verificar lo construido, decir cómo se corre y sustentarlo. Los cinco módulos se muestran en local. **IoT no aplica.**
 
 ---
 
@@ -20,10 +20,11 @@ Cierro el ciclo: verificar lo construido, decir cómo se corre y sustentarlo. Lo
 | [Matriz de casos](4.1-matriz-casos.md) | 32 casos POSITIVO/NEGATIVO de tests en `main` |
 | [4.2 Manual técnico](4.2-manual-tecnico.md) | Mapa a 2.1, 3.1, API y módulos de código |
 | [4.3 Manual de usuario](4.3-manual-usuario.md) | Qué hace cada rol en el prototipo |
-| [4.4 Despliegue](4.4-despliegue.md) | Puertos locales; no hay URL de piloto |
-| [4.5 Sustentación](4.5-sustentacion.md) | Guion de 15 minutos (`/sustentacion`) |
+| [4.5 Guion oral](4.5-sustentacion.md) | 15 minutos; diapositivas en `/sustentacion` |
 | [4.6 Cierre T6 y T7](4.6-cierre-t6-y-t7.md) | Qué cierra el trimestre 6 y qué queda fuera |
 | [4.7 Calidad y deuda](4.7-calidad-y-deuda.md) | Lint, backends de formación, deuda priorizada |
+
+El antiguo 4.4 (despliegue) se fusionó en el [3.1](../03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md): puertos locales y checklist de un piloto HTTPS futuro. No hay URL pública.
 
 ---
 

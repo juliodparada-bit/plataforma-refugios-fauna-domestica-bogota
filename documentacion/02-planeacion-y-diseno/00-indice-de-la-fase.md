@@ -35,7 +35,7 @@ Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métri
 | Actividades | Flujos de adopción (incluye `reservado`) y de lista de deseos |
 | Secuencia | Postulación y confirmación de insumo |
 | Clases y estados (dominio) | Usuario, PerfilAdoptante, Entidad, Animal, Postulación, Ítem, Reserva, Verificación. Estados de entidad **y** de solicitud (`complemento` vive en la solicitud). |
-| Componentes y despliegue | Esbozo en el 2.1; detalle operativo en fase 4 |
+| Componentes y despliegue | Esbozo en el 2.1; puertos y arranque en el [3.1](../03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md) |
 
 ### 2.3 Base de datos
 

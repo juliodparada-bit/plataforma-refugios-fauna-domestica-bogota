@@ -5,17 +5,15 @@ import './sustentacion.css';
 
 const PARTES = [
   { id: 'indice', label: 'Agenda', bloque: 'Apertura' },
-  { id: 'stack', label: 'Tecnologías', bloque: 'Stack' },
   { id: 'idea', label: 'Idea', bloque: 'Producto' },
-  { id: 'login', label: 'Login y cookie', bloque: 'Seguridad' },
-  { id: 'jwt', label: 'JWT', bloque: 'Seguridad' },
-  { id: 'roles', label: 'Roles', bloque: 'Seguridad' },
-  { id: 'datos', label: 'Datos', bloque: 'Seguridad' },
-  { id: 'arquitectura', label: 'Arquitectura', bloque: 'Integración' },
-  { id: 'cruds', label: 'Cinco CRUDs', bloque: 'Integración' },
-  { id: 'demo', label: 'Demo en vivo', bloque: 'Integración' },
-  { id: 'agil', label: 'Historias', bloque: 'Ágil y Git' },
-  { id: 'git', label: 'Git y README', bloque: 'Ágil y Git' },
+  { id: 't6', label: 'T6 y T7', bloque: 'D1' },
+  { id: 'jwt', label: 'Nest y JWT', bloque: 'D2' },
+  { id: 'arquitectura', label: 'Arquitectura', bloque: 'D2' },
+  { id: 'demo', label: 'Demo e2e', bloque: 'D2' },
+  { id: 'pruebas', label: 'Pruebas', bloque: 'D3' },
+  { id: 'ciclos', label: 'Issues y ciclos', bloque: 'D3' },
+  { id: 'docs', label: 'README y API', bloque: 'D4' },
+  { id: 'calidad', label: 'Lint y deuda', bloque: 'D5' },
   { id: 'cierre', label: 'Cierre', bloque: 'Cierre' },
 ] as const;
 
@@ -92,7 +90,7 @@ export function Sustentacion() {
   const progreso = ((idx + 1) / PARTES.length) * 100;
 
   useEffect(() => {
-    document.title = 'Sustentación · Mestizo';
+    document.title = 'Sustentación T6 · Mestizo';
     document.body.dataset.guia = '1';
     return () => {
       delete document.body.dataset.guia;
@@ -149,28 +147,24 @@ export function Sustentacion() {
     switch (actual.id) {
       case 'indice':
         return <Indice />;
-      case 'stack':
-        return <StackTecnologico />;
       case 'idea':
         return <Idea />;
-      case 'login':
-        return <Login />;
+      case 't6':
+        return <CierreT6 />;
       case 'jwt':
         return <Jwt />;
-      case 'roles':
-        return <Roles />;
-      case 'datos':
-        return <Datos />;
       case 'arquitectura':
         return <Arquitectura />;
-      case 'cruds':
-        return <Cruds />;
       case 'demo':
         return <DemoViva />;
-      case 'agil':
-        return <Agil />;
-      case 'git':
-        return <Git />;
+      case 'pruebas':
+        return <Pruebas />;
+      case 'ciclos':
+        return <Ciclos />;
+      case 'docs':
+        return <Docs />;
+      case 'calidad':
+        return <Calidad />;
       case 'cierre':
         return <Cierre />;
     }
@@ -185,7 +179,7 @@ export function Sustentacion() {
         <div className="guia-tope-fila">
           <div>
             <h1 className="guia-marca">
-              Sustentación · <NombreMarca />
+              Sustentación T6 · <NombreMarca />
             </h1>
             <div className="guia-equipo">
               {PRESENTAN.map((p) => (
@@ -251,7 +245,7 @@ function Indice() {
     <>
       <div className="guia-portada">
         <div className="guia-portada-copy">
-          <p className="guia-kicker">ADSO · SENA · ficha 3228973 B</p>
+          <p className="guia-kicker">ADSO · SENA · T6 oferta abierta · ficha 3228973 B</p>
           <div className="guia-portada-marca">
             <SimboloMarca tamano={56} />
             <div>
@@ -262,9 +256,8 @@ function Indice() {
             </div>
           </div>
           <Lead>
-            Plataforma web para adoptar por convivencia, cubrir un ítem concreto
-            y gestionar un refugio con sello. Sin recaudo. Sin Nequi. Un cupo
-            liberado es la métrica que nos importa.
+            Construcción Must HU-01 a HU-11, JWT cookie y Bearer, demo de punta a
+            punta, pruebas S1–S4 en main. IoT no aplica. Sin recaudo.
           </Lead>
         </div>
         <div className="guia-presentan">
@@ -278,122 +271,23 @@ function Indice() {
         </div>
       </div>
       <div className="guia-stats">
-        <Stat value="01" label="Seguridad y control de acceso" />
-        <Stat value="02" label="Arquitectura, integración y CRUDs" />
-        <Stat value="03" label="Historias, Git y cierre" />
+        <Stat value="D1" label="Visión T6/T7 y dos retrospectivas de pruebas" />
+        <Stat value="D2" label="Nest, JWT, .env, arquitectura, demo. IoT = No" />
+        <Stat value="D3–D5" label="Matriz, Postman, issues, README, lint 411" />
       </div>
       <Tabla
-        headers={['#', 'Diapositiva', 'Qué vamos a mostrar']}
+        headers={['#', 'Diapositiva', 'Qué califica']}
         rows={[
-          ['1', 'Tecnologías', 'Front, API, datos y por qué cada pieza'],
-          ['2', 'Idea', 'El problema, el alcance y lo que no hacemos'],
-          ['3', 'Login y cookie', 'Sesión real con cookie httpOnly'],
-          ['4', 'JWT', 'Token firmado que el JavaScript no lee'],
-          ['5', 'Roles', 'El menú cambia y el servidor también niega'],
-          ['6', 'Datos', 'Hash, Ley 1581 y bitácora sin datos del donante'],
-          ['7', 'Arquitectura', 'React, Nest y Postgres hablando por HTTP'],
-          ['8', 'Cinco CRUDs', 'Cinco entidades persistidas, no solo lectura'],
-          ['9', 'Demo en vivo', 'Flujos de punta a punta'],
-          ['10', 'Historias', 'Como / quiero / para, trazadas a requisitos'],
-          ['11', 'Git y README', 'Repositorio, instalación y entorno'],
-          ['12', 'Cierre', 'Una frase de producto y preguntas'],
-        ]}
-      />
-    </>
-  );
-}
-
-function StackTecnologico() {
-  return (
-    <>
-      <h2>Tres capas. Un prototipo.</h2>
-      <Lead>
-        El usuario entra por el navegador o por la app Flutter. Ambos hablan JSON
-        con NestJS. Nest aplica las reglas —especie, roles, puntaje, estados— y
-        Prisma escribe en PostgreSQL. TypeScript está en web y API; Dart en el
-        celular. Si el centro pidiera Java, cambiaría el lenguaje de la API, no
-        las capas ni los requisitos.
-      </Lead>
-      <h3>Frontend</h3>
-      <Tabla
-        headers={['Pieza', 'Tecnología', 'Por qué la elegimos']}
-        rows={[
-          [
-            'Interfaz',
-            'React (SPA) + Flutter',
-            'Dos clientes, una API. La web cubre los cinco roles por URL (WhatsApp abre el enlace). Flutter en mobile/ es companion de desarrollo; no hay Play Store.',
-          ],
-          [
-            'Build',
-            'Vite',
-            'Arranque local rápido y proxy /api hacia Nest. En desarrollo el navegador ve un solo origen.',
-          ],
-          [
-            'Lenguaje',
-            'TypeScript',
-            'El mismo contrato de roles y DTOs que la API.',
-          ],
-        ]}
-      />
-      <h3>Backend</h3>
-      <Tabla
-        headers={['Pieza', 'Tecnología', 'Por qué la elegimos']}
-        rows={[
-          [
-            'Runtime',
-            'Node.js',
-            'Un runtime para el cliente de desarrollo y la API.',
-          ],
-          [
-            'Framework',
-            'NestJS',
-            'Módulos que copian el dominio. Los guards de sesión y rol viven en el servidor.',
-          ],
-          [
-            'Validación',
-            'class-validator',
-            'Si alguien fuerza una especie que no es canino o felino, el DTO responde 400. El select del front no basta.',
-          ],
-          [
-            'Puntaje',
-            'Reglas en TypeScript',
-            'Cinco respuestas, un número y una frase. No hay machine learning.',
-          ],
-        ]}
-      />
-      <h3>Datos, archivos e identidad</h3>
-      <Tabla
-        headers={['Pieza', 'Tecnología', 'Por qué la elegimos']}
-        rows={[
-          [
-            'Base de datos',
-            'PostgreSQL 16',
-            'Relaciones reales: estado del animal, postulación, especie cerrada. No Mongo “por probar”.',
-          ],
-          [
-            'Mapeo',
-            'Prisma',
-            'El schema es el DER en el repo. Las migraciones viajan con Git.',
-          ],
-          [
-            'Archivos',
-            'Disco local',
-            'Fotos y evidencias. No son listables sin sesión.',
-          ],
-          [
-            'Sesión',
-            'JWT cookie o Bearer',
-            'Web: cookie httpOnly sid. Flutter: Authorization Bearer. El JS del navegador no lee la cookie. bcryptjs hashea la contraseña.',
-          ],
-        ]}
-      />
-      <h3>Lo que dejamos fuera</h3>
-      <Tabla
-        headers={['Pieza', 'Decisión', 'Motivo']}
-        rows={[
-          ['Pagos', 'Ninguno', 'Ítem, cantidad y unidad. Una pasarela contradice el alcance.'],
-          ['Tiendas de apps', 'Fuera de alcance', 'Hay companion Flutter en mobile/ sobre esta API. No se publica en Play Store.'],
-          ['Contenedor', 'Docker / Podman', 'El mismo Postgres en el puerto 5433.'],
+          ['1', 'Idea', 'Producto real: roles, Bogotá, Flutter companion'],
+          ['2', 'T6 y T7', 'D1 — qué cierra este trimestre y qué no'],
+          ['3', 'Nest y JWT', 'D2 — 4.º backend, cookie sid + Bearer, .env'],
+          ['4', 'Arquitectura', 'D2 — tres puertos, Flutter, IoT No'],
+          ['5', 'Demo e2e', 'D2 — recorrido en vivo con la semilla'],
+          ['6', 'Pruebas', 'D3 — S1–S4 en main, umbrales de config, Postman'],
+          ['7', 'Issues y ciclos', 'D3 — #18–#21 y dos ciclos cerrados'],
+          ['8', 'README y API', 'D4 — dónde está cada evidencia'],
+          ['9', 'Lint y deuda', 'D5 — 411 errores honestos, sin --fix'],
+          ['10', 'Cierre', 'Preguntas. S5/S6 = PR #13 y #14 abiertos'],
         ]}
       />
     </>
@@ -403,53 +297,58 @@ function StackTecnologico() {
 function Idea() {
   return (
     <>
-      <h2>Un cupo libre es un rescate que sí cabe.</h2>
+      <h2>Refugios de fauna doméstica en Bogotá.</h2>
       <Lead>
-        Somos Julio David Parada León y Brayan Alejandro Sánchez, tecnólogo ADSO,
-        ficha 3228973 B. Construimos <NombreMarca className="es-en-linea" />: una plataforma web para refugios y
-        hogares de paso de perros y gatos en el área urbana de Bogotá.
+        <NombreMarca className="es-en-linea" /> verifica un hogar, publica una
+        historia, recibe una postulación corta y cubre un ítem concreto. La
+        métrica norte es un animal en estado adoptado: un cupo que sí se libera.
       </Lead>
-      <p className="guia-texto">
-        Hay tres formas de participar: adoptar con un cuestionario corto, donar
-        un ítem concreto —alimento, medicina o aseo— o gestionar un refugio
-        cuando el sello de verificación está aprobado. La métrica norte no es un
-        like ni un monto: es un animal que pasa a estado adoptado. La plataforma
-        no recauda: no hay Nequi, no hay pasarela, no hay apadrinamiento en COP.
-      </p>
-      <div className="guia-stats">
-        <Stat value="Canino y felino" label="Alcance de especie, como el requisito" />
-        <Stat value="Sin recaudo" label="El dinero se coordina por WhatsApp" />
-        <Stat value={<NombreMarca />} label="Marca del producto; el nombre académico no cambia" />
-      </div>
+      <Tabla
+        headers={['Qué hay hoy', 'Qué no hay']}
+        rows={[
+          [
+            'Roles: visitante, adoptante, donante, entidad, validador',
+            'Recaudo, Nequi, pasarela o apadrinamiento en COP',
+          ],
+          [
+            'Web en 5173 (cookie sid) y companion Flutter (Bearer)',
+            'Play Store / App Store ni un segundo backend',
+          ],
+          [
+            'Canino y felino, área urbana de Bogotá',
+            'IoT, sensores, fauna silvestre o tiendas',
+          ],
+        ]}
+        rowTone={['success', 'success', 'info']}
+      />
     </>
   );
 }
 
-function Login() {
+function CierreT6() {
   return (
     <>
-      <h2>La puerta de acceso es real.</h2>
+      <h2>Qué cierra T6. Qué se lleva a T7.</h2>
       <Lead>
-        Entramos con un adoptante de demostración. El servidor autentica, firma
-        un JWT y lo entrega en una cookie httpOnly llamada <code className="guia-code">sid</code>.
-        El JavaScript del cliente no puede leerla. Cada petición autenticada sale
-        con credentials: el navegador adjunta la cookie solo a nuestro origen.
+        En <code className="guia-code">main</code> (
+        <code className="guia-code">a971d12</code>, merge del PR #11) el Must
+        está construido. No adelantamos fusiones ni inventamos S5/S6 en main.
       </Lead>
-      <p className="guia-texto">
-        El cuerpo de login y registro también trae <code className="guia-code">{'{ token, usuario }'}</code> para
-        la app Flutter. En el navegador el secreto viaja en{' '}
-        <code className="guia-code">Set-Cookie</code> y el JavaScript no lo lee.
-      </p>
       <Tabla
-        headers={['Dato', 'Valor en la demo']}
+        headers={['Cierra T6', 'No cierra T6']}
         rows={[
-          ['Correo', 'adoptante.ejemplo@local.test'],
-          ['Contraseña', 'EjemploLocal123'],
-          ['Cookie', 'sid · httpOnly · SameSite=Lax'],
-          ['JSON de login', '{ token, usuario } — Flutter usa token; la web no'],
-          ['Payload del JWT', 'sub (id de usuario) y rol'],
+          ['HU Must 01–11 (módulos 1 a 5)', 'HU Should 12–14: editar animal, recuperar clave, varias fotos'],
+          ['JWT: cookie httpOnly sid (web) + Bearer (Flutter)', 'Recaudo, Nequi, pasarela'],
+          ['Pruebas S1–S4 en main (PR #6, #7, #9, #11)', 'S5 y S6: PR #13 y #14 abiertos, no están en main'],
+          ['Demo local: Postgres 5433, API 3000, web 5173', 'URL de piloto, Play Store, entrevista de campo'],
+          ['IoT = No. Sin sensores ni hardware', 'Bonificación D2 por IoT: no se pide'],
         ]}
+        rowTone={['success', 'success', 'warning', 'info', 'neutral']}
       />
+      <p className="guia-texto">
+        Dos retrospectivas del proceso de pruebas: documento 3.6 (S1–S2 y
+        S3–S4). Visión escrita: documento 4.6. Umbrales: no se tocan.
+      </p>
     </>
   );
 }
@@ -457,84 +356,37 @@ function Login() {
 function Jwt() {
   return (
     <>
-      <h2>JWT: cookie en la web, Bearer en el celular.</h2>
+      <h2>4.º backend: Nest arranca. JWT en cookie y en Bearer.</h2>
       <Lead>
-        El token lo firma Nest con <code className="guia-code">JwtService</code> y{' '}
-        <code className="guia-code">JWT_SECRETO</code>. En la web el transporte es
-        la cookie <code className="guia-code">sid</code> (httpOnly). En Flutter el
-        cliente envía <code className="guia-code">Authorization: Bearer</code>. Un
-        script inyectado en el navegador no lee httpOnly; sí podría leer
-        localStorage.
+        Un proceso NestJS 11. Login y registro responden{' '}
+        <code className="guia-code">{'{ token, usuario }'}</code>. La web ignora
+        el token del JSON y usa la cookie <code className="guia-code">sid</code>{' '}
+        (httpOnly). Flutter guarda el token y lo manda como{' '}
+        <code className="guia-code">Authorization: Bearer</code>. Si llegan las
+        dos, <code className="guia-code">extraerToken</code> usa la cookie.
       </Lead>
       <Tabla
-        headers={['Qué se espera', 'Qué hicimos']}
+        headers={['Qué se espera', 'Qué hay en el código']}
         rows={[
           [
-            'El login produce un token',
-            'POST /auth/entrar y /registro responden { token, usuario }. La web ignora el token del JSON; Flutter lo guarda y lo manda como Bearer.',
+            'Arranque desde cero',
+            'api/.env.example → .env. DATABASE_URL, JWT_SECRETO, WEB_ORIGEN, PUERTO=3000. npm run prisma:migrate y prisma:seed.',
           ],
           [
-            'Almacenamiento seguro',
-            'Web: cookie sid httpOnly y SameSite Lax (el JS no la lee). Flutter: almacén seguro, no localStorage del navegador.',
+            'Validación de entrada',
+            'ValidationPipe + DTO (class-validator). Especie distinta de canino/felino → 400.',
           ],
           [
-            'Viaja en cabeceras',
-            'Navegador: Cookie sid. App: Authorization Bearer. Si llegan las dos, extraerToken usa la cookie.',
+            'GET /auth/yo sin sesión',
+            '200 y null (visitante). No 401. Rutas con SesionGuard: 401. Rol incorrecto: 403.',
           ],
           [
-            'Guards',
-            'GET /auth/yo sin sesión: 200 y null (visitante). Rutas con SesionGuard: 401. Rol incorrecto: 403.',
+            'Cuatro roles en registro; validador en semilla',
+            'Adoptante, donante, entidad. El validador no se autoasigna.',
           ],
         ]}
-        rowTone={['success', 'success', 'info', 'success']}
+        rowTone={['success', 'success', 'success', 'info']}
       />
-    </>
-  );
-}
-
-function Roles() {
-  return (
-    <>
-      <h2>El menú cambia. El servidor también niega.</h2>
-      <Lead>
-        Cuatro roles. Adoptante, donante y entidad se eligen al registrarse. El
-        validador no se autoasigna: sale de la semilla. Cada operación sensible
-        lleva SesionGuard y RolesGuard. Un adoptante que dispare POST /animales
-        recibe 403 aunque pinte un botón a mano.
-      </Lead>
-      <Tabla
-        headers={['Rol', 'Puede', 'El servidor le niega']}
-        rows={[
-          ['adoptante', 'Cinco preguntas y postularse', 'Publicar animal, cola, confirmar insumo'],
-          ['donante', 'Reservar un ítem y dejar contacto privado', 'Publicar animal y resolver postulaciones'],
-          ['entidad sin sello', 'Pedir verificación', 'POST /animales y POST /deseos'],
-          ['entidad Nivel 1 o 2', 'Publicar, resolver postulaciones, confirmar ítem', 'Aprobar su propio sello'],
-          ['validador', 'Cola, evidencias, aprobar o pedir complemento', 'Publicar animales'],
-        ]}
-      />
-    </>
-  );
-}
-
-function Datos() {
-  return (
-    <>
-      <h2>Los datos sensibles no viajan en claro.</h2>
-      <Lead>
-        La contraseña se guarda con hash (bcryptjs, costo 12). Si el login
-        falla, el mensaje es el mismo aunque el correo no exista. Al crear
-        cuenta hay dos casillas obligatorias: términos y tratamiento de datos
-        (Ley 1581). Sin ellas no hay INSERT.
-      </Lead>
-      <p className="guia-texto">
-        Las evidencias de RUT o Cámara no salen en el catálogo. La bitácora
-        pública muestra ítem, cantidad y fecha: no el teléfono del donante.
-      </p>
-      <div className="guia-stats">
-        <Stat value="hash + sal" label="Contraseña" />
-        <Stat value="401 genérico" label="No revela si el correo existe" />
-        <Stat value="Ley 1581" label="Consentimiento o no hay cuenta" />
-      </div>
     </>
   );
 }
@@ -542,50 +394,26 @@ function Datos() {
 function Arquitectura() {
   return (
     <>
-      <h2>React, Nest y Postgres en tres puertos.</h2>
+      <h2>Dos clientes. Una API. IoT no aplica.</h2>
       <Lead>
-        Dos clientes y un backend. Vite en 5173 llama a Nest en 3000 con el
-        proxy /api hacia 127.0.0.1. Flutter pega directo al puerto 3000 con
-        Bearer. Prisma persiste en PostgreSQL, puerto 5433. CORS admite el origen
-        de Vite y viaja con credentials: si no, la cookie no cruza. Flutter no
-        manda Origin y pasa.
+        Vite en 5173 llama a Nest en 3000 con el proxy /api hacia 127.0.0.1.
+        Flutter pega directo al 3000 con Bearer. Prisma escribe en PostgreSQL
+        16, puerto 5433. No hay capa de sensores ni hardware.
       </Lead>
       <Tabla
         headers={['Capa', 'Tecnología', 'Contrato']}
         rows={[
-          ['Cliente web', 'React + Vite', '5173 · fetch /api con credentials (cookie sid)'],
-          ['Cliente móvil', 'Flutter (mobile/)', 'Bearer al puerto 3000; misma API'],
-          ['API', 'NestJS + ValidationPipe', '3000 · DTOs con whitelist'],
-          ['Datos', 'Prisma + PostgreSQL 16', '5433 · migraciones en git'],
+          ['Cliente web', 'React 19 + Vite 6', '5173 · fetch /api con credentials (cookie sid)'],
+          ['Companion móvil', 'Flutter 3 (mobile/)', 'Bearer al puerto 3000; misma API; no hay tienda'],
+          ['API', 'NestJS 11 + ValidationPipe', '3000 · DTOs con whitelist · JwtService'],
+          ['Datos', 'Prisma + PostgreSQL 16', '5433 · schema.prisma = DER del 2.3'],
+          ['IoT', 'No aplica', 'El producto no incluye sensores ni hardware'],
         ]}
-      />
-    </>
-  );
-}
-
-function Cruds() {
-  return (
-    <>
-      <h2>Cinco entidades que sí se persisten.</h2>
-      <Lead>
-        En este dominio casi no borramos filas: el animal pasa de publicado a
-        reservado y a adoptado. Eso es un Update de estado. El cierre es
-        rechazar, caducar una reserva o invalidar la sesión.
-      </Lead>
-      <Tabla
-        headers={['#', 'Entidad', 'Crear', 'Leer', 'Actualizar', 'Cierre']}
-        rows={[
-          ['1', 'Usuario y sesión', 'POST /auth/registro', 'GET /auth/yo', '—', 'POST /auth/salir borra la cookie'],
-          ['2', 'Perfil adoptante', 'PUT /perfil', 'GET /perfil', 'Editar las 5 preguntas', 'Se corrige, no se borra'],
-          ['3', 'Animal', 'POST /animales con foto', 'GET /animales y GET /:id', 'Estado al resolver postulaciones', 'Archivar queda fuera del Must'],
-          ['4', 'Postulación', 'POST .../postulaciones', 'GET mías y las de la entidad', 'POST .../resolver', 'Rechazar o entregar (cupo +1)'],
-          ['5', 'Deseo y reserva', 'POST /deseos y reservar', 'GET públicos y míos', 'Confirmar recepción', 'A los 7 días vuelve a pendiente'],
-        ]}
-        rowTone={['success', 'success', 'success', 'success', 'success']}
+        rowTone={['success', 'success', 'success', 'success', 'neutral']}
       />
       <p className="guia-texto">
-        La verificación es un flujo extra —solicitud, cola, aprobar o
-        complemento— para explicar el sello, no para inflar el conteo.
+        Diagrama vigente: documento 2.1. Si el centro pidiera Java, Spring
+        sustituye a Nest; no cambian las capas ni los RF.
       </p>
     </>
   );
@@ -594,25 +422,27 @@ function Cruds() {
 function DemoViva() {
   return (
     <>
-      <h2>Recorrido en el prototipo.</h2>
+      <h2>Recorrido de punta a punta en el prototipo.</h2>
       <Lead>
-        Cambiamos de cuenta con Salir. La semilla ya dejó cada rol listo. En
-        cada paso nombramos el CRUD que estamos tocando.
+        Salir y entrar con la semilla. En cada paso nombramos la HU. Abrir{' '}
+        <a className="guia-enlace" href="/" target="_blank" rel="noreferrer">
+          localhost:5173
+        </a>
+        .
       </Lead>
       <Tabla
-        headers={['Paso', 'Cuenta', 'Recorrido', 'Qué se ve']}
+        headers={['Paso', 'Cuenta', 'Recorrido', 'HU']}
         rows={[
-          ['1', 'adoptante.ejemplo', 'Edita una de las cinco preguntas. Abre Mis postulaciones.', 'Perfil y lectura de postulaciones'],
-          ['2', 'Misma', 'Abre Luna. Puntaje y frase. No volvemos a postular si ya está enviada.', 'El puntaje se explica'],
-          ['3', 'entidad.ejemplo', 'Tablero de Luna: abrir, preseleccionar, entregar.', 'Entregar = animal adoptado = cupo'],
-          ['4', 'Misma', 'Lista de deseos: el ítem pendiente.', 'CRUD de deseos, lado entidad'],
-          ['5', 'donante.ejemplo', 'Perfil público. Reserva el ítem. El contacto no es público.', 'Crear reserva'],
-          ['6', 'entidad.ejemplo', 'Confirma recepción o bitácora de la semilla.', 'Sin cédula ni teléfono'],
-          ['7', 'validador@local.test', 'Cola y evidencias.', 'Rol que no nace en el registro'],
+          ['1', 'adoptante.ejemplo', 'Cinco preguntas. Abre Luna. Puntaje y frase.', '07, 08'],
+          ['2', 'entidad.ejemplo', 'Tablero de Luna: preseleccionar o entregar (cupo).', '09'],
+          ['3', 'Misma', 'Lista de deseos: ítem pendiente. Sin Nequi.', '10'],
+          ['4', 'donante.ejemplo', 'Necesidades → reservar. El teléfono no es público.', '11'],
+          ['5', 'entidad.ejemplo', 'Confirma recepción. Bitácora sin cédula.', '11'],
+          ['6', 'validador@local.test', 'Cola y evidencias. Rol que no nace en el registro.', '03, 04'],
         ]}
-        rowTone={['success', 'info', 'success', 'neutral', 'success', 'info', 'warning']}
+        rowTone={['success', 'success', 'info', 'success', 'info', 'warning']}
       />
-      <h3>Cuentas de demostración</h3>
+      <h3>Cuentas de la semilla</h3>
       <Tabla
         headers={['Rol', 'Correo', 'Contraseña']}
         rows={[
@@ -626,66 +456,109 @@ function DemoViva() {
   );
 }
 
-function Agil() {
+function Pruebas() {
   return (
     <>
-      <h2>Historias en formato Como / quiero / para.</h2>
+      <h2>S1–S4 están en main. S5 y S6 no.</h2>
       <Lead>
-        El tablero es el product backlog del documento 1.3. Cada historia Must
-        tiene rol, característica, razón y criterios de aceptación, trazados a
-        un requisito del IEEE 830. Las once Must de este incremento están
-        construidas.
+        Plan, ambiente separado (tests con dobles, sin Postgres) y matriz de 32
+        casos: documento 4.1. Umbrales leídos de los archivos. No se bajan.
       </Lead>
-      <div className="guia-stats">
-        <Stat value="11" label="HU Must del incremento" />
-        <Stat value="21" label="RF Must cubiertos en código" />
-        <Stat value="1.3" label="Fuente del tablero" />
-      </div>
       <Tabla
-        headers={['Historia', 'Como', 'Quiero', 'Estado']}
+        headers={['Paquete', 'Archivo', 'Líneas', 'Sentencias', 'Ramas', 'Funciones']}
         rows={[
-          ['HU-01', 'visitante', 'crear cuenta con rol y consentimiento', 'Hecha'],
-          ['HU-02', 'usuario', 'entrar y salir con sesión', 'Hecha'],
-          ['HU-03 y 04', 'entidad y validador', 'pedir y resolver el sello', 'Hecha'],
-          ['HU-05 y 06', 'entidad y visitante', 'publicar y ver el catálogo', 'Hecha'],
-          ['HU-07 a 09', 'adoptante y entidad', 'puntaje, postular y entregar', 'Hecha'],
-          ['HU-10 y 11', 'entidad y donante', 'ítem concreto y bitácora', 'Hecha'],
+          ['web', 'web/vite.config.ts', '75', '75', '77', '70 (timeout 20 s)'],
+          ['api', 'api/jest.config.cjs', '47', '47', '37', '43'],
         ]}
-        rowTone={['success', 'success', 'success', 'success', 'success', 'success']}
       />
-      <p className="guia-texto">
-        Quedó fuera a propósito, como Should: varias fotos, recuperar
-        contraseña y editar o archivar el animal.
-      </p>
+      <Tabla
+        headers={['Semana', 'Dónde está', 'Qué no decir']}
+        rows={[
+          ['S1–S4', 'main · PR #6, #7, #9, #11', 'Tratar el PR #5 como cierre de las seis semanas'],
+          ['S5 page.route', 'PR #13 abierto', 'Presentarlo como código de main'],
+          ['S6 Postgres 5434', 'PR #14 abierto', 'Documentar 5434 como ambiente vigente'],
+          ['Postman', 'tests/postman/mestizo-api.postman_collection.json', 'Que sustituye a Jest: no lo hace'],
+        ]}
+        rowTone={['success', 'warning', 'warning', 'info']}
+      />
     </>
   );
 }
 
-function Git() {
+function Ciclos() {
   return (
     <>
-      <h2>El código está en GitHub.</h2>
+      <h2>Issues #18 a #21. Dos ciclos cerrados en main.</h2>
       <Lead>
-        Repositorio público, rama main. El README indica cómo levantar Postgres,
-        la API, el cliente web y Flutter. Existe{' '}
-        <code className="guia-code">api/.env.example</code> con DATABASE_URL,
-        JWT_SECRETO y WEB_ORIGEN: los secretos reales no se suben.
+        Detectar → corregir → verificar. El tercero vive en el PR #14 y sigue
+        abierto. No se fusiona desde este expediente.
       </Lead>
-      <p className="guia-texto">
-        Organizamos el trabajo por módulos del expediente: identidad,
-        verificación, catálogo, postulaciones y deseos.
-      </p>
-      <article className="guia-tarjeta">
-        <header>
-          juliodparada-bit/plataforma-refugios-fauna-domestica-bogota
-          <span className="guia-sello">público</span>
-        </header>
-        <p>
-          README + documento 3.1 = instalación. compose.yml para PostgreSQL 16
-          (contenedor refugios-pg, puerto 5433). Cookie sid en la web; Bearer en
-          Flutter. No hay claves de pago porque no hay recaudo.
-        </p>
-      </article>
+      <Tabla
+        headers={['Issue', 'Ciclo', 'Estado']}
+        rows={[
+          ['#18', 'testTimeout 5 s → 20 s (commit 040b6c4, PR #9)', 'Cerrado en main'],
+          ['#19', 'Mutante role="alert": Playwright no encuentra el aviso', 'Cerrado en main'],
+          ['#20', 'Avisos act() en paginas.humo. Los tests pasan.', 'Abierto · deuda T6'],
+          ['#21', 'Umbral de ramas al límite; tope 80 / 5434 en PR #14', 'Abierto · umbral no se mueve'],
+        ]}
+        rowTone={['success', 'success', 'warning', 'warning']}
+      />
+    </>
+  );
+}
+
+function Docs() {
+  return (
+    <>
+      <h2>Dónde abre el instructor cada evidencia.</h2>
+      <Lead>
+        README raíz, sección Pruebas. API del 4.º backend: api/README.md.
+        Commits de construcción (#6 #7 #9 #11) distintos de umbral/corrección
+        (#8 #10 y 040b6c4).
+      </Lead>
+      <Tabla
+        headers={['Abrir', 'Para qué']}
+        rows={[
+          ['README.md · Pruebas', 'Comandos, umbrales de archivo, PRs'],
+          ['4.6 cierre T6/T7', 'Visión honesta D1'],
+          ['4.1 + 4.1-matriz-casos.md', 'Plan, 32 casos, Postman, reporte'],
+          ['tests/postman/…json', 'Colección importable con pm.test'],
+          ['3.6 retrospectivas', 'Dos notas sobre el proceso de pruebas'],
+          ['4.7 calidad y deuda', 'Lint 411, backends, deuda priorizada'],
+          ['2.1 y 3.1', 'Arquitectura y arranque .env'],
+        ]}
+      />
+    </>
+  );
+}
+
+function Calidad() {
+  return (
+    <>
+      <h2>Lint 411. Sin --fix. Deuda escrita.</h2>
+      <Lead>
+        Se corrió ESLint del API sin --fix para no reescribir el prototipo.
+        Resultado real (25 nov 2026): 411 errors, 9 warnings. Casi todos
+        prettier y no-unsafe-*. No se afirma «0 errores».
+      </Lead>
+      <Tabla
+        headers={['Tema', 'Hecho']}
+        rows={[
+          [
+            '4.º backend vs los anteriores',
+            'Un Nest, no cuatro APIs. Guards, Prisma y dos transportes del mismo JWT. Si pidieran Java, Spring cambia el lenguaje, no las capas.',
+          ],
+          [
+            'Front',
+            'web/ no tiene ESLint. La constancia T6 es Vitest + umbrales de vite.config.ts.',
+          ],
+          [
+            'Deuda T7',
+            'HU 12–14; S5/S6 en PR #13 y #14; issue #20 act(); issue #21 umbral estrecho. No se baja cobertura.',
+          ],
+        ]}
+        rowTone={['info', 'neutral', 'warning']}
+      />
     </>
   );
 }
@@ -693,37 +566,22 @@ function Git() {
 function Cierre() {
   return (
     <>
-      <h2>Un cupo. Gracias.</h2>
+      <h2>Must construido. IoT no. Gracias.</h2>
       <Lead>
-        Un refugio verificado publica una historia, un adoptante se postula con
-        cinco respuestas, un donante cubre un bulto, y cuando hay entrega real
-        se abre un cupo. <NombreMarca className="es-en-linea" /> no recauda.
+        Un hogar con sello publica, un adoptante se postula, un donante cubre un
+        bulto. <NombreMarca className="es-en-linea" /> no recauda y no tiene
+        sensores. S5 y S6 siguen en PR abiertos.
       </Lead>
       <p className="guia-texto">¿Preguntas?</p>
-      <h3>Si profundizamos</h3>
       <Tabla
-        headers={['Pregunta', 'Nuestra respuesta']}
+        headers={['Pregunta', 'Respuesta']}
         rows={[
-          [
-            '¿Dónde está Nequi?',
-            'Fuera de alcance. Categoría, cantidad y unidad. El dinero se coordina por WhatsApp.',
-          ],
-          [
-            '¿Por qué cookie y no solo Bearer?',
-            'En la web, httpOnly. En Flutter, Bearer en almacén seguro. Misma firma JWT.',
-          ],
-          [
-            '¿El puntaje es machine learning?',
-            'No. Cinco reglas y una frase.',
-          ],
-          [
-            '¿Es un producto del IDPYBA?',
-            'No. Prototipo formativo. El sello lo pone el rol validador del piloto.',
-          ],
-          [
-            '¿Dónde está el delete del animal?',
-            'Should. El Must cierra con estados: reservado, adoptado, rechazado.',
-          ],
+          ['¿Dónde está Nequi?', 'Fuera de alcance. Categoría, cantidad y unidad. WhatsApp coordina la entrega.'],
+          ['¿IoT?', 'No aplica. No hay prototipo de sensores ni bonificación D2.'],
+          ['¿Solo cookie?', 'No. Web: cookie sid httpOnly. Flutter: Bearer. Mismo JWT. Cookie gana si hay ambas.'],
+          ['¿S5 y S6 ya están?', 'No en main. PR #13 y #14 abiertos. El #16 lo fusiona Brayan.'],
+          ['¿Por qué 411 errores de lint?', 'Se midió sin --fix. Son estilo. Arreglarlos en T6 mezclaría formato con producto.'],
+          ['¿Se bajaron umbrales?', 'No. web 75/75/77/70 y api 47/47/43/37 salen de los configs.'],
         ]}
       />
     </>
