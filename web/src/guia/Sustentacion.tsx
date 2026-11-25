@@ -331,15 +331,15 @@ function CierreT6() {
       <h2>Qué cierra T6. Qué se lleva a T7.</h2>
       <Lead>
         En <code className="guia-code">main</code> (
-        <code className="guia-code">a971d12</code>, merge del PR #11) el Must
-        está construido. No adelantamos fusiones ni inventamos S5/S6 en main.
+        <code className="guia-code">ccac6b5</code>, merge del PR #17 sobre el
+        #11) el Must está construido. No adelantamos S5/S6 a main.
       </Lead>
       <Tabla
         headers={['Cierra T6', 'No cierra T6']}
         rows={[
           ['HU Must 01–11 (módulos 1 a 5)', 'HU Should 12–14: editar animal, recuperar clave, varias fotos'],
           ['JWT: cookie httpOnly sid (web) + Bearer (Flutter)', 'Recaudo, Nequi, pasarela'],
-          ['Pruebas S1–S4 en main (PR #6, #7, #9, #11)', 'S5 y S6: PR #13 y #14 abiertos, no están en main'],
+          ['Pruebas S1–S4 en main (PR #6, #7, #9, #11) + umbral API #17', 'S5 y S6: PR #13 y #14 abiertos, no están en main'],
           ['Demo local: Postgres 5433, API 3000, web 5173', 'URL de piloto, Play Store, entrevista de campo'],
           ['IoT = No. Sin sensores ni hardware', 'Bonificación D2 por IoT: no se pide'],
         ]}
@@ -347,7 +347,8 @@ function CierreT6() {
       />
       <p className="guia-texto">
         Dos retrospectivas del proceso de pruebas: documento 3.6 (S1–S2 y
-        S3–S4). Visión escrita: documento 4.6. Umbrales: no se tocan.
+        S3–S4). Visión escrita: documento 4.6. Front 75 no se tocó; backend S4
+        en main vía #17.
       </p>
     </>
   );
@@ -468,13 +469,13 @@ function Pruebas() {
         headers={['Paquete', 'Archivo', 'Líneas', 'Sentencias', 'Ramas', 'Funciones']}
         rows={[
           ['web', 'web/vite.config.ts', '75', '75', '77', '70 (timeout 20 s)'],
-          ['api', 'api/jest.config.cjs', '47', '47', '37', '43'],
+          ['api', 'api/jest.config.cjs', '88', '88', '70', '92'],
         ]}
       />
       <Tabla
         headers={['Semana', 'Dónde está', 'Qué no decir']}
         rows={[
-          ['S1–S4', 'main · PR #6, #7, #9, #11', 'Tratar el PR #5 como cierre de las seis semanas'],
+          ['S1–S4', 'main · PR #6, #7, #9, #11 + umbral #17', 'Tratar el PR #5 como cierre de las seis semanas'],
           ['S5 page.route', 'PR #13 abierto', 'Presentarlo como código de main'],
           ['S6 Postgres 5434', 'PR #14 abierto', 'Documentar 5434 como ambiente vigente'],
           ['Postman', 'tests/postman/mestizo-api.postman_collection.json', 'Que sustituye a Jest: no lo hace'],
@@ -514,7 +515,7 @@ function Docs() {
       <Lead>
         README raíz, sección Pruebas. API del 4.º backend: api/README.md.
         Commits de construcción (#6 #7 #9 #11) distintos de umbral/corrección
-        (#8 #10 y 040b6c4).
+        (#8 #10 #17 y 040b6c4). El #12 fue el mismo bump a test/semana-04.
       </Lead>
       <Tabla
         headers={['Abrir', 'Para qué']}
@@ -581,7 +582,7 @@ function Cierre() {
           ['¿Solo cookie?', 'No. Web: cookie sid httpOnly. Flutter: Bearer. Mismo JWT. Cookie gana si hay ambas.'],
           ['¿S5 y S6 ya están?', 'No en main. PR #13 y #14 abiertos. El #16 lo fusiona Brayan.'],
           ['¿Por qué 411 errores de lint?', 'Se midió sin --fix. Son estilo. Arreglarlos en T6 mezclaría formato con producto.'],
-          ['¿Se bajaron umbrales?', 'No. web 75/75/77/70 y api 47/47/43/37 salen de los configs.'],
+          ['¿Se bajaron umbrales?', 'No. web 75/75/77/70 (sin tocar). api 88/88/70/92 = S4 vía #17.'],
         ]}
       />
     </>

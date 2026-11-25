@@ -11,7 +11,7 @@ Carpeta `docs/`: artefactos del **bootcamp de pruebas** (rotación por semanas).
 
 **S5 y S6 no están en `main`.** Viven en los PR **abiertos** [#13](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/13) (`page.route`) y [#14](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/14) (Postgres 5434). No se asignan aquí como capa cerrada. El [PR #16](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/16) (camino de auditoría) lo fusiona Brayan; ese archivo no está en este árbol.
 
-Umbrales **vigentes** (archivos; no se tocan en T6): `web/vite.config.ts` 75 / 75 / 77 / 70 (`testTimeout` 20000); `api/jest.config.cjs` 47 / 47 / 43 / 37.
+Umbrales **vigentes** (archivos): `web/vite.config.ts` 75 / 75 / 77 / 70 (`testTimeout` 20000); `api/jest.config.cjs` 88 / 88 / 92 / 70. Front no se toca. El piso de API S4 entró a `main` por el [PR #17](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/17).
 
 ---
 
@@ -24,7 +24,7 @@ Línea base **de esa semana**, no el umbral de hoy. En S1 el frontend aún no te
 | S1 | 0 | 4 | 0 en el frontend. Backend: 4 líneas y 3 ramas | En `main` (PR #6) |
 | S2 | 58 | 47 | 58 y 47 | En `main` (PR #7 / #8) |
 | S3 | 75 | 47 | 75 y 47. El backend ya superaba el 40 | En `main` (PR #9 / #10) |
-| S4 | 75 (archivo) | 88 medido; piso 47 | Contrato HTTP; umbral de API **no** subió en `main` | En `main` (PR #11). PR #12 (umbral backend) no está en `main` |
+| S4 | 75 (archivo) | 88 | Contrato HTTP (PR #11) + umbral API max(50, 88) = 88/88/92/70 | En `main`: código #11, umbral [#17](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/17). El #12 fusionó el mismo bump a `test/semana-04` (rama equivocada) |
 | S5 | — | — | `page.route` | PR #13 **abierto** |
 | S6 | — | — | Postgres **5434** | PR #14 **abierto** |
 
