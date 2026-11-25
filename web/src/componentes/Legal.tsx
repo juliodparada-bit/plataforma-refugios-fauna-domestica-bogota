@@ -100,10 +100,11 @@ function Datos() {
       <h2>Seguridad</h2>
       <p>
         Contraseña con hash y sal (bcryptjs, costo 12). En la web la sesión va en
-        cookie httpOnly (`sid`); en la app Flutter, el mismo JWT viaja como
-        `Authorization: Bearer`.
-        En un despliegue piloto se usará HTTPS. Las evidencias no son listables
-        sin autenticación.
+        cookie httpOnly (`sid`); el JavaScript no la lee. Login y registro
+        también responden <code>{'{ token, usuario }'}</code>: la app Flutter
+        guarda ese JWT y lo envía como <code>Authorization: Bearer</code>. Si
+        llegan cookie y Bearer, gana la cookie. En un despliegue piloto se usará
+        HTTPS. Las evidencias no son listables sin autenticación.
       </p>
       <h2>Tus derechos</h2>
       <p>

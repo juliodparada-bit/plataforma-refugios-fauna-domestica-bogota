@@ -200,12 +200,12 @@ export const api = {
     rol: Exclude<Rol, 'validador'>;
     consentimientoDatos: boolean;
   }) =>
-    pedir<{ usuario: Usuario }>('/auth/registro', {
+    pedir<{ token: string; usuario: Usuario }>('/auth/registro', {
       method: 'POST',
       body: JSON.stringify(datos),
     }),
   entrar: (correo: string, contrasena: string) =>
-    pedir<{ usuario: Usuario }>('/auth/entrar', {
+    pedir<{ token: string; usuario: Usuario }>('/auth/entrar', {
       method: 'POST',
       body: JSON.stringify({ correo, contrasena }),
     }),

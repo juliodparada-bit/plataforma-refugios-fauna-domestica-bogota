@@ -23,7 +23,7 @@ Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métri
 - Estilo (capas / cliente-servidor).
 - Diagrama de contexto y de contenedores.
 - Stack del prototipo (React 19 + Vite 6 + TypeScript, NestJS 11, Prisma, PostgreSQL 16). Alternativa Java/Spring si el centro lo exigiera: cambian el lenguaje, no las capas ni los RF.
-- Decisión de recaudo: el sistema no recauda dinero.
+- Decisión de recaudo: el sistema no recauda dinero. IoT no aplica: el producto no incluye sensores ni hardware.
 
 ### 2.2 UML
 
@@ -35,7 +35,7 @@ Traduzco requisitos a **arquitectura, modelos y pantallas**. Si cambia la métri
 | Actividades | Flujos de adopción (incluye `reservado`) y de lista de deseos |
 | Secuencia | Postulación y confirmación de insumo |
 | Clases y estados (dominio) | Usuario, PerfilAdoptante, Entidad, Animal, Postulación, Ítem, Reserva, Verificación. Estados de entidad **y** de solicitud (`complemento` vive en la solicitud). |
-| Componentes y despliegue | Esbozo en el 2.1; detalle operativo en fase 4 |
+| Componentes y despliegue | Esbozo en el 2.1; arranque de revisión en el [4.4](../04-evaluacion-pruebas-y-entrega/4.4-despliegue.md); instalación en el [4.9](../04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md); resumen en el [3.1](../03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md) |
 
 ### 2.3 Base de datos
 
