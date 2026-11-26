@@ -78,4 +78,13 @@ describe('Entrar', () => {
     expect(alTerminos).toHaveBeenCalledOnce();
     expect(alDatos).toHaveBeenCalledOnce();
   });
+
+  it('no muestra cuentas de piloto y sí el panel de Bogotá', () => {
+    montar();
+    expect(screen.queryByText(/cuentas de piloto/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/local\.test/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/EjemploLocal123/)).not.toBeInTheDocument();
+    expect(screen.getByRole('complementary', { name: 'Cifras y compromisos de Mestizo' })).toBeInTheDocument();
+    expect(screen.getByText('19')).toBeInTheDocument();
+  });
 });

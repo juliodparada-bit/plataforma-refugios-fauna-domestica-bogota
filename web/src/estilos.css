@@ -384,6 +384,105 @@ span.menu-avatar {
   background-color: var(--superficie);
 }
 
+.sesion {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.sesion-form .formulario {
+  margin-top: 0;
+}
+
+.sesion-panel {
+  position: relative;
+  isolation: isolate;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border-radius: var(--radio);
+  border: 1px solid color-mix(in srgb, var(--primario) 28%, var(--linea));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--primario-suave) 88%, var(--superficie)) 0%,
+      var(--superficie) 42%,
+      color-mix(in srgb, var(--hero) 55%, var(--superficie)) 100%
+    );
+  box-shadow: var(--sombra-s);
+  overflow: hidden;
+}
+
+.sesion-panel::before {
+  content: "";
+  position: absolute;
+  inset: auto -12% -28% auto;
+  width: 11rem;
+  height: 11rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primario) 12%, transparent);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.sesion-panel h2 {
+  margin: 0 0 0.4rem;
+  font-size: var(--texto-h2);
+  letter-spacing: var(--track-titulo);
+}
+
+.sesion-panel h3 {
+  margin: 1.1rem 0 0.45rem;
+  font-size: 0.95rem;
+}
+
+.sesion-panel-lema {
+  margin: 0 0 0.35rem;
+  color: var(--tinta-suave);
+}
+
+.sesion-panel-eslogan {
+  margin: 0 0 1rem;
+  font-family: var(--fuente-leyenda);
+  font-style: italic;
+  color: var(--hero-lema);
+}
+
+.sesion-cifras {
+  list-style: none;
+  padding: 0;
+  margin: 0.15rem 0 0;
+  grid-template-columns: 1fr 1fr;
+}
+
+.sesion-cifras .cifra {
+  text-align: left;
+  padding: 0.7rem 0.75rem;
+  background: color-mix(in srgb, var(--superficie) 82%, transparent);
+  box-shadow: none;
+}
+
+.sesion-compromisos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.sesion-compromisos li {
+  margin: 0;
+  padding: 0.55rem 0.7rem 0.55rem 0.8rem;
+  border-radius: 0.7rem;
+  border-left: 3px solid var(--primario);
+  background: color-mix(in srgb, var(--superficie) 80%, var(--primario-suave));
+  font-size: var(--texto-leyenda);
+  line-height: 1.45;
+}
+
+.sesion-panel-pie {
+  margin: 1rem 0 0;
+}
+
 .pagina-cabecera {
   margin: 0 0 1.35rem;
   padding-bottom: 1.1rem;
@@ -1969,6 +2068,17 @@ code {
     max-width: 32rem;
   }
 
+  .sesion {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.95fr);
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .sesion-panel {
+    position: sticky;
+    top: 5.5rem;
+  }
+
   .acciones-fila {
     flex-direction: row;
   }
@@ -2373,6 +2483,17 @@ code {
 [data-tema="oscuro"] .aviso-ejemplo {
   background: var(--ejemplo);
   border-color: color-mix(in srgb, var(--acento) 28%, var(--linea));
+}
+
+[data-tema="oscuro"] .sesion-panel {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--primario-suave) 55%, var(--superficie-2)) 0%,
+      var(--superficie) 50%,
+      color-mix(in srgb, var(--hero) 35%, var(--superficie)) 100%
+    );
+  border-color: color-mix(in srgb, var(--primario) 32%, var(--linea));
 }
 
 [data-tema="oscuro"] .capa-legal {

@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { api, type Localidad, type Rol, type Usuario } from '../api';
 import { Pagina } from '../componentes/Pagina';
+import { PanelSesion } from '../componentes/PanelSesion';
 
 export function Registro({
   alListo,
@@ -54,19 +55,18 @@ export function Registro({
 
   return (
     <Pagina
-      className="hoja-estrecha"
+      className="hoja-sesion"
       kicker="Registro"
       titulo="Crear cuenta"
       proposito="Elige cómo vas a participar: adoptar, donar un insumo o publicar desde un hogar de paso."
     >
-      <p className="ayuda">
-        Si quieres explorar primero, usa las cuentas de piloto al entrar.
-      </p>
-      <form
-        className="formulario"
-        onSubmit={(e) => void enviar(e)}
-        aria-describedby={error ? 'registro-error' : undefined}
-      >
+      <div className="sesion">
+        <div className="sesion-form">
+          <form
+            className="formulario"
+            onSubmit={(e) => void enviar(e)}
+            aria-describedby={error ? 'registro-error' : undefined}
+          >
         <label>
           Nombre
           <input name="nombre" required maxLength={120} autoComplete="name" />
@@ -191,6 +191,9 @@ export function Registro({
           {enviando ? 'Creando cuenta…' : 'Crear cuenta'}
         </button>
       </form>
+        </div>
+        <PanelSesion modo="registro" />
+      </div>
     </Pagina>
   );
 }

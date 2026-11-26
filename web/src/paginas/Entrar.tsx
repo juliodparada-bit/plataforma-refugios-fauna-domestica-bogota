@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { api, type Usuario } from '../api';
-import { CuentasEjemplo } from '../componentes/CuentasEjemplo';
 import { Pagina } from '../componentes/Pagina';
+import { PanelSesion } from '../componentes/PanelSesion';
 
 export function Entrar({
   alListo,
@@ -37,57 +37,61 @@ export function Entrar({
 
   return (
     <Pagina
-      className="hoja-estrecha"
+      className="hoja-sesion"
       kicker="Sesión"
       titulo="Entrar"
-      proposito="Correo y contraseña. También puedes usar una cuenta de piloto."
+      proposito="Usa el correo y la contraseña de tu cuenta."
     >
-      <CuentasEjemplo />
-      <form className="formulario" onSubmit={(e) => void enviar(e)}>
-        <label>
-          Correo
-          <input
-            name="correo"
-            type="email"
-            required
-            autoComplete="username"
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? 'entrar-error' : undefined}
-          />
-        </label>
-        <label>
-          Contraseña
-          <input
-            name="contrasena"
-            type="password"
-            required
-            autoComplete="current-password"
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? 'entrar-error' : undefined}
-          />
-        </label>
-        {error && (
-          <p id="entrar-error" className="error" role="alert">
-            {error}
+      <div className="sesion">
+        <div className="sesion-form">
+          <form className="formulario" onSubmit={(e) => void enviar(e)}>
+            <label>
+              Correo
+              <input
+                name="correo"
+                type="email"
+                required
+                autoComplete="username"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? 'entrar-error' : undefined}
+              />
+            </label>
+            <label>
+              Contraseña
+              <input
+                name="contrasena"
+                type="password"
+                required
+                autoComplete="current-password"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? 'entrar-error' : undefined}
+              />
+            </label>
+            {error && (
+              <p id="entrar-error" className="error" role="alert">
+                {error}
+              </p>
+            )}
+            <button type="submit" className="primario" disabled={enviando}>
+              {enviando ? 'Entrando…' : 'Entrar'}
+            </button>
+          </form>
+          <p>
+            <button type="button" className="enlace" onClick={alRegistro}>
+              Crear cuenta
+            </button>
+            {' · '}
+            <button type="button" className="enlace" onClick={alTerminos}>
+              Términos
+            </button>
+            {' · '}
+            <button type="button" className="enlace" onClick={alDatos}>
+              Datos personales
+            </button>
           </p>
-        )}
-        <button type="submit" className="primario" disabled={enviando}>
-          {enviando ? 'Entrando…' : 'Entrar'}
-        </button>
-      </form>
-      <p>
-        <button type="button" className="enlace" onClick={alRegistro}>
-          Crear cuenta
-        </button>
-        {' · '}
-        <button type="button" className="enlace" onClick={alTerminos}>
-          Términos
-        </button>
-        {' · '}
-        <button type="button" className="enlace" onClick={alDatos}>
-          Datos personales
-        </button>
-      </p>
+        </div>
+        <PanelSesion modo="entrar" />
+      </div>
     </Pagina>
   );
 }
