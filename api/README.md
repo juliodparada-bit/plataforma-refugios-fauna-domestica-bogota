@@ -1,8 +1,8 @@
 # API de Mestizo (NestJS)
 
-Backend del prototipo. Primera vez: [4.9](../documentacion/04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md). Poner a correr: [4.4](../documentacion/04-evaluacion-pruebas-y-entrega/4.4-despliegue.md). Resumen: [3.1](../documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md) (`cp .env.example .env`, `npm run prisma:migrate`, `npm run prisma:seed`, `npm run start:dev`). Postgres **5433**, `PUERTO=3000`. Sesión: JWT (bcryptjs). Web: cookie `httpOnly` `sid`. Flutter: `{ token, usuario }` y `Authorization: Bearer`. Si hay ambas, `extraerToken` (`src/auth/token.ts`) usa la cookie. Vite **5173** llama `/api` (proxy a `127.0.0.1:3000`). Mapa de módulos: [4.2](../documentacion/04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md). Pruebas: [4.1](../documentacion/04-evaluacion-pruebas-y-entrega/4.1-pruebas.md).
+Backend del prototipo. Primera vez: [4.9](../documentacion/04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md). Poner a correr: [4.4](../documentacion/04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) (`./scripts/compose.sh up --build`). Resumen: [3.1](../documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md). Camino npm: `cp .env.example .env`, `npm run prisma:migrate`, `npm run prisma:seed`, `npm run start:dev`. Postgres **5433**, `PUERTO=3000`. Sesión: JWT (bcryptjs). Web: cookie `httpOnly` `sid`. Flutter: `{ token, usuario }` y `Authorization: Bearer`. Si hay ambas, `extraerToken` (`src/auth/token.ts`) usa la cookie. El cliente en **5173** llama `/api` (nginx en Compose, o proxy de Vite a `127.0.0.1:3000`). Mapa de módulos: [4.2](../documentacion/04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md). Pruebas: [4.1](../documentacion/04-evaluacion-pruebas-y-entrega/4.1-pruebas.md).
 
-Rutas (el cliente web las llama con el prefijo `/api` del proxy de Vite; Postman apunta a `http://localhost:3000` sin ese prefijo):
+Rutas (el cliente web las llama con el prefijo `/api`; Postman apunta a `http://localhost:3000` sin ese prefijo):
 
 | Método | Ruta | HU |
 |---|---|---|

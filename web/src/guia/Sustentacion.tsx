@@ -340,7 +340,7 @@ function CierreT6() {
           ['HU Must 01–11 (módulos 1 a 5)', 'HU Should 12–14: editar animal, recuperar clave, varias fotos'],
           ['JWT: cookie httpOnly sid (web) + Bearer (Flutter)', 'Recaudo, Nequi, pasarela'],
           ['Pruebas S1–S4 en main (PR #6, #7, #9, #11) + umbral API #17', 'S5 y S6: PR #13 y #14 abiertos, no están en main'],
-          ['Demo local: Postgres 5433, API 3000, web 5173', 'URL de piloto, Play Store, entrevista de campo'],
+          ['Demo local: Compose (5173 / 3000 / 5433)', 'URL de piloto, Play Store, entrevista de campo'],
           ['IoT = No. Sin sensores ni hardware', 'Bonificación D2 por IoT: no se pide'],
         ]}
         rowTone={['success', 'success', 'warning', 'info', 'neutral']}

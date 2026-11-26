@@ -22,7 +22,7 @@ Los siete entregables del instructor están tabulados en el [índice maestro](..
 | [Matriz de casos](4.1-matriz-casos.md) | 32 casos POSITIVO/NEGATIVO de tests en `main` |
 | [4.2 Manual técnico](4.2-manual-tecnico.md) | Mapa a 2.1, 3.1, API y módulos de código |
 | [4.3 Manual de usuario](4.3-manual-usuario.md) | Recorrido por rol (visitante → validador), cuentas de piloto |
-| [4.4 Despliegue](4.4-despliegue.md) | Poner a correr Postgres 5433, API 3000, web 5173. Checklist de revisión |
+| [4.4 Despliegue](4.4-despliegue.md) | Un comando Compose (Postgres 5433, API 3000, web 5173). Checklist de revisión |
 | [4.5 Guion oral](4.5-sustentacion.md) | 15 minutos; diapositivas en `/sustentacion` |
 | [4.6 Cierre T6 y T7](4.6-cierre-t6-y-t7.md) | Qué cierra el trimestre 6 y qué queda fuera |
 | [4.7 Calidad y deuda](4.7-calidad-y-deuda.md) | Lint, backends de formación, deuda priorizada |

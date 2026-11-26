@@ -7,7 +7,7 @@ La web sigue usando la cookie `httpOnly` `sid`. Esta app guarda el JWT que ahora
 ## Requisitos
 
 - Flutter 3.16+ (probado con 3.47 / Dart 3.13)
-- API levantada (`cd api && npm run start:dev`) y Postgres en **5433**
+- API levantada (`./scripts/compose.sh up --build`, o `cd api && npm run start:dev`) y Postgres en **5433**
 - Un emulador Android, un simulador iOS o un teléfono en la misma red
 
 ## Cómo correrla
