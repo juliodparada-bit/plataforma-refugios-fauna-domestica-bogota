@@ -14,7 +14,7 @@
 | Frase del catálogo | No busca una raza. Busca un hogar. |
 | Ámbito | Área urbana de Bogotá, D.C. — caninos y felinos domésticos |
 | Repositorio | https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota |
-| Última revisión | 25 de noviembre de 2026 (expediente T6 alineado al código) |
+| Última revisión | 26 de noviembre de 2026 (expediente alineado al código; stack Compose) |
 
 Este expediente lo organizamos Julio David Parada León y Brayan Alejandro Sánchez. Julio firma como Product Owner del hilo documental. El expediente SENA vive en `documentacion/` (fases 1–4). `docs/` es **otra** carpeta: material del bootcamp de pruebas (`matriz-rotacion.md`); el camino de auditoría del [PR #16](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/16) no está en `main`. No se mezclan.
 
@@ -130,12 +130,12 @@ La lista de internet (análisis → diseño → desarrollo → despliegue) es el
 | [Matriz de casos](04-evaluacion-pruebas-y-entrega/4.1-matriz-casos.md) | 32 casos POSITIVO/NEGATIVO sacados de tests de `main` |
 | [4.2 Manual técnico](04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md) | Ancla de módulos de código |
 | [4.3 Manual de usuario](04-evaluacion-pruebas-y-entrega/4.3-manual-usuario.md) | Recorrido por rol, pantallas y cuentas de piloto |
-| [4.4 Despliegue](04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) | Poner a correr los tres procesos; sin URL pública |
+| [4.4 Despliegue](04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) | Un comando Compose (Postgres, API y web); sin URL pública |
 | [4.5 Guion oral](04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md) | Orden de 15 minutos; diapositivas en `/sustentacion` |
 | [4.6 Cierre T6 y T7](04-evaluacion-pruebas-y-entrega/4.6-cierre-t6-y-t7.md) | Qué cierra el trimestre 6 y qué no |
 | [4.7 Calidad y deuda](04-evaluacion-pruebas-y-entrega/4.7-calidad-y-deuda.md) | Lint real, backends de formación, deuda priorizada |
 | [4.8 Plan de respaldo](04-evaluacion-pruebas-y-entrega/4.8-plan-de-respaldo.md) | GitHub + dump de `refugios-pg` + semilla; sin nube |
-| [4.9 Manual de instalación](04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md) | Requisitos, clonar, `.env`, npm, Prisma (Linux y Windows) |
+| [4.9 Manual de instalación](04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md) | Requisitos, clonar, Compose; `.env` y npm para desarrollo (Linux y Windows) |
 
 ---
 

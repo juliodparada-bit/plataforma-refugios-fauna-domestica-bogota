@@ -12,12 +12,12 @@ Los siete pedidos para la revisión, con el archivo completo (no un párrafo esc
 
 | # | Entregable | Archivo | En una frase |
 |---|---|---|---|
-| 1 | Despliegue de la aplicación | [4.4](documentacion/04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) | Cómo se pone a correr (Postgres **5433**, API **3000**, web **5173**). Checklist «está desplegado si…» |
+| 1 | Despliegue de la aplicación | [4.4](documentacion/04-evaluacion-pruebas-y-entrega/4.4-despliegue.md) | Un comando: `./scripts/compose.sh up --build` (Postgres **5433**, API **3000**, web **5173**). Checklist «está desplegado si…» |
 | 2 | Documentación de requisitos corregida | [1.5](documentacion/01-analisis/1.5-requisitos-vigentes.md) (portada) · [1.1](documentacion/01-analisis/1.1-formulacion-del-proyecto.md) · [1.2](documentacion/01-analisis/1.2-ers-ieee-830.md) · [1.3](documentacion/01-analisis/1.3-historias-de-usuario-y-product-backlog.md) | Must 01–11 hechas; Should 12–14 no; IoT No; recaudo No; cookie `sid` + Bearer |
 | 3 | Plan de pruebas | [4.1](documentacion/04-evaluacion-pruebas-y-entrega/4.1-pruebas.md) · [matriz 32](documentacion/04-evaluacion-pruebas-y-entrega/4.1-matriz-casos.md) · Postman `tests/postman/` | Niveles, umbrales de archivo (web 75/75/77/70, api 88/88/92/70), `npm test`, issues #18–#21 |
 | 4 | Plan de respaldo | [4.8](documentacion/04-evaluacion-pruebas-y-entrega/4.8-plan-de-respaldo.md) | GitHub (código) + `pg_dump` del contenedor `refugios-pg` + semilla. Sin AWS Backup |
-| 5 | Manual de usuario | [4.3](documentacion/04-evaluacion-pruebas-y-entrega/4.3-manual-usuario.md) | Recorrido por rol, cuentas de piloto, botones, `/sustentacion` |
-| 6 | Manual de instalación | [4.9](documentacion/04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md) | Git, Node, Docker, clonar, `.env`, `npm install`, Prisma. Distinto del 4.4 |
+| 5 | Manual de usuario | [4.3](documentacion/04-evaluacion-pruebas-y-entrega/4.3-manual-usuario.md) | Recorrido por rol, cuentas de piloto (no están en la UI de Entrar), botones, `/sustentacion` |
+| 6 | Manual de instalación | [4.9](documentacion/04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md) | Git, Podman/Docker, clonar. Node y `.env` solo para el camino npm. Distinto del 4.4 |
 | 7 | Otros necesarios para T6 | Esta tabla + [índice maestro](documentacion/00-indice-maestro.md) | [4.6 cierre](documentacion/04-evaluacion-pruebas-y-entrega/4.6-cierre-t6-y-t7.md) · [3.6 retros](documentacion/03-ejecucion-y-desarrollo/3.6-retrospectivas-de-pruebas.md) · [4.7 deuda](documentacion/04-evaluacion-pruebas-y-entrega/4.7-calidad-y-deuda.md) · [2.1](documentacion/02-planeacion-y-diseno/2.1-arquitectura-de-la-solucion.md) · [3.4 Git Flow](documentacion/03-ejecucion-y-desarrollo/3.4-git-flow.md) · [4.5 / diapositivas](documentacion/04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md) · Postman `tests/postman/` · [4.2 técnico](documentacion/04-evaluacion-pruebas-y-entrega/4.2-manual-tecnico.md) |
 
 S5/S6 = PR [#13](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/13) y [#14](https://github.com/juliodparada-bit/plataforma-refugios-fauna-domestica-bogota/pull/14) **abiertos**, no `main`.
@@ -30,9 +30,9 @@ Empieza por el [índice maestro](documentacion/00-indice-maestro.md), en vista p
 
 Orden del análisis: **1.5 (portada vigente) → 1.1 → 1.2 → 1.3 → 2.1 → 2.2 → 2.3 → 2.4**. El código está en `api/`, `web/` y `mobile/` (Flutter, misma API). Primera vez: [4.9 Instalación](documentacion/04-evaluacion-pruebas-y-entrega/4.9-manual-instalacion.md). Poner a correr: [4.4 Despliegue](documentacion/04-evaluacion-pruebas-y-entrega/4.4-despliegue.md). Entorno resumido: [3.1](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md). Avance de historias: [tablero 3.5](documentacion/03-ejecucion-y-desarrollo/3.5-tablero-de-ejecucion.md). Ramas y PRs: [3.4](documentacion/03-ejecucion-y-desarrollo/3.4-git-flow.md).
 
-En local: Postgres en `5433`, API en `3000`, cliente web en [http://localhost:5173](http://localhost:5173), app Flutter en `mobile/`. Diapositivas T6: [http://localhost:5173/sustentacion](http://localhost:5173/sustentacion) (guion [4.5](documentacion/04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md)). Detalle de la app: [mobile/README.md](mobile/README.md).
+En local: `./scripts/compose.sh up --build`. Postgres en `5433`, API en `3000`, cliente web en [http://localhost:5173](http://localhost:5173), app Flutter en `mobile/`. Diapositivas T6: [http://localhost:5173/sustentacion](http://localhost:5173/sustentacion) (guion [4.5](documentacion/04-evaluacion-pruebas-y-entrega/4.5-sustentacion.md)). Detalle de la app: [mobile/README.md](mobile/README.md).
 
-**Cuentas de piloto** (solo local): `entidad.ejemplo@local.test`, `adoptante.ejemplo@local.test` y `donante.ejemplo@local.test`, todas con `EjemploLocal123`. Detalle en [3.1](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md).
+**Cuentas de piloto** (solo local; no se pintan en Entrar ni Crear cuenta): `entidad.ejemplo@local.test`, `adoptante.ejemplo@local.test` y `donante.ejemplo@local.test`, todas con `EjemploLocal123`. Detalle en [3.1](documentacion/03-ejecucion-y-desarrollo/3.1-entorno-de-desarrollo.md).
 
 ## Alcance del prototipo
 
